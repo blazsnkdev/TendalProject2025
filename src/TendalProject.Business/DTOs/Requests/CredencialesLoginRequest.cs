@@ -1,6 +1,6 @@
 ﻿namespace TendalProject.Business.DTOs.Requests
 {
-    public record CredencialesLoginDto
+    public record CredencialesLoginRequest
     (
         string Email,
         string Password

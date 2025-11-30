@@ -12,7 +12,7 @@ namespace TendalProject.Entities.Entidades
         public string ApellidoMaterno { get; set; } = null!;
         public string CorreoElectronico { get; set; } = null!;
         public string? NumeroCelular { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
+        public DateOnly FechaNacimiento { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
         public EstadoCliente Estado { get; set; }

@@ -12,6 +12,11 @@ namespace TendalProject.Data.Repositories
         {
             _appDbContext = appDbContext;
         }
+        public async Task<bool> ExisteEmailAsync(string email)
+        {
+            return await _appDbContext.TblUsuario
+                .AnyAsync(u => u.Email == email);
+        }
         public async Task<Usuario?> GetUsuarioConRolesPorEmailAsync(string email)
         {
             return await _appDbContext.TblUsuario

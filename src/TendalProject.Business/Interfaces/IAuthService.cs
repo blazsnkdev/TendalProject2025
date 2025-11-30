@@ -7,7 +7,8 @@ namespace TendalProject.Business.Interfaeces
 {
     public interface IAuthService
     {
-        Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginDto dto);
+        Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginRequest request);
         Task SignInAsync(HttpContext httpContext, LoginValidoResponse response, bool recordar = true);
+        Task<Result> RegistroAsync(RegistroUsuarioRequest request);
     }
 }
