@@ -9,6 +9,8 @@ using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
 using TendalProject.Common.Time;
 using TendalProject.Data.UnitOfWork;
+using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Business.Services
 {
@@ -53,15 +55,15 @@ namespace TendalProject.Business.Services
                 props);
         }
 
-        public async Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginDto dto)//TODO: por ahora devuelve un result pq no se que dto debe devolver XD
+        public async Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginRequest request)//TODO: por ahora devuelve un result pq no se que dto debe devolver XD
         {
-            var usuario = await _UoW.UsuarioRepository.GetUsuarioConRolesPorEmailAsync(dto.Email);
+            var usuario = await _UoW.UsuarioRepository.GetUsuarioConRolesPorEmailAsync(request.Email);
             if(usuario is null)
             {
                 return Result<LoginValidoResponse>.Failure(Error.NotFound("Usuario no encontrado"));
             }
             
-            if (!PasswordHelper.Verify(dto.Password,usuario.PasswordHash))
+            if (!PasswordHelper.Verify(request.Password,usuario.PasswordHash))
             {
                 return Result<LoginValidoResponse>.Failure(Error.Unauthorized());
             }
@@ -77,6 +79,65 @@ namespace TendalProject.Business.Services
                 roles: usuario.UsuariosRoles.Select(ur => ur.Rol.Nombre).ToArray()
             );
             return Result<LoginValidoResponse>.Success(loginValidoResponse);
+        }
+
+        public async Task<Result> RegistroAsync(RegistroUsuarioRequest request)
+        {
+            var emailExiste = await _UoW.UsuarioRepository.ExisteEmailAsync(request.Email);
+            if (emailExiste)
+            {
+                return Result.Failure(Error.Conflict("El email ya está registrado"));
+            }
+            if (!_dateTimeProvider.ValidarFecha(request.FechaNacimiento))
+            {
+                return Result.Failure(Error.Validation("La fecha de nacimiento no puede ser en el futuro"));
+            }
+
+            if (!_dateTimeProvider.ValidarMayoriaEdad(request.FechaNacimiento))
+            {
+                return Result.Failure(Error.Validation("El usuario debe ser mayor de edad"));
+            }
+            if(request.Password != request.ConfirmPassword)
+            {
+                return Result.Failure(Error.Validation("Las contraseñas no coinciden"));
+            }
+            Guid usuarioId = Guid.NewGuid();
+            var cliente = new Cliente()
+            {
+                Nombre = request.Nombre,
+                ApellidoPaterno = request.ApellidoPaterno,
+                ApellidoMaterno = request.ApellidoMaterno,
+                NumeroCelular = request.NumeroCelular,
+                FechaNacimiento = request.FechaNacimiento,
+                FechaCreacion = _dateTimeProvider.GetDateTimeNow(),
+                CorreoElectronico = request.Email,
+                Estado = EstadoCliente.Activo,
+                UsuarioId = usuarioId
+            };
+            var usuario = new Usuario()
+            {
+                UsuarioId = usuarioId,
+                Cliente = cliente,
+                Email = request.Email,
+                PasswordHash = PasswordHelper.Hash(request.Password),
+                FechaCreacion = _dateTimeProvider.GetDateTimeNow(),
+                Activo = true,
+                UltimaConexion = null,
+                IntentosFallidos = 0
+            };
+            await _UoW.BeginTransactionAsync();
+            try
+            {
+                await _UoW.ClienteRepository.AddAsync(cliente);
+                await _UoW.UsuarioRepository.AddAsync(usuario);
+                await _UoW.CommitTransactionAsync();
+            }
+            catch(Exception ex)
+            {
+                await _UoW.RollBackAsync();
+                return Result.Failure(Error.InternalServerError("Error al registrar el usuario: " + ex.Message));
+            }
+            return Result.Success();
         }
     }
 }
