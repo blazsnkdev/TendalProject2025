@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TendalProject.Business", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TendalProject.Web", "src\TendalProject.Web\TendalProject.Web.csproj", "{870ABC2E-BB9E-42A1-BF8B-CEF340F2F16A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TendalProject.Common", "src\TendalProject.Common\TendalProject.Common.csproj", "{CFEFB4C8-BA77-486D-8856-B44A5B2124D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{870ABC2E-BB9E-42A1-BF8B-CEF340F2F16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{870ABC2E-BB9E-42A1-BF8B-CEF340F2F16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{870ABC2E-BB9E-42A1-BF8B-CEF340F2F16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFEFB4C8-BA77-486D-8856-B44A5B2124D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFEFB4C8-BA77-486D-8856-B44A5B2124D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFEFB4C8-BA77-486D-8856-B44A5B2124D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFEFB4C8-BA77-486D-8856-B44A5B2124D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

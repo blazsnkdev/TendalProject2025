@@ -1,4 +1,4 @@
-namespace TendalProject.Web.Models
+namespace TendalProject.Web.ViewModels
 {
     public class ErrorViewModel
     {
