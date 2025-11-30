@@ -1,10 +1,5 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.DTOs.Requests;
-using TendalProject.Business.DTOs.Responses;
 using TendalProject.Business.Interfaeces;
 using TendalProject.Web.ViewModels;
 
@@ -28,7 +23,7 @@ namespace TendalProject.Web.Controllers
             {
                 return View(viewModel);
             }
-            var result = await _authService.LoginAsync(new CredencialesLoginDto(Email:viewModel.Email,Password:viewModel.Password));
+            var result = await _authService.LoginAsync(new CredencialesLoginRequest(Email:viewModel.Email,Password:viewModel.Password));
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError(string.Empty, "Credenciales inválidas.");
@@ -42,5 +37,33 @@ namespace TendalProject.Web.Controllers
             await _authService.SignInAsync(HttpContext, result.Value, viewModel.Recordarme);
             return RedirectToAction("Index", "Home");
         }
+        public IActionResult Registro()=> View();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Registro(RegistrarUsuarioViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+
+            var result = await _authService.RegistroAsync(new RegistroUsuarioRequest(
+                viewModel.Nombre,
+                viewModel.ApellidoPaterno,
+                viewModel.ApellidoMaterno,
+                viewModel.NumeroCelular,
+                viewModel.FechaNacimiento,
+                viewModel.Email,
+                viewModel.Password,
+                viewModel.ConfirmarPassword));
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, "Error al registrar el usuario.");
+                return View(viewModel);
+            }
+
+            return RedirectToAction("Login", "Auth");
+        }   
     }
 }

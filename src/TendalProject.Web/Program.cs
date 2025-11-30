@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Repositorios
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 //UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Servicios
