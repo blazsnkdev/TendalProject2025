@@ -1,7 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using TendalProject.Data.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//AppDbContext para EntityFramework
+var cn1 = builder.Configuration.GetConnectionString("cn1");
+builder.Services.AddDbContext<AppDbContext>(option =>
+option.UseSqlServer(cn1));
 
 var app = builder.Build();
 
@@ -12,6 +20,14 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+//Aplicar migraciones pendientes
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 
 app.UseHttpsRedirection();
 app.UseRouting();
