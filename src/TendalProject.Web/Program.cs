@@ -1,23 +1,48 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using TendalProject.Business.Interfaeces;
+using TendalProject.Business.Services;
+using TendalProject.Common.Time;
 using TendalProject.Data.Context;
+using TendalProject.Data.Interfaces;
+using TendalProject.Data.Repositories;
+using TendalProject.Data.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+//Repositorios
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+//UnitOfWork
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+//Servicios
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+
 
 //AppDbContext para EntityFramework
 var cn1 = builder.Configuration.GetConnectionString("cn1");
 builder.Services.AddDbContext<AppDbContext>(option =>
 option.UseSqlServer(cn1));
 
+//Authentication Cookies
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Auth/Login";     // Página de login
+        options.LogoutPath = "/Auth/Logout";   // Página de logout
+        options.AccessDeniedPath = "/Auth/Denegado";
+        options.ExpireTimeSpan = TimeSpan.FromHours(12);
+        options.SlidingExpiration = true;
+    });
+builder.Services.AddAuthorization();
+builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -32,6 +57,8 @@ using (var scope = app.Services.CreateScope())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+//Authenticación y authorizacion
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
