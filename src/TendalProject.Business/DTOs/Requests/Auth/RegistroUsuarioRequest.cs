@@ -1,4 +1,4 @@
-﻿namespace TendalProject.Business.DTOs.Requests
+﻿namespace TendalProject.Business.DTOs.Requests.Auth
 {
     public record RegistroUsuarioRequest
     (

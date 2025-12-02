@@ -12,8 +12,8 @@ using TendalProject.Data.Context;
 namespace TendalProject.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251130011634_init")]
-    partial class init
+    [Migration("20251202034104_inti")]
+    partial class inti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,98 @@ namespace TendalProject.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Articulo", b =>
+                {
+                    b.Property<Guid>("ArticuloId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CantidadVentas")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CategoriaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Destacado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Imagen")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrecioOferta")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("ProveedorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArticuloId");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("Codigo")
+                        .IsUnique();
+
+                    b.HasIndex("Nombre");
+
+                    b.HasIndex("ProveedorId");
+
+                    b.ToTable("TblArticulo");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Categoria", b =>
+                {
+                    b.Property<Guid>("CategoriaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CategoriaId");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique();
+
+                    b.ToTable("TblCategoria");
+                });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Cliente", b =>
                 {
@@ -52,8 +144,8 @@ namespace TendalProject.Data.Migrations
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("FechaNacimiento")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("FechaNacimiento")
+                        .HasColumnType("date");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -71,6 +163,51 @@ namespace TendalProject.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("TblCliente");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Proveedor", b =>
+                {
+                    b.Property<Guid>("ProveedorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Contacto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RazonSocial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ruc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProveedorId");
+
+                    b.HasIndex("Nombre")
+                        .IsUnique();
+
+                    b.ToTable("TblProveedor");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Rol", b =>
@@ -137,6 +274,23 @@ namespace TendalProject.Data.Migrations
                     b.ToTable("TblUsuarioRol");
                 });
 
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Articulo", b =>
+                {
+                    b.HasOne("TendalProject.Entities.Entidades.Categoria", "Categoria")
+                        .WithMany("Articulos")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("TendalProject.Entities.Entidades.Proveedor", "Proveedor")
+                        .WithMany("Articulos")
+                        .HasForeignKey("ProveedorId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Proveedor");
+                });
+
             modelBuilder.Entity("TendalProject.Entities.Entidades.Cliente", b =>
                 {
                     b.HasOne("TendalProject.Entities.Entidades.Usuario", "Usuario")
@@ -165,6 +319,16 @@ namespace TendalProject.Data.Migrations
                     b.Navigation("Rol");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Categoria", b =>
+                {
+                    b.Navigation("Articulos");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Proveedor", b =>
+                {
+                    b.Navigation("Articulos");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Rol", b =>

@@ -14,10 +14,10 @@ namespace TendalProject.Entities.Entidades
         [Column(TypeName = "decimal(18,2)")]
         public decimal PrecioOferta { get; set; }
         public int Stock { get; set; }
-        public Guid CategoriaId { get; set; }
-        public Categoria Categoria { get; set; } = null!;
-        public Guid ProveedorId { get; set; }
-        public Proveedor Proveedor { get; set; } = null!;
+        public Guid? CategoriaId { get; set; }
+        public Categoria? Categoria { get; set; }
+        public Guid? ProveedorId { get; set; }
+        public Proveedor? Proveedor { get; set; }
         public bool Destacado { get; set; }
         public EstadoArticulo Estado { get; set; }
         public DateTime FechaRegistro { get; set; }

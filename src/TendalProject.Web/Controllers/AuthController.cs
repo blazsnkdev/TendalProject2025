@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TendalProject.Business.DTOs.Requests;
+using TendalProject.Business.DTOs.Requests.Auth;
 using TendalProject.Business.Interfaeces;
-using TendalProject.Web.ViewModels;
+using TendalProject.Web.ViewModels.Auth;
 
 namespace TendalProject.Web.Controllers
 {
