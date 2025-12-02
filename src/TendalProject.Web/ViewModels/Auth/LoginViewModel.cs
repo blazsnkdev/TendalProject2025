@@ -1,4 +1,4 @@
-﻿namespace TendalProject.Web.ViewModels
+﻿namespace TendalProject.Web.ViewModels.Auth
 {
     public class LoginViewModel
     {

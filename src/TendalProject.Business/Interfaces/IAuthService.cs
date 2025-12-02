@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using TendalProject.Business.DTOs.Requests;
-using TendalProject.Business.DTOs.Responses;
+using TendalProject.Business.DTOs.Requests.Auth;
+using TendalProject.Business.DTOs.Responses.Auth;
 using TendalProject.Common.Results;
 
 namespace TendalProject.Business.Interfaeces

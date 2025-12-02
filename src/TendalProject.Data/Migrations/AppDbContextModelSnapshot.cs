@@ -31,7 +31,7 @@ namespace TendalProject.Data.Migrations
                     b.Property<int>("CantidadVentas")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CategoriaId")
+                    b.Property<Guid?>("CategoriaId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Codigo")
@@ -67,7 +67,7 @@ namespace TendalProject.Data.Migrations
                     b.Property<decimal>("PrecioOferta")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProveedorId")
+                    b.Property<Guid?>("ProveedorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Stock")
@@ -276,14 +276,12 @@ namespace TendalProject.Data.Migrations
                     b.HasOne("TendalProject.Entities.Entidades.Categoria", "Categoria")
                         .WithMany("Articulos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("TendalProject.Entities.Entidades.Proveedor", "Proveedor")
                         .WithMany("Articulos")
                         .HasForeignKey("ProveedorId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Categoria");
 

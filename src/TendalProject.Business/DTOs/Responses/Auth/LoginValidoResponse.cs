@@ -1,4 +1,4 @@
-﻿namespace TendalProject.Business.DTOs.Responses
+﻿namespace TendalProject.Business.DTOs.Responses.Auth
 {
     public record LoginValidoResponse
     (

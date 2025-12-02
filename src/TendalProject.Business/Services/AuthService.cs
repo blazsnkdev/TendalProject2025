@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using TendalProject.Business.DTOs.Requests;
-using TendalProject.Business.DTOs.Responses;
+using TendalProject.Business.DTOs.Requests.Auth;
+using TendalProject.Business.DTOs.Responses.Auth;
 using TendalProject.Business.Interfaeces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -39,8 +39,9 @@ namespace TendalProject.Business.Services
             };
 
             foreach (var rol in response.roles)
+            {
                 claims.Add(new Claim(ClaimTypes.Role, rol));
-
+            }
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             var props = new AuthenticationProperties
@@ -135,7 +136,7 @@ namespace TendalProject.Business.Services
             catch(Exception ex)
             {
                 await _UoW.RollBackAsync();
-                return Result.Failure(Error.InternalServerError("Error al registrar el usuario: " + ex.Message));
+                return Result.Failure(Error.Internal("Error al registrar el usuario: " + ex.Message));
             }
             return Result.Success();
         }
