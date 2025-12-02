@@ -30,6 +30,21 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categoria" asp-action="Registrar">Formulario</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Cuenta
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <form method="post" action="/Auth/Logout" class="dropdown-item p-0">
+                                        <button type="submit" class="btn btn-link dropdown-item">Cerrar sesión</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </nav>

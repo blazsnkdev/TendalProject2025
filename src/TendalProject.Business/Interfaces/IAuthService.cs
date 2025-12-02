@@ -10,5 +10,6 @@ namespace TendalProject.Business.Interfaeces
         Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginRequest request);
         Task SignInAsync(HttpContext httpContext, LoginValidoResponse response, bool recordar = true);
         Task<Result> RegistroAsync(RegistroUsuarioRequest request);
+        Task LogoutAsync(HttpContext httpContext);
     }
 }

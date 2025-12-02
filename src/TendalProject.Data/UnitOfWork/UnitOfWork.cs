@@ -13,17 +13,21 @@ namespace TendalProject.Data.UnitOfWork
         public IUsuarioRepository UsuarioRepository { get; }
         public IClienteRepository ClienteRepository { get; }
         public ICategoriaRepository CategoriaRepository { get; }
+        public IRolRepository RolRepository { get; }
 
         public UnitOfWork(
             AppDbContext appDbContext,
             IUsuarioRepository usuarioRepository,
             IClienteRepository clienteRepository,
-            ICategoriaRepository categoriaRepository)
+            ICategoriaRepository categoriaRepository,
+            IRolRepository rolRepository
+            )
         {
             _appDbContext = appDbContext;
             UsuarioRepository = usuarioRepository;
             ClienteRepository = clienteRepository;
             CategoriaRepository = categoriaRepository;
+            RolRepository = rolRepository;
         }
 
         public async Task BeginTransactionAsync()
