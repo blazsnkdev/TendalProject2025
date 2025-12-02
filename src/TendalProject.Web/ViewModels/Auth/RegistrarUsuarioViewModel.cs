@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TendalProject.Web.ViewModels
+namespace TendalProject.Web.ViewModels.Auth
 {
     public class RegistrarUsuarioViewModel
     {

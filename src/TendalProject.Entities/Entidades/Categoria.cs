@@ -1,5 +1,4 @@
 ﻿using TendalProject.Entities.Enum;
-
 namespace TendalProject.Entities.Entidades
 {
     public class Categoria
