@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.DTOs.Requests.Auth;
 using TendalProject.Business.Interfaeces;
+using TendalProject.Common.Helpers;
 using TendalProject.Web.ViewModels.Auth;
 
 namespace TendalProject.Web.Controllers
@@ -24,6 +25,7 @@ namespace TendalProject.Web.Controllers
                 return View(viewModel);
             }
             var result = await _authService.LoginAsync(new CredencialesLoginRequest(Email:viewModel.Email,Password:viewModel.Password));
+            
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError(string.Empty, "Credenciales inválidas.");
@@ -65,5 +67,11 @@ namespace TendalProject.Web.Controllers
 
             return RedirectToAction("Login", "Auth");
         }   
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.LogoutAsync(HttpContext);
+            return RedirectToAction("Login", "Auth");
+        }
     }
 }

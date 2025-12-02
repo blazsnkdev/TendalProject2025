@@ -70,6 +70,7 @@ namespace TendalProject.Business.Services
             }
             var ultimaConexion = _dateTimeProvider.GetDateTimeNow();
             usuario.UltimaConexion = ultimaConexion;
+            await _UoW.SaveChangesAsync();
             var loginValidoResponse = new LoginValidoResponse
             (
                 sesionId: Guid.NewGuid(),
@@ -124,7 +125,15 @@ namespace TendalProject.Business.Services
                 FechaCreacion = _dateTimeProvider.GetDateTimeNow(),
                 Activo = true,
                 UltimaConexion = null,
-                IntentosFallidos = 0
+                IntentosFallidos = 0,
+                UsuariosRoles = new List<UsuarioRol>()
+                {
+                    new UsuarioRol()
+                    {
+                        UsuarioId = usuarioId,
+                        RolId = await _UoW.RolRepository.GetRolIdPorNombreAsync("Cliente")
+                    }
+                }
             };
             await _UoW.BeginTransactionAsync();
             try
@@ -139,6 +148,11 @@ namespace TendalProject.Business.Services
                 return Result.Failure(Error.Internal("Error al registrar el usuario: " + ex.Message));
             }
             return Result.Success();
+        }
+
+        public async Task LogoutAsync(HttpContext httpContext)
+        {
+            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }
