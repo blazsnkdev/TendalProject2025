@@ -2,6 +2,7 @@
 using TendalProject.Data.Context;
 using TendalProject.Data.Interfaces;
 using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Data.Repositories
 {
@@ -26,6 +27,13 @@ namespace TendalProject.Data.Repositories
         public async Task<bool> ExisteTelefonoAsync(string telefono)
         {
             return await _appDbContext.TblProveedor.AnyAsync(p => p.Telefono == telefono);
+        }
+
+        public Task<List<Proveedor>> GetProveedoresActivosAsync()
+        {
+            return _appDbContext.TblProveedor
+                .Where(p => p.Estado == EstadoProveedor.Activo)
+                .ToListAsync();
         }
     }
 }

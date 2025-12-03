@@ -8,8 +8,9 @@ namespace TendalProject.Business.Interfaces
     {
         Task<Result<Guid>> RegistrarProveedorAsync(RegistrarProveedorRequest request);
         Task<Result> ActualizarProveedorAsync(ActualizarProveedorRequest request);
-        Task<Result<DetalleProveedorResponse>> DetalleProveedorAsync(Guid proveedorId);
-        Task<Result<List<DetalleProveedorResponse>>> ListarProveedoresAsync();
+        Task<Result<ProveedorResponse>> DetalleProveedorAsync(Guid proveedorId);
+        Task<Result<List<ProveedorResponse>>> ListarProveedoresAsync();
         Task<Result<Guid>> ModificarEstadoProveedorAsync(Guid proveedorId);
+        Task<Result<List<ProveedorSelectListResponse>>> ObtenerProveedoresActivosSelectListAsync();
     }
 }

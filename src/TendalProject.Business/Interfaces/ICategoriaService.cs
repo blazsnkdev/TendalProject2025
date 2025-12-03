@@ -11,5 +11,6 @@ namespace TendalProject.Business.Interfaces
         Task<Result> ModificarEstadoAsync(Guid categoriaId);
         Task<Result<CategoriaResponse>> ObtenerDetalleCategoriaAsync(Guid categoriaId);
         Task<Result<List<CategoriaResponse>>> ObtenerCategoriasAsync();
+        Task<Result<List<CategoriaSelectListResponse>>> ObtenerCategoriasActivasSelectListAsync();
     }
 }

@@ -2,6 +2,7 @@
 using TendalProject.Data.Context;
 using TendalProject.Data.Interfaces;
 using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Data.Repositories
 {
@@ -17,6 +18,13 @@ namespace TendalProject.Data.Repositories
         {
             return _appDbContext.TblCategoria
                 .AnyAsync(c => c.Nombre.ToLower() == nombre.ToLower());
+        }
+
+        public async Task<List<Categoria>> GetCategoriasActivasAsync()
+        {
+            return await _appDbContext.TblCategoria
+                .Where(c => c.Estado == EstadoCategoria.Activo)
+                .ToListAsync();
         }
     }
 }
