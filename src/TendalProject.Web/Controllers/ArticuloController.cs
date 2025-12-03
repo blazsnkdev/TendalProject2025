@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TendalProject.Business.DTOs.Requests.Articulo;
 using TendalProject.Business.Interfaces;
+using TendalProject.Common.Results;
 using TendalProject.Web.ViewModels.Articulo;
 
 namespace TendalProject.Web.Controllers
@@ -45,6 +46,12 @@ namespace TendalProject.Web.Controllers
             string rutaImagen = string.Empty;
             if(viewModel.Imagen is not null)
             {
+                var allowed = new[] { "image/jpeg", "image/png", "image/webp" };
+                if (!allowed.Contains(viewModel.Imagen.ContentType))
+                {
+                    ModelState.AddModelError("Imagen", "Formato no permitido.");
+                    return View(viewModel);
+                }
                 var extension = Path.GetExtension(viewModel.Imagen.FileName);
                 var nombreArchivo = $"{articuloId}{extension}";
                 var folder = Path.Combine(_env.WebRootPath, "img", "Articulo");
@@ -72,9 +79,43 @@ namespace TendalProject.Web.Controllers
                     await CargarSelectLists();
                     return View(viewModel);
                 }
+                return RedirectToAction(nameof(Detalle), new { articuloId = result.Value });
             }
-            return RedirectToAction("Index", "Home");
+            await CargarSelectLists();
+            return View(viewModel);
         }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Detalle(Guid articuloId)
+        {
+            var result = await _articuloService.DetalleArticuloAsync(articuloId);
+
+            if (!result.IsSuccess || result.Value is null)
+            {
+                return View("Error");//NOTE:che brother aqui tengo que cambiar osea mal
+            }
+            var rutaImagen = await _articuloService.ObtenerRutaImagenArticuloAsync(articuloId);
+            if(!rutaImagen.IsSuccess || rutaImagen.Value is null)
+            {
+                return View("Error");
+            }
+            var value = result.Value;
+            var viewModel = new DetalleArticuloViewModel()
+            {
+                ArticuloId = articuloId,
+                Codigo = value.Codigo,
+                Nombre = value.Nombre,
+                Descripcion = value.Descripcion,
+                Precio = value.Precio,
+                Stock = value.Stock,
+                NombreCategoria = value.NombreCategoria,
+                NombreProveedor = value.NombreProveedor,
+                FechaRegistro = value.FechaRegistro,
+                Imagen = rutaImagen.Value
+            };
+
+            return View(viewModel);
+        }
+
         private async Task CargarSelectLists()
         {
             var categorias = await _categoriaService.ObtenerCategoriasActivasSelectListAsync();
