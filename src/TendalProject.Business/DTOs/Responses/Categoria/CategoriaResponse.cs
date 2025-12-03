@@ -1,6 +1,6 @@
 ﻿namespace TendalProject.Business.DTOs.Responses.Categoria
 {
-    public record DetalleCategoriaResponse
+    public record CategoriaResponse
     (
         Guid CategoriaId,
         string Nombre,

@@ -7,7 +7,6 @@
 <h1>Detalle</h1>
 
 <div>
-    <h4>DetalleCategoriaViewModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -43,6 +42,10 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <form asp-controller="Categoria" asp-action="Eliminar" method="post">
+        <input type="hidden" name="categoriaId" value="@Model.CategoriaId" />
+        <button type="submit">Eliminar</button>
+    </form> |
+    <br />
     <a asp-action="Index">Back to List</a>
 </div>
