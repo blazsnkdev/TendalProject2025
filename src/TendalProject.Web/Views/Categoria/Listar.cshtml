@@ -10,12 +10,12 @@
 <div class="clientes-container">
     <!-- Header de la página -->
     <div class="page-header">
-        <h1 class="page-title">Clientes Activos</h1>
+        <h1 class="page-title">Módulo Categorias</h1>
     </div>
 
     <!-- Botón agregar -->
     <a asp-action="Registrar" class="btn-agregar">
-        <i class="fas fa-plus-circle"></i> Agregar Nuevo Cliente
+        <i class="fas fa-plus-circle"></i> Agregar
     </a>
 
     @if (Model.Items.Any())
@@ -31,13 +31,13 @@
             <div class="tamanio-pagina">
                 <span class="tamanio-label">Registros por página:</span>
                 <div>
-                    <a asp-action="Activos" asp-route-pagina="1" asp-route-tamanioPagina="5"
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="5"
                        class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
-                    <a asp-action="Activos" asp-route-pagina="1" asp-route-tamanioPagina="10"
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="10"
                        class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
-                    <a asp-action="Activos" asp-route-pagina="1" asp-route-tamanioPagina="25"
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="25"
                        class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
-                    <a asp-action="Activos" asp-route-pagina="1" asp-route-tamanioPagina="50"
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="50"
                        class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
                 </div>
             </div>
