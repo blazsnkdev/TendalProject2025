@@ -23,4 +23,8 @@
     <ProjectReference Include="..\TendalProject.Business\TendalProject.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\Articulo\" />
+  </ItemGroup>
+
 </Project>
