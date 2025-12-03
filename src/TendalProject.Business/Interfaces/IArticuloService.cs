@@ -1,4 +1,5 @@
 ﻿using TendalProject.Business.DTOs.Requests.Articulo;
+using TendalProject.Business.DTOs.Responses.Articulo;
 using TendalProject.Common.Results;
 
 namespace TendalProject.Business.Interfaces
@@ -7,5 +8,8 @@ namespace TendalProject.Business.Interfaces
     {
         Task<Result<Guid>> RegistrarArticuloAsync(RegistrarArticuloRequest request);
         Task<Result<string>> GenerarCodigoArticuloAsync();
+        Task<Result<ActualizarImagenArticuloResponse>> DetalleImagenArticuloAsync(Guid articuloId);
+        Task<Result<string>> ObtenerRutaImagenArticuloAsync(Guid articuloId);
+        Task<Result<DetalleArticuloResponse>> DetalleArticuloAsync(Guid articuloId);
     }
 }

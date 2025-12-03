@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TendalProject.Business.DTOs.Requests.Articulo;
+using TendalProject.Business.DTOs.Responses.Articulo;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
 using TendalProject.Common.Time;
@@ -21,6 +22,31 @@ namespace TendalProject.Business.Services
         {
             _UoW = uoW;
             _dateTimeProvider = dateTimeProvider;
+        }
+
+        public async Task<Result<DetalleArticuloResponse>> DetalleArticuloAsync(Guid articuloId)
+        {
+            var articulo = await _UoW.ArticuloRepository.GetArticuloWithIncludesByIdAsync(articuloId);
+            if(articulo is null)
+            {
+                return Result<DetalleArticuloResponse>.Failure(Error.NotFound("El articulo no existe"));
+            }
+            var response = new DetalleArticuloResponse(
+                articulo.ArticuloId,
+                articulo.Codigo,
+                articulo.Nombre,
+                articulo.Descripcion,
+                articulo.Precio,
+                articulo.Stock,
+                articulo.Categoria!.Nombre,
+                articulo.Proveedor!.Nombre,
+                articulo.FechaRegistro);
+            return Result<DetalleArticuloResponse>.Success(response);
+        }
+
+        public Task<Result<ActualizarImagenArticuloResponse>> DetalleImagenArticuloAsync(Guid articuloId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Result<string>> GenerarCodigoArticuloAsync()
@@ -45,6 +71,20 @@ namespace TendalProject.Business.Services
                 var nuevoCodigo = $"ART-{nuevoNumeroCodigo.ToString("D8")}";
                 return Result<string>.Success(nuevoCodigo);
             }
+        }
+
+        public async Task<Result<string>> ObtenerRutaImagenArticuloAsync(Guid articuloId)
+        {
+            var articulo = await _UoW.ArticuloRepository.GetByIdAsync(articuloId);
+            if (articulo is null)
+            {
+                return Result<string>.Failure(Error.NotFound("El articulo no existe."));
+            }
+            if (!StringUtils.IsNullOrWhiteSpace(articulo.Imagen))
+            {
+                return Result<string>.Success("img/Articulo/no-image.jpg");//NOTE: ojito mi bro esto tengo que agregar una img por defect
+            }
+            return Result<string>.Success(articulo.Imagen);
         }
 
         public async Task<Result<Guid>> RegistrarArticuloAsync(RegistrarArticuloRequest request)
