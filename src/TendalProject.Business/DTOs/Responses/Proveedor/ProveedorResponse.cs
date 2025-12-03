@@ -1,6 +1,6 @@
 ﻿namespace TendalProject.Business.DTOs.Responses.Proveedor
 {
-    public record DetalleProveedorResponse
+    public record ProveedorResponse
     (
         Guid ProveedorId,
         string Nombre,

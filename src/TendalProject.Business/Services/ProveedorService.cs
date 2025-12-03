@@ -4,6 +4,7 @@ using TendalProject.Business.DTOs.Responses.Proveedor;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
 using TendalProject.Common.Time;
+using TendalProject.Common.Utils;
 using TendalProject.Data.UnitOfWork;
 using TendalProject.Entities.Entidades;
 using TendalProject.Entities.Enum;
@@ -32,13 +33,12 @@ namespace TendalProject.Business.Services
                 {
                     return Result.Failure(Error.Validation("El ID del proveedor es obligatorio."));
                 }
-                if (string.IsNullOrWhiteSpace(request.Nombre)
-                    || string.IsNullOrWhiteSpace(request.RazonSocial)
-                    || string.IsNullOrWhiteSpace(request.Ruc)
-                    || string.IsNullOrWhiteSpace(request.Contacto)
-                    || string.IsNullOrWhiteSpace(request.Telefono)
-                    || string.IsNullOrWhiteSpace(request.Email)
-                    || string.IsNullOrWhiteSpace(request.Direccion))
+                if (!StringUtils.IsNullOrWhiteSpace(
+                    request.Nombre,
+                    request.Telefono,
+                    request.Email,
+                    request.Contacto,
+                    request.Direccion))
                 {
                     return Result<Guid>.Failure(Error.Validation("Todos los campos son obligatorios."));
                 }
@@ -85,18 +85,18 @@ namespace TendalProject.Business.Services
             
         }
 
-        public async Task<Result<DetalleProveedorResponse>> DetalleProveedorAsync(Guid proveedorId)
+        public async Task<Result<ProveedorResponse>> DetalleProveedorAsync(Guid proveedorId)
         {
             if(proveedorId == Guid.Empty)
             {
-                return Result<DetalleProveedorResponse>.Failure(Error.Validation("El ID del proveedor es obligatorio."));
+                return Result<ProveedorResponse>.Failure(Error.Validation("El ID del proveedor es obligatorio."));
             }
             var proveedor = await _UoW.ProveedorRepository.GetByIdAsync(proveedorId);
             if (proveedor == null)
             {
-                return Result<DetalleProveedorResponse>.Failure(Error.NotFound("Proveedor no encontrado."));
+                return Result<ProveedorResponse>.Failure(Error.NotFound("Proveedor no encontrado."));
             }
-            var response = new DetalleProveedorResponse(
+            var response = new ProveedorResponse(
                 proveedorId,
                 proveedor.Nombre,
                 proveedor.RazonSocial,
@@ -107,18 +107,18 @@ namespace TendalProject.Business.Services
                 proveedor.Direccion,
                 proveedor.Estado.ToString(),
                 proveedor.FechaRegistro);
-            return Result<DetalleProveedorResponse>.Success(response);
+            return Result<ProveedorResponse>.Success(response);
         }
 
-        public async Task<Result<List<DetalleProveedorResponse>>> ListarProveedoresAsync()
+        public async Task<Result<List<ProveedorResponse>>> ListarProveedoresAsync()
         {
             var proveedores = await _UoW.ProveedorRepository.GetAllAsync();
-            var response = new List<DetalleProveedorResponse>();
+            var response = new List<ProveedorResponse>();
             if (proveedores == null || !proveedores.Any())
             {
-                return Result<List<DetalleProveedorResponse>>.Success(response);
+                return Result<List<ProveedorResponse>>.Success(response);
             }
-            response = proveedores.Select(p => new DetalleProveedorResponse(
+            response = proveedores.Select(p => new ProveedorResponse(
                 p.ProveedorId,
                 p.Nombre,
                 p.RazonSocial,
@@ -130,7 +130,7 @@ namespace TendalProject.Business.Services
                 p.Estado.ToString(),
                 p.FechaRegistro
             )).ToList();
-            return Result<List<DetalleProveedorResponse>>.Success(response);
+            return Result<List<ProveedorResponse>>.Success(response);
         }
 
         public async Task<Result<Guid>> ModificarEstadoProveedorAsync(Guid proveedorId)
@@ -145,17 +145,26 @@ namespace TendalProject.Business.Services
             return Result<Guid>.Success(proveedor.ProveedorId);
         }
 
+        public async Task<Result<List<ProveedorSelectListResponse>>> ObtenerProveedoresActivosSelectListAsync()
+        {
+            var proveedoresActivos = await _UoW.ProveedorRepository.GetProveedoresActivosAsync();
+            var response = new List<ProveedorSelectListResponse>();
+            response = proveedoresActivos.Select(p => new ProveedorSelectListResponse(
+                p.ProveedorId,
+                p.Nombre)).ToList();
+            return Result<List<ProveedorSelectListResponse>>.Success(response);
+        }
+
         public async Task<Result<Guid>> RegistrarProveedorAsync(RegistrarProveedorRequest request)
         {
             try
             {
-                if(string.IsNullOrWhiteSpace(request.Nombre)
-                    || string.IsNullOrWhiteSpace(request.RazonSocial)
-                    || string.IsNullOrWhiteSpace(request.Ruc)
-                    || string.IsNullOrWhiteSpace(request.Contacto)
-                    || string.IsNullOrWhiteSpace(request.Telefono)
-                    || string.IsNullOrWhiteSpace(request.Email)
-                    || string.IsNullOrWhiteSpace(request.Direccion))
+                if(StringUtils.IsNullOrWhiteSpace(
+                    request.Nombre,
+                    request.Telefono,
+                    request.Contacto,
+                    request.Direccion,
+                    request.Email))
                 {
                     return Result<Guid>.Failure(Error.Validation("Todos los campos son obligatorios."));
                 }

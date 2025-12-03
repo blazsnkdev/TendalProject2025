@@ -7,5 +7,6 @@ namespace TendalProject.Data.Interfaces
         Task<bool> ExisteRucAsync(string ruc);
         Task<bool> ExisteEmailAsync(string email);
         Task<bool> ExisteTelefonoAsync(string telefono);
+        Task<List<Proveedor>> GetProveedoresActivosAsync();
     }
 }

@@ -4,6 +4,7 @@ using TendalProject.Business.DTOs.Responses.Categoria;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
 using TendalProject.Common.Time;
+using TendalProject.Common.Utils;
 using TendalProject.Data.UnitOfWork;
 using TendalProject.Entities.Entidades;
 using TendalProject.Entities.Enum;
@@ -32,7 +33,7 @@ namespace TendalProject.Business.Services
                 {
                     return Result<Guid>.Failure(Error.Validation("El Id de la categoría es inválido."));
                 }
-                if (string.IsNullOrWhiteSpace(request.Nombre) || string.IsNullOrWhiteSpace(request.Descripcion))
+                if (StringUtils.IsNullOrWhiteSpace(request.Nombre, request.Descripcion))//NOTE: ojito aqui creo que falta el !
                 {
                     return Result<Guid>.Failure(Error.Validation("Nombre y Descripción son nulos."));
                 }
@@ -89,6 +90,18 @@ namespace TendalProject.Business.Services
             {
                 return Result.Failure(Error.Internal($"Error inesperado al desactivar la categoría: {ex.Message}"));
             }
+        }
+
+        public async Task<Result<List<CategoriaSelectListResponse>>> ObtenerCategoriasActivasSelectListAsync()
+        {
+            var categorias = await _UoW.CategoriaRepository.GetCategoriasActivasAsync();
+            var listaCategorias = new List<CategoriaSelectListResponse>();  
+            listaCategorias = categorias.Select(categoria => new CategoriaSelectListResponse
+            (
+                categoria.CategoriaId,
+                categoria.Nombre
+            )).ToList();
+            return Result<List<CategoriaSelectListResponse>>.Success(listaCategorias);
         }
 
         public async Task<Result<List<CategoriaResponse>>> ObtenerCategoriasAsync()
