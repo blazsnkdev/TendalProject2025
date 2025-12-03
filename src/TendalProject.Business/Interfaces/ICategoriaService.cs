@@ -9,6 +9,7 @@ namespace TendalProject.Business.Interfaces
         Task<Result<Guid>> RegistrarCategoriaAsync(RegistrarCategoriaRequest request);
         Task<Result<Guid>> ActualizarCategoriaAsync(ActualizarCategoriaRequest request);
         Task<Result> ModificarEstadoAsync(Guid categoriaId);
-        Task<Result<DetalleCategoriaResponse>> ObtenerDetalleCategoriaAsync(Guid categoriaId);
+        Task<Result<CategoriaResponse>> ObtenerDetalleCategoriaAsync(Guid categoriaId);
+        Task<Result<List<CategoriaResponse>>> ObtenerCategoriasAsync();
     }
 }

@@ -91,19 +91,33 @@ namespace TendalProject.Business.Services
             }
         }
 
-        public async Task<Result<DetalleCategoriaResponse>> ObtenerDetalleCategoriaAsync(Guid categoriaId)
+        public async Task<Result<List<CategoriaResponse>>> ObtenerCategoriasAsync()
+        {
+            var categorias = await _UoW.CategoriaRepository.GetAllAsync();
+            var listaCategorias = categorias.Select(categoria => new CategoriaResponse
+            (
+                categoria.CategoriaId,
+                categoria.Nombre,
+                categoria.Descripcion,
+                categoria.Estado.ToString(),
+                categoria.FechaRegistro
+            )).ToList();
+            return Result<List<CategoriaResponse>>.Success(listaCategorias);
+        }
+
+        public async Task<Result<CategoriaResponse>> ObtenerDetalleCategoriaAsync(Guid categoriaId)
         {
             if(categoriaId == Guid.Empty)
             {
-                return Result<DetalleCategoriaResponse>.Failure(Error.Validation("El Id de la categoría es inválido."));
+                return Result<CategoriaResponse>.Failure(Error.Validation("El Id de la categoría es inválido."));
             }
             var categoria = await _UoW.CategoriaRepository.GetByIdAsync(categoriaId);
             if (categoria is null)
             {
-                return Result<DetalleCategoriaResponse>.Failure(Error.NotFound("La categoría no existe."));
+                return Result<CategoriaResponse>.Failure(Error.NotFound("La categoría no existe."));
             }
-            
-            var detalleCategoria = new DetalleCategoriaResponse
+
+            var detalleCategoria = new CategoriaResponse
             (
                 categoria.CategoriaId,
                 categoria.Nombre,
@@ -111,7 +125,7 @@ namespace TendalProject.Business.Services
                 categoria.Estado.ToString(),
                 categoria.FechaRegistro
             );
-            return Result<DetalleCategoriaResponse>.Success(detalleCategoria);
+            return Result<CategoriaResponse>.Success(detalleCategoria);
         }
 
         public async Task<Result<Guid>> RegistrarCategoriaAsync(RegistrarCategoriaRequest request)

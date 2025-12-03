@@ -1,0 +1,135 @@
+﻿/* ===== CONTENEDOR GENERAL ===== */
+.clientes-container {
+    padding: 20px;
+}
+
+/* ===== CARD ===== */
+.cliente-card {
+    border-radius: 14px;
+    border: 1px solid #e6e6e6;
+    transition: all 0.25s ease;
+    background: #ffffff;
+}
+
+    /* Sombra al pasar */
+    .cliente-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Título */
+    .cliente-card .card-title {
+        font-size: 1.15rem;
+        color: #2c3e50;
+    }
+
+/* Badge de estado */
+.badge-activo,
+.badge-inactivo {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.badge-activo {
+    background-color: #27ae60 !important;
+    color: #fff !important;
+}
+
+.badge-inactivo {
+    background-color: #c0392b !important;
+    color: #fff !important;
+}
+
+/* Botones dentro del card */
+.cliente-card .btn {
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    border-radius: 8px;
+}
+
+/* Botón detalle */
+.btn-outline-primary {
+    border-width: 1.5px;
+}
+
+/* Botón actualizar */
+.btn-primary {
+    background-color: #0069d9;
+    border-color: #0069d9;
+}
+
+/* Hover de botones */
+.btn-outline-primary:hover {
+    background-color: #0069d9;
+    color: #fff !important;
+}
+
+.btn-primary:hover {
+    background-color: #0058b8;
+    border-color: #0058b8;
+}
+
+/* ===== PAGINACIÓN ===== */
+.pagination-custom {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    gap: 8px;
+}
+
+.page-link-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    background: #f1f3f5;
+    color: #34495e;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+
+.page-item-custom.active .page-link-custom {
+    background-color: #0069d9;
+    color: #fff;
+}
+
+.page-item-custom:not(.active) .page-link-custom:hover {
+    background-color: #d6dce3;
+}
+
+/* ===== BOTÓN AGREGAR ===== */
+.btn-agregar {
+    display: inline-flex;
+    align-items: center;
+    background: #0069d9;
+    color: #fff !important;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    transition: all .2s ease;
+}
+
+    .btn-agregar:hover {
+        background: #0058b8;
+        transform: translateY(-2px);
+    }
+
+/* ===== ESTADO VACÍO ===== */
+.estado-vacio {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fafafa;
+    border-radius: 12px;
+}
+
+    .estado-vacio i {
+        font-size: 45px;
+        color: #bdc3c7;
+        margin-bottom: 12px;
+    }
