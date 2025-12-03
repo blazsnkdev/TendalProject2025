@@ -17,12 +17,14 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
+builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
 //UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Servicios
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IProveedorService, ProveedorService>();
 
 
 //AppDbContext para EntityFramework

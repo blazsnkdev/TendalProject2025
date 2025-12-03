@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using TendalProject.Data.Context;
 using TendalProject.Data.Interfaces;
 
@@ -14,13 +13,15 @@ namespace TendalProject.Data.UnitOfWork
         public IClienteRepository ClienteRepository { get; }
         public ICategoriaRepository CategoriaRepository { get; }
         public IRolRepository RolRepository { get; }
+        public IProveedorRepository ProveedorRepository { get; }
 
         public UnitOfWork(
             AppDbContext appDbContext,
             IUsuarioRepository usuarioRepository,
             IClienteRepository clienteRepository,
             ICategoriaRepository categoriaRepository,
-            IRolRepository rolRepository
+            IRolRepository rolRepository,
+            IProveedorRepository proveedorRepository
             )
         {
             _appDbContext = appDbContext;
@@ -28,6 +29,7 @@ namespace TendalProject.Data.UnitOfWork
             ClienteRepository = clienteRepository;
             CategoriaRepository = categoriaRepository;
             RolRepository = rolRepository;
+            ProveedorRepository = proveedorRepository;
         }
 
         public async Task BeginTransactionAsync()
