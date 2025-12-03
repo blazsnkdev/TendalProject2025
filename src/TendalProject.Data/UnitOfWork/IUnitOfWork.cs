@@ -8,6 +8,7 @@ namespace TendalProject.Data.UnitOfWork
         public IClienteRepository ClienteRepository { get; }
         public ICategoriaRepository CategoriaRepository { get; }
         public IRolRepository RolRepository { get; }
+        public IProveedorRepository ProveedorRepository { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
