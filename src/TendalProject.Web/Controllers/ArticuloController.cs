@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TendalProject.Business.DTOs.Requests.Articulo;
 using TendalProject.Business.Interfaces;
+using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
 using TendalProject.Web.ViewModels.Articulo;
 
@@ -25,6 +26,28 @@ namespace TendalProject.Web.Controllers
             _categoriaService = categoriaService;
             _proveedorService = proveedorService;
             _env = env;
+        }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Listar(int pagina = 1, int tamanioPagina = 10)
+        {
+            var result = await _articuloService.ObtenerListaArticulosAsync();
+            if (!result.IsSuccess || result.Value is null)
+            {
+                return View("Error");
+            }
+            var viewModel = result.Value.Select(a => new ListarArticulosViewModel()
+            {
+                ArticuloId = a.ArticuloId,
+                Nombre = a.Nombre,
+                NombreCategoria = a.NombreCategoria,
+                Stock = a.Stock,
+                Estado = a.Estado,
+                Destacado = a.Destacado,
+                Codigo = a.Codigo,
+                CantidadVentas = a.CantidadVentas
+            }).ToList();
+            var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
+            return View(paginacion);
         }
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Registrar()
@@ -91,12 +114,12 @@ namespace TendalProject.Web.Controllers
 
             if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error");//NOTE:che brother aqui tengo que cambiar osea mal
+                return RedirectToAction("Listar");
             }
             var rutaImagen = await _articuloService.ObtenerRutaImagenArticuloAsync(articuloId);
             if(!rutaImagen.IsSuccess || rutaImagen.Value is null)
             {
-                return View("Error");
+                return RedirectToAction("Listar");
             }
             var value = result.Value;
             var viewModel = new DetalleArticuloViewModel()
@@ -120,7 +143,6 @@ namespace TendalProject.Web.Controllers
         {
             return View(new ActualizarImagenArticuloViewModel { ArticuloId = articuloId });
         }
-
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
