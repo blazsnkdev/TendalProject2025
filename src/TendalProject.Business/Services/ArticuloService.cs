@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using TendalProject.Business.DTOs.Requests.Articulo;
 using TendalProject.Business.DTOs.Responses.Articulo;
 using TendalProject.Business.Interfaces;
@@ -24,6 +25,31 @@ namespace TendalProject.Business.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
+        public async Task<Result> ActualizarImagenArticuloAsync(ActualizarImagenArticuloRequest request)
+        {
+            var articulo = await _UoW.ArticuloRepository.GetByIdAsync(request.ArticuloId);
+            if (articulo == null)
+            {
+                return Result<string>.Failure(Error.NotFound("Artículo no encontrado."));
+            }
+            var extension = Path.GetExtension(request.Imagen.FileName);
+            var nombreArchivo = $"{articulo.ArticuloId}{extension}";
+            var folder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", "Articulo");
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            var rutaArchivo = Path.Combine(folder, nombreArchivo);
+            using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+            {
+                await request.Imagen.CopyToAsync(stream);
+            }
+            articulo.Imagen = $"img/Articulo/{nombreArchivo}";
+            _UoW.ArticuloRepository.Update(articulo);
+            await _UoW.SaveChangesAsync();
+            return Result.Success();
+        }
+
         public async Task<Result<DetalleArticuloResponse>> DetalleArticuloAsync(Guid articuloId)
         {
             var articulo = await _UoW.ArticuloRepository.GetArticuloWithIncludesByIdAsync(articuloId);
@@ -42,11 +68,6 @@ namespace TendalProject.Business.Services
                 articulo.Proveedor!.Nombre,
                 articulo.FechaRegistro);
             return Result<DetalleArticuloResponse>.Success(response);
-        }
-
-        public Task<Result<ActualizarImagenArticuloResponse>> DetalleImagenArticuloAsync(Guid articuloId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<Result<string>> GenerarCodigoArticuloAsync()
