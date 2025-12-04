@@ -1,0 +1,14 @@
+﻿@using TendalProject.Web.ViewModels.Articulo
+@model ActualizarImagenArticuloViewModel
+
+<form asp-action="ActualizarImagen" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ArticuloId" />
+
+    <div class="mb-3">
+        <label class="form-label">Nueva Imagen</label>
+        <input asp-for="Imagen" type="file" class="form-control" />
+        <span asp-validation-for="Imagen" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</form>
