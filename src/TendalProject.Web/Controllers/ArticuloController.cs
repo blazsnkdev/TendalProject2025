@@ -115,7 +115,29 @@ namespace TendalProject.Web.Controllers
 
             return View(viewModel);
         }
+        [Authorize(Roles = "Administrador")]
+        public IActionResult ActualizarImagen(Guid articuloId)
+        {
+            return View(new ActualizarImagenArticuloViewModel { ArticuloId = articuloId });
+        }
 
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActualizarImagen(ActualizarImagenArticuloViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+            var request = new ActualizarImagenArticuloRequest(viewModel.ArticuloId, viewModel.Imagen!);
+            var result = await _articuloService.ActualizarImagenArticuloAsync(request);
+            if (!result.IsSuccess)
+            {
+                return View(viewModel);
+            }
+            return RedirectToAction(nameof(Detalle), new { articuloId = viewModel.ArticuloId });
+        }
         private async Task CargarSelectLists()
         {
             var categorias = await _categoriaService.ObtenerCategoriasActivasSelectListAsync();

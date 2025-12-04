@@ -8,8 +8,8 @@ namespace TendalProject.Business.Interfaces
     {
         Task<Result<Guid>> RegistrarArticuloAsync(RegistrarArticuloRequest request);
         Task<Result<string>> GenerarCodigoArticuloAsync();
-        Task<Result<ActualizarImagenArticuloResponse>> DetalleImagenArticuloAsync(Guid articuloId);
         Task<Result<string>> ObtenerRutaImagenArticuloAsync(Guid articuloId);
         Task<Result<DetalleArticuloResponse>> DetalleArticuloAsync(Guid articuloId);
+        Task<Result> ActualizarImagenArticuloAsync(ActualizarImagenArticuloRequest request);
     }
 }

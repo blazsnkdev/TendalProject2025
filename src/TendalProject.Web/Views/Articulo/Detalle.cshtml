@@ -1,4 +1,5 @@
-﻿@model TendalProject.Web.ViewModels.Articulo.DetalleArticuloViewModel
+﻿@using TendalProject.Web.ViewModels.Articulo
+@model TendalProject.Web.ViewModels.Articulo.DetalleArticuloViewModel
 
 @{
     ViewData["Title"] = "Detalle del Artículo";
@@ -70,6 +71,9 @@
                            class="btn btn-primary px-4">
                             <i class="bi bi-pencil-square"></i> Editar
                         </a>
+                        <button type="button" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#modalActualizarImagen">
+                            Cambiar Imagen
+                        </button>
                     </div>
 
                 </div>
@@ -79,4 +83,23 @@
 
     </div>
 
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalActualizarImagen" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Actualizar Imagen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                @await Html.PartialAsync("_ActualizarImagenPartial",
+                new ActualizarImagenArticuloViewModel { ArticuloId = Model.ArticuloId })
+            </div>
+
+        </div>
+    </div>
 </div>
