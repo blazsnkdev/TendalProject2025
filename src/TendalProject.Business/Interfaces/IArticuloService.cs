@@ -7,9 +7,11 @@ namespace TendalProject.Business.Interfaces
     public interface IArticuloService
     {
         Task<Result<Guid>> RegistrarArticuloAsync(RegistrarArticuloRequest request);
+        Task<Result<Guid>> ActualizarArticuloAsync(ActualizarArticuloRequest request);
         Task<Result<string>> GenerarCodigoArticuloAsync();
         Task<Result<string>> ObtenerRutaImagenArticuloAsync(Guid articuloId);
         Task<Result<DetalleArticuloResponse>> DetalleArticuloAsync(Guid articuloId);
         Task<Result> ActualizarImagenArticuloAsync(ActualizarImagenArticuloRequest request);
+        Task<Result<List<ListarArticulosResponse>>> ObtenerListaArticulosAsync();
     }
 }
