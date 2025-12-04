@@ -1,0 +1,134 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Articulo.ListarArticulosViewModel>
+
+@{
+    ViewData["Title"] = "Activos";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Articulo/Listar.css" />
+}
+<div class="clientes-container">
+    
+    <div class="page-header">
+        <h1 class="page-title">Módulo Artículos</h1>
+    </div>
+
+    
+    <a asp-action="Registrar" class="btn-agregar">
+        <i class="fas fa-plus-circle"></i> Agregar
+    </a>
+
+    @if (Model.Items.Any())
+    {
+        
+        <div class="pagination-controls">
+            <div class="registros-info">
+                Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+                @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+                @Model.TotalRegistros registros
+            </div>
+
+            <div class="tamanio-pagina">
+                <span class="tamanio-label">Registros por página:</span>
+                <div>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="5"
+                       class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="10"
+                       class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="25"
+                       class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="50"
+                       class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Categoria</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                    <th>Destacado</th>
+                    <th>Ventas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Codigo</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.NombreCategoria</td>
+                        <td>@item.Stock</td>
+                        <td>@item.Estado</td>
+                        <td>@item.Destacado</td>
+                        <td>@item.CantidadVentas</td>
+                        <td>
+                            <a asp-action="Actualizar" asp-route-articuloId="@item.ArticuloId" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a asp-action="Detalle" asp-route-articuloId="@item.ArticuloId" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-info-circle"></i> Detalle
+                            </a>
+                        </td>
+                    </tr>
+    }
+            </tbody>
+        </table>
+
+        <!-- Paginación inferior -->
+        <nav aria-label="Paginación de articulos">
+            <ul class="pagination-custom">
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Primera">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@(Model.PaginaIndice - 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Anterior">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+
+                @{
+                    int inicio = Math.Max(1, Model.PaginaIndice - 2);
+                    int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
+                }
+
+                @for (int i = inicio; i <= fin; i++)
+                {
+                    <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                        <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@i" asp-route-tamanioPagina="@Model.TamanioPagina">@i</a>
+                    </li>
+                }
+
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@(Model.PaginaIndice + 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Siguiente">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@Model.TotalPagias" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Última">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <!-- Estado vacío -->
+        <div class="estado-vacio">
+            <i class="fas fa-users"></i>
+            <h4>No hay articulos </h4>
+            <p>No se encontraron articulos en el sistema.</p>
+            <a asp-action="Registrar" class="btn-agregar">
+                <i class="fas fa-plus-circle"></i> Agregar Primer Articulo
+            </a>
+        </div>
+    }
+</div>

@@ -2,6 +2,7 @@
 using TendalProject.Data.Context;
 using TendalProject.Data.Interfaces;
 using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Data.Repositories
 {
@@ -11,6 +12,14 @@ namespace TendalProject.Data.Repositories
         public ArticuloRepository(AppDbContext appDbContext) : base(appDbContext)
         {
             _appDbContext = appDbContext;
+        }
+
+        public async Task<List<Articulo>> GetArticulosWithCategoriaAsync()
+        {
+            return await _appDbContext.TblArticulo
+                .AsNoTracking()
+                .Include(c => c.Categoria)
+                .ToListAsync();
         }
 
         public async Task<Articulo?> GetArticuloWithIncludesByIdAsync(Guid articuloId)

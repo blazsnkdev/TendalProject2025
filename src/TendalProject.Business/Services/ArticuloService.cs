@@ -25,6 +25,48 @@ namespace TendalProject.Business.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
+        public async Task<Result<Guid>> ActualizarArticuloAsync(ActualizarArticuloRequest request)
+        {
+            try
+            {
+                if (request.ArticuloId == Guid.Empty)
+                {
+                    return Result<Guid>.Failure(Error.Validation("El campo ArticuloId es obligatorio."));
+                }
+                if(StringUtils.IsNullOrWhiteSpace(request.Nombre,request.Descripcion))
+                {
+                    return Result<Guid>.Failure(Error.Validation("Los campos Nombre y Descripcion son obligatorios."));
+                }
+                var articulo = await _UoW.ArticuloRepository.GetByIdAsync(request.ArticuloId);
+                if (articulo == null) { 
+                    return Result<Guid>.Failure(Error.NotFound("Artículo no encontrado."));
+                }
+                articulo.Nombre = request.Nombre;
+                articulo.Descripcion = request.Descripcion;
+                articulo.Precio = request.Precio;
+                articulo.PrecioOferta = request.PrecioOferta;
+                articulo.Stock = request.Stock;
+                articulo.Destacado = request.Destacado;
+                articulo.CategoriaId = request.CategoriaId;
+                articulo.ProveedorId = request.ProveedorId;
+                _UoW.ArticuloRepository.Update(articulo);
+                await _UoW.SaveChangesAsync();
+                return Result<Guid>.Success(articulo.ArticuloId);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Result<Guid>.Failure(Error.Conflict("El artículo ha sido modificado por otro usuario. Por favor, vuelva a intentarlo."));
+            }
+            catch (DbUpdateException ex)
+            {
+                return Result<Guid>.Failure(Error.Database($"Error de base de datos al actualizar el articulo: {ex.Message}"));
+            }
+            catch (Exception ex)
+            {
+                return Result<Guid>.Failure(Error.Internal($"Error al actualizar el articulo: {ex.Message}"));
+            }
+        }
+
         public async Task<Result> ActualizarImagenArticuloAsync(ActualizarImagenArticuloRequest request)
         {
             var articulo = await _UoW.ArticuloRepository.GetByIdAsync(request.ArticuloId);
@@ -92,6 +134,26 @@ namespace TendalProject.Business.Services
                 var nuevoCodigo = $"ART-{nuevoNumeroCodigo.ToString("D8")}";
                 return Result<string>.Success(nuevoCodigo);
             }
+        }
+
+        public async Task<Result<List<ListarArticulosResponse>>> ObtenerListaArticulosAsync()
+        {
+            var articulos = await _UoW.ArticuloRepository.GetArticulosWithCategoriaAsync();
+            if (articulos is null || !articulos.Any())
+            {
+                return Result<List<ListarArticulosResponse>>.Success(new List<ListarArticulosResponse>());
+            }
+            var response = articulos.Select(a => new ListarArticulosResponse(
+                a.ArticuloId,
+                a.Codigo,
+                a.Nombre,
+                a.Categoria!.Nombre,
+                a.Stock,
+                a.Estado.ToString(),
+                a.Destacado,
+                a.CantidadVentas
+            )).ToList();
+            return Result<List<ListarArticulosResponse>>.Success(response);
         }
 
         public async Task<Result<string>> ObtenerRutaImagenArticuloAsync(Guid articuloId)
