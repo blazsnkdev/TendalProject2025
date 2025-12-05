@@ -28,14 +28,20 @@ namespace TendalProject.Web.Controllers
             _env = env;
         }
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Listar(int pagina = 1, int tamanioPagina = 10)
+        public async Task<IActionResult> Listar(bool mostrarInactivos = false, int pagina = 1, int tamanioPagina = 10)
         {
             var result = await _articuloService.ObtenerListaArticulosAsync();
             if (!result.IsSuccess || result.Value is null)
             {
                 return View("Error");
             }
-            var viewModel = result.Value.Select(a => new ListarArticulosViewModel()
+
+            // filtrar activos o inactivos
+            var articulos = result.Value
+                .Where(a => mostrarInactivos ? a.Estado == "Inactivo" : a.Estado == "Activo")
+                .ToList();
+
+            var viewModel = articulos.Select(a => new ListarArticulosViewModel()
             {
                 ArticuloId = a.ArticuloId,
                 Nombre = a.Nombre,
@@ -46,9 +52,15 @@ namespace TendalProject.Web.Controllers
                 Codigo = a.Codigo,
                 CantidadVentas = a.CantidadVentas
             }).ToList();
+
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
+
+            // Mandas el parámetro para usarlo en la vista
+            ViewBag.MostrarInactivos = mostrarInactivos;
+
             return View(paginacion);
         }
+
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Registrar()
         {
