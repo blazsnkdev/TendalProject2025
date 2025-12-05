@@ -4,6 +4,7 @@ using TendalProject.Business.DTOs.Requests.Proveedor;
 using TendalProject.Business.Interfaces;
 using TendalProject.Business.Services;
 using TendalProject.Common.Helpers;
+using TendalProject.Common.Results;
 using TendalProject.Web.ViewModels.Proveedor;
 
 namespace TendalProject.Web.Controllers
@@ -22,7 +23,7 @@ namespace TendalProject.Web.Controllers
             var result = await _proveedorService.ObtenerProveedoresAsync();
             if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error");
+                return HandleError(result.Error!);
             }
             var proveedores = result.Value
                 .Where(p => mostrarInactivos ? p.Estado == "Inactivo" : p.Estado == "Activo")
@@ -50,13 +51,9 @@ namespace TendalProject.Web.Controllers
         public async Task<IActionResult> Detalle(Guid proveedorId)
         {
             var result = await _proveedorService.DetalleProveedorAsync(proveedorId);
-            if (!result.IsSuccess)
+            if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error", result.Error);//NOTE: che esto necesito cambiar real
-            }
-            if (result.Value is null)
-            {
-                return NotFound();
+                return HandleError(result.Error!);
             }
             var viewModel = new DetalleProveedorViewModel
             {
@@ -74,7 +71,7 @@ namespace TendalProject.Web.Controllers
             return View(viewModel);
         }
         [Authorize(Roles = "Administrador")]
-        public IActionResult Registrar() => View();
+        public IActionResult Registrar() => View(new RegistrarProveedorViewModel());
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
@@ -106,13 +103,9 @@ namespace TendalProject.Web.Controllers
         public async Task<IActionResult> Actualizar(Guid proveedorId)
         {
             var result = await _proveedorService.DetalleProveedorAsync(proveedorId);
-            if (!result.IsSuccess)
+            if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error", result.Error);
-            }
-            if (result.Value is null)
-            {
-                return NotFound();
+                return HandleError(result.Error!);
             }
             var viewModel = new ActualizarProveedorViewModel
             {
@@ -162,9 +155,21 @@ namespace TendalProject.Web.Controllers
             var result = await _proveedorService.ModificarEstadoProveedorAsync(proveedorId);
             if (!result.IsSuccess)
             {
-                return View("Error", result.Error);
+                return HandleError(result.Error!);
             }
             return RedirectToAction(nameof(Detalle), new { proveedorId = proveedorId });
+        }
+
+        private IActionResult HandleError(Error error)
+        {
+            return error.Code switch
+            {
+                "ERROR_NOT_FOUND" => RedirectToAction("NotFoundPage", "Auth"),
+                "ERROR_UNAUTHORIZED" => RedirectToAction("UnauthorizedPage", "Auth"),
+                "ERROR_CONFLICT" => RedirectToAction("AccessDenied", "Auth"),
+                "ERROR_VALIDATION" => RedirectToAction("AccessDenied", "Auth"),
+                _ => RedirectToAction("AccessDenied", "Auth")
+            };
         }
     }
 }

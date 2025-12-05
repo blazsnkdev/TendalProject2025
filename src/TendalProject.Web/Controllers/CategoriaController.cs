@@ -4,6 +4,7 @@ using TendalProject.Business.DTOs.Requests.Categoria;
 using TendalProject.Business.Interfaces;
 using TendalProject.Business.Services;
 using TendalProject.Common.Helpers;
+using TendalProject.Common.Results;
 using TendalProject.Web.ViewModels.Categoria;
 
 namespace TendalProject.Web.Controllers
@@ -22,11 +23,11 @@ namespace TendalProject.Web.Controllers
             var result = await _categoriaService.ObtenerDetalleCategoriaAsync(categoriaId);
             if (!result.IsSuccess)
             {
-                return NotFound();//TODO: Manejar error adecuadamente
+                return HandleError(result.Error!);
             }
             if (result.Value is null)
             {
-                return NotFound();
+                return HandleError(result.Error!);
             }
             var viewModel = new DetalleCategoriaViewModel
             {
@@ -39,7 +40,7 @@ namespace TendalProject.Web.Controllers
             return View(viewModel);
         }
         [Authorize(Roles = "Administrador")]
-        public IActionResult Registrar() => View();
+        public IActionResult Registrar() => View(new RegistrarCategoriaViewModel());
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
@@ -64,7 +65,7 @@ namespace TendalProject.Web.Controllers
             var result = await _categoriaService.ObtenerCategoriasAsync();
             if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error");
+                return HandleError(result.Error!);
             }
             var categorias = result.Value
                 .Where(c => mostrarInactivos ? c.Estado == "Inactivo" : c.Estado == "Activo")
@@ -88,11 +89,11 @@ namespace TendalProject.Web.Controllers
             var result = await _categoriaService.ObtenerDetalleCategoriaAsync(categoriaId);
             if (!result.IsSuccess)
             {
-                return NotFound();//TODO: Manejar error adecuadamente
+                return HandleError(result.Error!);
             }
             if (result.Value is null)
             {
-                return NotFound();
+                return HandleError(result.Error!);
             }
             var viewModel = new ActualizarCategoriaViewModel
             {
@@ -128,9 +129,22 @@ namespace TendalProject.Web.Controllers
             var result = await _categoriaService.ModificarEstadoAsync(categoriaId);
             if (!result.IsSuccess)
             {
-                return View("Error");
+                return HandleError(result.Error!);
             }
             return RedirectToAction(nameof(Detalle), new {categoriaId = result.Value});
+        }
+
+
+        private IActionResult HandleError(Error error)
+        {
+            return error.Code switch
+            {
+                "ERROR_NOT_FOUND" => RedirectToAction("NotFoundPage", "Auth"),
+                "ERROR_UNAUTHORIZED" => RedirectToAction("UnauthorizedPage", "Auth"),
+                "ERROR_CONFLICT" => RedirectToAction("AccessDenied", "Auth"),
+                "ERROR_VALIDATION" => RedirectToAction("AccessDenied", "Auth"),
+                _ => RedirectToAction("AccessDenied", "Auth")
+            };
         }
     }
 }

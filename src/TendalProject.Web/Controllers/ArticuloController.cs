@@ -33,7 +33,7 @@ namespace TendalProject.Web.Controllers
             var result = await _articuloService.ObtenerListaArticulosAsync();
             if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error");
+                return HandleError(result.Error!);  
             }
             var articulos = result.Value
                 .Where(a => mostrarInactivos ? a.Estado == "Inactivo" : a.Estado == "Activo")
@@ -121,12 +121,12 @@ namespace TendalProject.Web.Controllers
 
             if (!result.IsSuccess || result.Value is null)
             {
-                return RedirectToAction("Listar");
+                return HandleError(result.Error!);
             }
             var rutaImagen = await _articuloService.ObtenerRutaImagenArticuloAsync(articuloId);
             if (!rutaImagen.IsSuccess || rutaImagen.Value is null)
             {
-                return RedirectToAction("Listar");
+                return HandleError(rutaImagen.Error!);
             }
             var value = result.Value;
             var viewModel = new DetalleArticuloViewModel()
@@ -174,7 +174,7 @@ namespace TendalProject.Web.Controllers
             var result = await _articuloService.ObtenerArticuloActualizarAsync(articuloId);
             if (!result.IsSuccess || result.Value is null)
             {
-                return RedirectToAction("Listar");
+                return HandleError(result.Error!);
             }
             var value = result.Value;
             var viewModel = new ActualizarArticuloViewModel()
@@ -229,11 +229,14 @@ namespace TendalProject.Web.Controllers
             var result = await _articuloService.ModificarEstadoArticuloAsync(articuloId);
             if (!result.IsSuccess)
             {
-                ViewBag.Mensaje = "No se pudo modificar el estado del artículo.";
-                return RedirectToAction("Listar");
+                return HandleError(result.Error!);
             }
             return RedirectToAction(nameof(Detalle), new { articuloId = result.Value});
         }
+
+
+
+
         private async Task CargarSelectLists()
         {
             var categorias = await _categoriaService.ObtenerCategoriasActivasSelectListAsync();
@@ -246,5 +249,17 @@ namespace TendalProject.Web.Controllers
                 ? new SelectList(proveedores.Value, "ProveedorId", "Nombre")
                 : new SelectList(Enumerable.Empty<SelectListItem>(), "ProveedorId", "Nombre");
         }
+        private IActionResult HandleError(Error error)
+        {
+            return error.Code switch
+            {
+                "ERROR_NOT_FOUND" => RedirectToAction("NotFoundPage", "Auth"),
+                "ERROR_UNAUTHORIZED" => RedirectToAction("UnauthorizedPage", "Auth"),
+                "ERROR_CONFLICT" => RedirectToAction("AccessDenied", "Auth"),
+                "ERROR_VALIDATION" => RedirectToAction("AccessDenied", "Auth"),
+                _ => RedirectToAction("AccessDenied", "Auth")
+            };
+        }
+
     }
 }
