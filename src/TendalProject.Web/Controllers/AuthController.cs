@@ -73,5 +73,12 @@ namespace TendalProject.Web.Controllers
             await _authService.LogoutAsync(HttpContext);
             return RedirectToAction("Login", "Auth");
         }
+        [Route("acceso-denegado")]
+        public IActionResult AccessDenied() => View("AccessDenied");
+        [Route("no-autorizado")]
+        public IActionResult UnauthorizedPage() => View("UnauthorizedPage");
+        [Route("no-encontrado")]
+        public IActionResult NotFoundPage() => View("NotFoundPage");
+        
     }
 }
