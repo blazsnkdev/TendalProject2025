@@ -1,0 +1,157 @@
+﻿/* Paleta de Colores Tendal Market:
+   Amarillo: #FFD700
+   Morado: #800080
+   Verde: #3CB371
+   Blanco: #FFFFFF
+*/
+
+/* --- Base y Contenedor de Registro --- */
+body {
+    background-color: #FFD700; /* Fondo amarillo vibrante */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 750px; /* Más ancho para el registro */
+}
+
+.register-box {
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* --- Elementos de Marca --- */
+.logo-area {
+    margin-bottom: 25px;
+}
+
+.brand-name {
+    color: #800080; /* Morado */
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.form-title {
+    color: #800080;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #FFD700; /* Detalle amarillo */
+    padding-bottom: 5px;
+}
+
+/* --- Formulario General --- */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+    .form-group label {
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* Columna y Fila para el Registro (Permite campos lado a lado) */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding-left: 10px;
+    padding-right: 10px;
+    box-sizing: border-box;
+}
+
+/* Botón Principal */
+.btn-primary-tendal {
+    width: 100%;
+    padding: 12px;
+    background-color: #800080; /* Botón Morado */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 25px; /* Más espacio en el botón de registro */
+}
+
+    .btn-primary-tendal:hover {
+        background-color: #5d005d;
+    }
+
+/* --- Links y Validación --- */
+.login-link {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+    .login-link a {
+        color: #3CB371; /* Link verde */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+/* Validación de Errores */
+.text-danger {
+    color: #D32F2F;
+    font-size: 0.85rem;
+    margin-top: 3px;
+    display: block;
+}
+
+/* Media Query para Responsividad (Móviles) */
+@media (max-width: 768px) {
+    .register-container {
+        max-width: 95%;
+    }
+
+    .register-box {
+        padding: 25px 20px;
+    }
+
+    /* Columnas a una sola columna en móvil */
+    .col-md-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
