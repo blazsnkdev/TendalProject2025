@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.DTOs.Requests.Categoria;
 using TendalProject.Business.Interfaces;
+using TendalProject.Business.Services;
 using TendalProject.Common.Helpers;
 using TendalProject.Web.ViewModels.Categoria;
 
@@ -58,18 +59,18 @@ namespace TendalProject.Web.Controllers
             return RedirectToAction(nameof(Detalle), new { categoriaId = result.Value });
         }
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Listar(int pagina = 1, int tamanioPagina = 10)
+        public async Task<IActionResult> Listar(bool mostrarInactivos = false,int pagina = 1, int tamanioPagina = 10)
         {
             var result = await _categoriaService.ObtenerCategoriasAsync();
-            if (!result.IsSuccess)
+            if (!result.IsSuccess || result.Value is null)
             {
-                return NotFound();//TODO: Manejar error adecuadamente
+                return View("Error");
             }
-            if (result.Value is null)
-            {
-                return NotFound();
-            }
-            var viewModel = result.Value.Select(c => new ListarCategoriasViewModel()
+            var categorias = result.Value
+                .Where(c => mostrarInactivos ? c.Estado == "Inactivo" : c.Estado == "Activo")
+                .ToList();
+
+            var viewModel = categorias.Select(c => new ListarCategoriasViewModel()
             {
                 CategoriaId = c.CategoriaId,
                 Nombre = c.Nombre,
@@ -78,6 +79,7 @@ namespace TendalProject.Web.Controllers
                 FechaRegistro = c.FechaRegistro
             }).ToList();
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
+            ViewBag.MostrarInactivos = mostrarInactivos;
             return View(paginacion);
         }
         [Authorize(Roles = "Administrador")]
@@ -121,7 +123,7 @@ namespace TendalProject.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Eliminar(Guid categoriaId)
+        public async Task<IActionResult> ModificarEstado(Guid categoriaId)
         {
             var result = await _categoriaService.ModificarEstadoAsync(categoriaId);
             if (!result.IsSuccess)

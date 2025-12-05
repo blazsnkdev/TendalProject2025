@@ -11,8 +11,7 @@
         <form asp-controller="Categoria" asp-action="Actualizar" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CategoriaId" class="control-label"></label>
-                <input asp-for="CategoriaId" class="form-control" />
+                <input asp-for="CategoriaId" type="hidden" class="form-control" />
                 <span asp-validation-for="CategoriaId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -25,6 +24,7 @@
                 <input asp-for="Descripcion" class="form-control" />
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -33,6 +33,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Listar">Regresar</a>
 </div>
 

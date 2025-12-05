@@ -20,10 +20,9 @@ namespace TendalProject.Data.Repositories
                 .AnyAsync(c => c.Nombre.ToLower() == nombre.ToLower());
         }
 
-        public async Task<List<Categoria>> GetCategoriasActivasAsync()
+        public async Task<List<Categoria>> GetAllCategoriasAsync()
         {
             return await _appDbContext.TblCategoria
-                .Where(c => c.Estado == EstadoCategoria.Activo)
                 .ToListAsync();
         }
     }
