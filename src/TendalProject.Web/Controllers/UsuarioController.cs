@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.Interfaces;
+using TendalProject.Common.Results;
 using TendalProject.Web.ViewModels.Auth;
 
 namespace TendalProject.Web.Controllers
