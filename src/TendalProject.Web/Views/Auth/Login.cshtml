@@ -1,59 +1,57 @@
-﻿@using TendalProject.Web.ViewModels.Auth
-@model LoginViewModel
+﻿@model TendalProject.Web.ViewModels.Auth.LoginViewModel
+
 @{
-    ViewData["Title"] = "Iniciar Sesión";
     Layout = null;
 }
-
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5 col-lg-4">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-primary text-white text-center py-4">
-                    <h3 class="mb-0">
-                        <i class="bi bi-box-arrow-in-right"></i> Bienvenido
-                    </h3>
-                </div>
-                <div class="card-body p-4">
-                    <form asp-action="Login" asp-controller="Auth" method="post">
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control form-control-lg" placeholder="tu@email.com" />
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control form-control-lg" placeholder="••••••••" />
-                            <span asp-validation-for="Password" class="text-danger small"></span>
-                        </div>
-
-                        <div class="mb-3 form-check">
-                            <input asp-for="Recordarme" class="form-check-input" />
-                            <label asp-for="Recordarme" class="form-check-label">Mantener sesión abierta</label>
-                        </div>
-
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                            </button>
-                        </div>
-                    </form>
-
-                    <div class="text-center mt-4">
-                        <p>¿No tienes cuenta? <a asp-controller="Auth" asp-action="Registro" class="fw-bold">Regístrate aquí</a></p>
-                        <p><a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a></p>
-                    </div>
-                </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iniciar Sesión - Tendal Market</title>
+    <link rel="stylesheet" href="~/css/Auth//Login.css" />
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo-area">
+                <img src="~/tendal.png" alt="Tendal Market Logo" class="brand-logo" />
+                <h1 class="brand-name">Tendal Market</h1>
             </div>
+
+            <form asp-controller="Auth" asp-action="Login" method="post">
+                <h2 class="form-title">Inicia Sesión</h2>
+
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="form-control" placeholder="nombre@ejemplo.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Contraseña" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-group form-check">
+                    <input class="form-check-input" asp-for="Recordarme" />
+                    <label class="form-check-label" asp-for="Recordarme">
+                        Recuérdame
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary-tendal">Ingresar</button>
+
+                <div class="register-link">
+                    <p>¿Aún no tienes cuenta? <a asp-controller="Auth" asp-action="Registro">Regístrate aquí</a></p>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
