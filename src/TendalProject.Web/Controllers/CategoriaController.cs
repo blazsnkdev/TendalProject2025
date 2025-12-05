@@ -128,10 +128,9 @@ namespace TendalProject.Web.Controllers
             var result = await _categoriaService.ModificarEstadoAsync(categoriaId);
             if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, "Ocurrió un error al eliminar la categoría.");
-                return RedirectToAction(nameof(Listar));
+                return View("Error");
             }
-            return RedirectToAction(nameof(Listar));
+            return RedirectToAction(nameof(Detalle), new {categoriaId = result.Value});
         }
     }
 }

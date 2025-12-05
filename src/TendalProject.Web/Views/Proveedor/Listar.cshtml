@@ -39,12 +39,9 @@
                             <a class="btn btn-sm btn-outline-primary" asp-action="Actualizar" asp-route-proveedorId="@item.ProveedorId">
                                 <i class="bi bi-pencil-square"></i> Editar
                             </a>
-                            <form asp-action="Eliminar" method="post">
-                                <input type="hidden" name="proveedorId" value="@item.ProveedorId" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                    <i class="bi bi-trash"></i> Eliminar
-                                </button>
-                            </form>
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Detalle" asp-route-proveedorId="@item.ProveedorId">
+                                <i class="bi bi-pencil-square"></i> Ver
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -78,3 +75,16 @@
 
 </div>
 
+
+@if ((bool)ViewBag.MostrarInactivos)
+{
+    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-primary">
+        Ver Activos
+    </a>
+}
+else
+{
+    <a asp-action="Listar" asp-route-mostrarInactivos="true" class="btn btn-warning">
+        Ver Inactivos
+    </a>
+}

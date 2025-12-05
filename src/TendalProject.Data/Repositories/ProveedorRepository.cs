@@ -29,9 +29,9 @@ namespace TendalProject.Data.Repositories
             return await _appDbContext.TblProveedor.AnyAsync(p => p.Telefono == telefono);
         }
 
-        public Task<List<Proveedor>> GetProveedoresActivosAsync()
+        public async Task<List<Proveedor>> GetAllProveedoresActivosAsync()
         {
-            return _appDbContext.TblProveedor
+            return await _appDbContext.TblProveedor
                 .Where(p => p.Estado == EstadoProveedor.Activo)
                 .ToListAsync();
         }

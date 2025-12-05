@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.DTOs.Requests.Proveedor;
 using TendalProject.Business.Interfaces;
+using TendalProject.Business.Services;
 using TendalProject.Common.Helpers;
 using TendalProject.Web.ViewModels.Proveedor;
 
@@ -16,18 +17,18 @@ namespace TendalProject.Web.Controllers
             _proveedorService = proveedorService;
         }
         [Authorize(Roles = "Administrador")]
-        public async Task<IActionResult> Listar(int pagina = 1, int tamanioPagina = 10)
+        public async Task<IActionResult> Listar(bool mostrarInactivos = false,int pagina = 1, int tamanioPagina = 10)
         {
-            var result = await _proveedorService.ListarProveedoresAsync();
-            if (!result.IsSuccess)
+            var result = await _proveedorService.ObtenerProveedoresAsync();
+            if (!result.IsSuccess || result.Value is null)
             {
-                return View("Error", result.Error);
+                return View("Error");
             }
-            if (result.Value is null)
-            {
-                return View("Error", "No se encontraron proveedores.");
-            }
-            var viewModel = result.Value.Select(p => new ListarProveedoresViewModel
+            var proveedores = result.Value
+                .Where(p => mostrarInactivos ? p.Estado == "Inactivo" : p.Estado == "Activo")
+                .ToList();
+
+            var viewModel = proveedores.Select(p => new ListarProveedoresViewModel
             {
                 ProveedorId = p.ProveedorId,
                 Nombre = p.Nombre,
@@ -42,6 +43,7 @@ namespace TendalProject.Web.Controllers
             }).ToList();
 
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
+            ViewBag.MostrarInactivos = mostrarInactivos;
             return View(paginacion);
         }
         [Authorize(Roles = "Administrador")]
@@ -155,7 +157,7 @@ namespace TendalProject.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Eliminar(Guid proveedorId)
+        public async Task<IActionResult> ModificarEstado(Guid proveedorId)
         {
             var result = await _proveedorService.ModificarEstadoProveedorAsync(proveedorId);
             if (!result.IsSuccess)
