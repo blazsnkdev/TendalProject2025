@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TendalProject.Business.DTOs.Requests.Articulo;
 using TendalProject.Business.DTOs.Responses.Articulo;
 using TendalProject.Business.Interfaces;
@@ -24,7 +23,6 @@ namespace TendalProject.Business.Services
             _UoW = uoW;
             _dateTimeProvider = dateTimeProvider;
         }
-
         public async Task<Result<Guid>> ActualizarArticuloAsync(ActualizarArticuloRequest request)
         {
             try
@@ -33,7 +31,7 @@ namespace TendalProject.Business.Services
                 {
                     return Result<Guid>.Failure(Error.Validation("El campo ArticuloId es obligatorio."));
                 }
-                if(StringUtils.IsNullOrWhiteSpace(request.Nombre,request.Descripcion))
+                if(!StringUtils.IsNullOrWhiteSpace(request.Nombre,request.Descripcion))
                 {
                     return Result<Guid>.Failure(Error.Validation("Los campos Nombre y Descripcion son obligatorios."));
                 }
@@ -87,7 +85,6 @@ namespace TendalProject.Business.Services
                 await request.Imagen.CopyToAsync(stream);
             }
             articulo.Imagen = $"img/Articulo/{nombreArchivo}";
-            _UoW.ArticuloRepository.Update(articulo);
             await _UoW.SaveChangesAsync();
             return Result.Success();
         }
@@ -108,7 +105,8 @@ namespace TendalProject.Business.Services
                 articulo.Stock,
                 articulo.Categoria!.Nombre,
                 articulo.Proveedor!.Nombre,
-                articulo.FechaRegistro);
+                articulo.FechaRegistro,
+                articulo.Estado.ToString());
             return Result<DetalleArticuloResponse>.Success(response);
         }
 
@@ -134,6 +132,47 @@ namespace TendalProject.Business.Services
                 var nuevoCodigo = $"ART-{nuevoNumeroCodigo.ToString("D8")}";
                 return Result<string>.Success(nuevoCodigo);
             }
+        }
+
+        public async Task<Result<Guid>> ModificarEstadoArticuloAsync(Guid articuloId)
+        {
+            if (articuloId == Guid.Empty)
+            {
+                return Result<Guid>.Failure(Error.Validation("El campo ArticuloId es obligatorio."));
+            }
+            var articulo = await _UoW.ArticuloRepository.GetByIdAsync(articuloId);
+            if(articulo is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound("El articulo no existe."));
+            }
+            articulo.Estado = articulo.Estado == EstadoArticulo.Activo ? EstadoArticulo.Inactivo : EstadoArticulo.Activo;
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(articulo.ArticuloId);
+        }
+
+        public async Task<Result<DatosActualizarArticuloResponse>> ObtenerArticuloActualizarAsync(Guid articuloId)
+        {
+            if(articuloId == Guid.Empty)
+            {
+                return Result<DatosActualizarArticuloResponse>.Failure(Error.Validation("El campo ArticuloId es obligatorio."));
+            }
+            var articulo = await _UoW.ArticuloRepository.GetArticuloWithIncludesByIdAsync(articuloId);
+            if(articulo is null)
+            {
+                return Result<DatosActualizarArticuloResponse>.Failure(Error.NotFound("El articulo no existe."));
+            }
+            var response = new DatosActualizarArticuloResponse(
+                articulo.ArticuloId,
+                articulo.Nombre,
+                articulo.Descripcion,
+                articulo.Precio,
+                articulo.PrecioOferta,
+                articulo.Stock,
+                articulo.Destacado,
+                articulo.CategoriaId ?? Guid.Empty,
+                articulo.ProveedorId ?? Guid.Empty
+            );
+            return Result<DatosActualizarArticuloResponse>.Success(response);
         }
 
         public async Task<Result<List<ListarArticulosResponse>>> ObtenerListaArticulosAsync()
