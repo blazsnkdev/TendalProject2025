@@ -132,3 +132,16 @@
         </div>
     }
 </div>
+
+@if ((bool)ViewBag.MostrarInactivos)
+{
+    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-primary">
+        Ver Activos
+    </a>
+}
+else
+{
+    <a asp-action="Listar" asp-route-mostrarInactivos="true" class="btn btn-warning">
+        Ver Inactivos
+    </a>
+}
