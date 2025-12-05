@@ -35,8 +35,6 @@ namespace TendalProject.Web.Controllers
             {
                 return View("Error");
             }
-
-            // filtrar activos o inactivos
             var articulos = result.Value
                 .Where(a => mostrarInactivos ? a.Estado == "Inactivo" : a.Estado == "Activo")
                 .ToList();
@@ -54,10 +52,7 @@ namespace TendalProject.Web.Controllers
             }).ToList();
 
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
-
-            // Mandas el parámetro para usarlo en la vista
             ViewBag.MostrarInactivos = mostrarInactivos;
-
             return View(paginacion);
         }
 
