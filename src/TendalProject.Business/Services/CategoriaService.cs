@@ -94,7 +94,7 @@ namespace TendalProject.Business.Services
 
         public async Task<Result<List<CategoriaSelectListResponse>>> ObtenerCategoriasActivasSelectListAsync()
         {
-            var categorias = await _UoW.CategoriaRepository.GetCategoriasActivasAsync();
+            var categorias = await _UoW.CategoriaRepository.GetAllCategoriasAsync();
             var listaCategorias = new List<CategoriaSelectListResponse>();  
             listaCategorias = categorias.Select(categoria => new CategoriaSelectListResponse
             (
