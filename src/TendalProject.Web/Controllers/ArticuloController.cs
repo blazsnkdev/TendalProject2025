@@ -67,7 +67,7 @@ namespace TendalProject.Web.Controllers
             }
             var articuloId = Guid.NewGuid();
             string rutaImagen = string.Empty;
-            if(viewModel.Imagen is not null)
+            if (viewModel.Imagen is not null)
             {
                 var allowed = new[] { "image/jpeg", "image/png", "image/webp" };
                 if (!allowed.Contains(viewModel.Imagen.ContentType))
@@ -117,7 +117,7 @@ namespace TendalProject.Web.Controllers
                 return RedirectToAction("Listar");
             }
             var rutaImagen = await _articuloService.ObtenerRutaImagenArticuloAsync(articuloId);
-            if(!rutaImagen.IsSuccess || rutaImagen.Value is null)
+            if (!rutaImagen.IsSuccess || rutaImagen.Value is null)
             {
                 return RedirectToAction("Listar");
             }
@@ -133,7 +133,8 @@ namespace TendalProject.Web.Controllers
                 NombreCategoria = value.NombreCategoria,
                 NombreProveedor = value.NombreProveedor,
                 FechaRegistro = value.FechaRegistro,
-                Imagen = rutaImagen.Value
+                Imagen = rutaImagen.Value,
+                Estado = value.Estado
             };
 
             return View(viewModel);
@@ -159,6 +160,72 @@ namespace TendalProject.Web.Controllers
                 return View(viewModel);
             }
             return RedirectToAction(nameof(Detalle), new { articuloId = viewModel.ArticuloId });
+        }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Actualizar(Guid articuloId)
+        {
+            var result = await _articuloService.ObtenerArticuloActualizarAsync(articuloId);
+            if (!result.IsSuccess || result.Value is null)
+            {
+                return RedirectToAction("Listar");
+            }
+            var value = result.Value;
+            var viewModel = new ActualizarArticuloViewModel()
+            {
+                ArticuloId = articuloId,
+                Nombre = value.Nombre,
+                Descripcion = value.Descripcion,
+                Precio = value.Precio,
+                PrecioOferta = value.PrecioOferta,
+                Stock = value.Stock,
+                Destacado = value.Destacado,
+                CategoriaId = value.CategoriaId,
+                ProveedorId = value.ProveedorId
+            };
+            await CargarSelectLists();
+            return View(viewModel);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Actualizar(ActualizarArticuloViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                await CargarSelectLists();
+                return View(viewModel);
+            }
+            var request = new ActualizarArticuloRequest(
+                viewModel.ArticuloId,
+                viewModel.Nombre,
+                viewModel.Descripcion,
+                viewModel.Precio,
+                viewModel.PrecioOferta,
+                viewModel.Stock,
+                viewModel.Destacado,
+                viewModel.CategoriaId,
+                viewModel.ProveedorId
+                );
+            var result = await _articuloService.ActualizarArticuloAsync(request);
+            if (!result.IsSuccess)
+            {
+                await CargarSelectLists();
+                return View(viewModel);
+            }
+            return RedirectToAction(nameof(Detalle), new { articuloId = viewModel.ArticuloId });
+        }
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ModificarEstado(Guid articuloId)
+        {
+            var result = await _articuloService.ModificarEstadoArticuloAsync(articuloId);
+            if (!result.IsSuccess)
+            {
+                ViewBag.Mensaje = "No se pudo modificar el estado del artículo.";
+                return RedirectToAction("Listar");
+            }
+            return RedirectToAction(nameof(Detalle), new { articuloId = result.Value});
         }
         private async Task CargarSelectLists()
         {

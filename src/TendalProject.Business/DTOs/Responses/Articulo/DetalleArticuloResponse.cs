@@ -1,7 +1,8 @@
 ﻿namespace TendalProject.Business.DTOs.Responses.Articulo
 {
     public record DetalleArticuloResponse
-    (Guid ArticuloId,
+    (
+        Guid ArticuloId,
         string Codigo,
         string Nombre,
         string Descripcion,
@@ -9,5 +10,7 @@
         int Stock,
         string NombreCategoria,
         string NombreProveedor,
-        DateTime FechaRegistro);
+        DateTime FechaRegistro,
+        string Estado
+    );
 }

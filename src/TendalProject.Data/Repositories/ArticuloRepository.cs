@@ -31,5 +31,14 @@ namespace TendalProject.Data.Repositories
                 .Include(p => p.Proveedor)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task UpdateEstadoArticuloByIdAsync(Guid articuloId)
+        {
+            await _appDbContext.TblArticulo
+                .Where(a => a.ArticuloId == articuloId)
+                .ExecuteUpdateAsync(a => a.SetProperty(
+                    articulo => articulo.Estado,
+                    articulo => articulo.Estado == EstadoArticulo.Activo ? EstadoArticulo.Inactivo : EstadoArticulo.Activo));
+        }
     }
 }
