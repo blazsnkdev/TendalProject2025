@@ -110,7 +110,7 @@ namespace TendalProject.Business.Services
             return Result<ProveedorResponse>.Success(response);
         }
 
-        public async Task<Result<List<ProveedorResponse>>> ListarProveedoresAsync()
+        public async Task<Result<List<ProveedorResponse>>> ObtenerProveedoresAsync()
         {
             var proveedores = await _UoW.ProveedorRepository.GetAllAsync();
             var response = new List<ProveedorResponse>();
@@ -147,7 +147,7 @@ namespace TendalProject.Business.Services
 
         public async Task<Result<List<ProveedorSelectListResponse>>> ObtenerProveedoresActivosSelectListAsync()
         {
-            var proveedoresActivos = await _UoW.ProveedorRepository.GetProveedoresActivosAsync();
+            var proveedoresActivos = await _UoW.ProveedorRepository.GetAllProveedoresActivosAsync();
             var response = new List<ProveedorSelectListResponse>();
             response = proveedoresActivos.Select(p => new ProveedorSelectListResponse(
                 p.ProveedorId,

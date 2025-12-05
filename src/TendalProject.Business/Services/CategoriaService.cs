@@ -61,14 +61,14 @@ namespace TendalProject.Business.Services
             }
         }
 
-        public async Task<Result> ModificarEstadoAsync(Guid categoriaId)
+        public async Task<Result<Guid>> ModificarEstadoAsync(Guid categoriaId)
         {
             try
             {
                 var categoriaExistente = await _UoW.CategoriaRepository.GetByIdAsync(categoriaId);
                 if (categoriaExistente is null)
                 {
-                    return Result.Failure(Error.NotFound("La categoría no existe."));
+                    return Result<Guid>.Failure(Error.NotFound("La categoría no existe."));
                 }
 
                 categoriaExistente.Estado =categoriaExistente.Estado == EstadoCategoria.Inactivo
@@ -76,25 +76,25 @@ namespace TendalProject.Business.Services
                     : EstadoCategoria.Inactivo;
 
                 await _UoW.SaveChangesAsync();
-                return Result.Success();
+                return Result<Guid>.Success(categoriaExistente.CategoriaId);
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                return Result.Failure(Error.Conflict($"Conflicto al desactivar la categoría: {ex.Message}"));
+                return Result<Guid>.Failure(Error.Conflict($"Conflicto al desactivar la categoría: {ex.Message}"));
             }
             catch (DbUpdateException ex)
             {
-                return Result.Failure(Error.Database($"Error al desactivar la categoría: {ex.Message}"));
+                return Result<Guid>.Failure(Error.Database($"Error al desactivar la categoría: {ex.Message}"));
             }
             catch (Exception ex)
             {
-                return Result.Failure(Error.Internal($"Error inesperado al desactivar la categoría: {ex.Message}"));
+                return Result<Guid>.Failure(Error.Internal($"Error inesperado al desactivar la categoría: {ex.Message}"));
             }
         }
 
         public async Task<Result<List<CategoriaSelectListResponse>>> ObtenerCategoriasActivasSelectListAsync()
         {
-            var categorias = await _UoW.CategoriaRepository.GetAllCategoriasAsync();
+            var categorias = await _UoW.CategoriaRepository.GetAllCategoriasActivasAsync();
             var listaCategorias = new List<CategoriaSelectListResponse>();  
             listaCategorias = categorias.Select(categoria => new CategoriaSelectListResponse
             (
