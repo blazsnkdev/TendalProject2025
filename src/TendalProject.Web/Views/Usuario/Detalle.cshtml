@@ -6,50 +6,61 @@
 
 <h1>Detalle</h1>
 
-<h4>DetalleUsuarioViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Detalle">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UsuarioId" class="control-label"></label>
-                <input asp-for="UsuarioId" class="form-control" />
-                <span asp-validation-for="UsuarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UltimaConexion" class="control-label"></label>
-                <input asp-for="UltimaConexion" class="form-control" />
-                <span asp-validation-for="UltimaConexion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IntentosFallidos" class="control-label"></label>
-                <input asp-for="IntentosFallidos" class="form-control" />
-                <span asp-validation-for="IntentosFallidos" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Activo" /> @Html.DisplayNameFor(model => model.Activo)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaCreacion" class="control-label"></label>
-                <input asp-for="FechaCreacion" class="form-control" />
-                <span asp-validation-for="FechaCreacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+    <h4>DetalleUsuarioViewModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UltimaConexion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UltimaConexion)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IntentosFallidos)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IntentosFallidos)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaCreacion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaCreacion)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Roles)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var rol in Model.Roles)
+            {
+                <span>@rol</span><br />
+            }
+        </dd>
+    </dl>
 </div>
-
+<div>
+    <form asp-action="ModificarEstado" asp-route-usuarioId="@Model.UsuarioId" method="post">
+        @if (Model.Activo)
+        {
+            <input type="submit" value="Desactivar Usuario" class="btn btn-danger" />
+        }
+        else
+        {
+            <input type="submit" value="Activar Usuario" class="btn btn-success" />
+        }
+    </form>
+    <a asp-action="Listar">Regresar</a>
+</div>

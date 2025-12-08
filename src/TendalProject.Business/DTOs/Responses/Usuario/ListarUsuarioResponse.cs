@@ -4,7 +4,6 @@
     (
         Guid UsuarioId,
         string Email,
-        string Password,
         bool Activo,
         DateTime? UltimaConexion
     );

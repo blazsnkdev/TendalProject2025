@@ -23,6 +23,16 @@ namespace TendalProject.Business.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
+        public async Task<Result<Guid>> ActualizarEstadoUsuarioAsync(Guid usuarioId)
+        {
+            var result = await _UoW.UsuarioRepository.UpdateEstadoAsync(usuarioId);
+            if(result > 0)
+            {
+                return Result<Guid>.Success(usuarioId);
+            }
+            return Result<Guid>.Failure(Error.Unknown("No se pudo dar de baja al usuario."));
+        }
+
         public async Task<Result<DetalleUsuarioResponse>> ObtenerDetalleUsuarioAsync(Guid usuarioId)
         {
             var usuario = await _UoW.UsuarioRepository.GetByIdAsync(usuarioId);
@@ -57,7 +67,7 @@ namespace TendalProject.Business.Services
         {
             var usuarios = await  _UoW.UsuarioRepository.GetAllAsync();
             var response = usuarios.Select(u => new ListarUsuarioResponse(
-                u.UsuarioId,u.Email,u.PasswordHash,u.Activo, u.UltimaConexion
+                u.UsuarioId,u.Email,u.Activo, u.UltimaConexion
                 )).ToList();
             return Result<List<ListarUsuarioResponse>>.Success(response);
         }

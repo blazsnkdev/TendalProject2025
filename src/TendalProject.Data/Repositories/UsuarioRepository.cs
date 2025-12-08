@@ -44,5 +44,18 @@ namespace TendalProject.Data.Repositories
                     .ThenInclude(ur => ur.Rol)
                 .FirstOrDefaultAsync(u => u.UsuarioId == usuarioId);
         }
+
+        public async Task<int> UpdateEstadoAsync(Guid usuarioId)
+        {
+            var estadoActual = await _appDbContext.TblUsuario
+                .Where(u => u.UsuarioId == usuarioId)
+                .Select(u => u.Activo)
+                .FirstOrDefaultAsync();
+
+            return await _appDbContext.TblUsuario
+                .Where(u => u.UsuarioId == usuarioId)
+                .ExecuteUpdateAsync(u =>
+                    u.SetProperty(x => x.Activo, !estadoActual));
+        }
     }
 }

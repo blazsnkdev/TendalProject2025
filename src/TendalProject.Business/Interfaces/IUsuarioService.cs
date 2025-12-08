@@ -10,5 +10,6 @@ namespace TendalProject.Business.Interfaces
         Task<Result<List<ListarUsuarioResponse>>> ObtenerUsuariosAsync();
         Task<Result<List<ListarRolesPorUsuarioResponse>>> ObtenerRolesPorUsuarioIdAsync(Guid usuarioId);
         Task<Result<DetalleUsuarioResponse>> ObtenerDetalleUsuarioAsync(Guid usuarioId);
+        Task<Result<Guid>> ActualizarEstadoUsuarioAsync(Guid usuarioId);
     }
 }
