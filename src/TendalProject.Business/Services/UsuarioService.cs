@@ -1,4 +1,5 @@
 ﻿using TendalProject.Business.DTOs.Requests.Usuario;
+using TendalProject.Business.DTOs.Responses.Usuario;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -21,6 +22,46 @@ namespace TendalProject.Business.Services
             _UoW = UoW;
             _dateTimeProvider = dateTimeProvider;
         }
+
+        public async Task<Result<DetalleUsuarioResponse>> ObtenerDetalleUsuarioAsync(Guid usuarioId)
+        {
+            var usuario = await _UoW.UsuarioRepository.GetByIdAsync(usuarioId);
+            if (usuario == null)
+            {
+                return Result<DetalleUsuarioResponse>.Failure(Error.NotFound("Usuario no encontrado."));
+            }
+            var roles = usuario.UsuariosRoles;
+            var response = new DetalleUsuarioResponse(
+                usuario.UsuarioId,
+                usuario.Email,
+                usuario.UltimaConexion,
+                usuario.IntentosFallidos,
+                usuario.Activo,
+                usuario.FechaCreacion,
+                roles.Select(r => r.Rol.Nombre).ToList()
+            );
+            return Result<DetalleUsuarioResponse>.Success(response);
+        }
+
+        public async Task<Result<List<ListarRolesPorUsuarioResponse>>> ObtenerRolesPorUsuarioIdAsync(Guid usuarioId)
+        {
+            var roles = await _UoW.UsuarioRepository.GetRolesPorUsuarioIdAsync(usuarioId);
+            var response = roles.Select(r => new ListarRolesPorUsuarioResponse(
+                r.Nombre,
+                r.Descripcion
+            )).ToList();
+            return Result<List<ListarRolesPorUsuarioResponse>>.Success(response);
+        }
+
+        public async Task<Result<List<ListarUsuarioResponse>>> ObtenerUsuariosAsync()
+        {
+            var usuarios = await  _UoW.UsuarioRepository.GetAllAsync();
+            var response = usuarios.Select(u => new ListarUsuarioResponse(
+                u.UsuarioId,u.Email,u.PasswordHash,u.Activo, u.UltimaConexion
+                )).ToList();
+            return Result<List<ListarUsuarioResponse>>.Success(response);
+        }
+
         public async Task<Result<Guid>> RegistrarUsuarioAsync(RegistrarUsuarioRequest request)
         {
             if (StringUtils.IsNullOrWhiteSpace(request.Email, request.Password, request.ConfirmarPassword))
