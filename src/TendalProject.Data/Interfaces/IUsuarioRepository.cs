@@ -6,5 +6,8 @@ namespace TendalProject.Data.Interfaces
     {
         Task<Usuario?> GetUsuarioConRolesPorEmailAsync(string email);
         Task<bool> ExisteEmailAsync(string email);
+        Task<List<Rol>> GetRolesPorUsuarioIdAsync(Guid usuarioId);
+        Task<Usuario?> GetUsuarioWithRolesAsync(Guid usuarioId);
+        Task<int> UpdateEstadoAsync(Guid usuarioId);
     }
 }

@@ -1,0 +1,147 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Usuario.ListarUsuarioViewModel>
+
+@{
+    ViewData["Title"] = "Activos";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Usuario/Listar.css" />
+}
+<div class="clientes-container">
+    <!-- Header de la página -->
+    <div class="page-header">
+        <h1 class="page-title">Módulo Usuarios</h1>
+    </div>
+
+    <!-- Botón agregar -->
+    <a asp-action="Registrar" class="btn-agregar">
+        <i class="fas fa-plus-circle"></i> Agregar
+    </a>
+
+    @if (Model.Items.Any())
+    {
+        <!-- Controles de paginación superior -->
+        <div class="pagination-controls">
+            <div class="registros-info">
+                Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+                @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+                @Model.TotalRegistros registros
+            </div>
+
+            <div class="tamanio-pagina">
+                <span class="tamanio-label">Registros por página:</span>
+                <div>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="5"
+                       class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="10"
+                       class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="25"
+                       class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="50"
+                       class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid de Cards -->
+        <div class="row g-4 mt-3">
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card shadow-sm cliente-card h-100">
+                        <div class="card-body d-flex flex-column">
+
+                            <h5 class="card-title fw-bold">@item.Email</h5>
+                            <p class="card-text text-muted mb-1">@item.UltimaConexion?.ToString("g")</p>
+
+                            <span class="badge bg-success mb-2">@item.Activo</span>
+
+
+                            <div class="mt-auto d-flex gap-2">
+                                <a asp-controller="Usuario" asp-action="Detalle" asp-route-usuarioId="@item.UsuarioId"
+                                   class="btn btn-sm btn-outline-primary w-50">
+                                    <i class="fas fa-eye"></i> Detalle
+                                </a>
+                                <a asp-controller="Usuario" asp-action="Actualizar" asp-route-usuarioId="@item.UsuarioId"
+                                   class="btn btn-sm btn-primary w-50">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a asp-controller="Usuario" asp-action="Roles" asp-route-usuarioId="@item.UsuarioId"
+                                   class="btn btn-sm btn-danger w-50">
+                                    <i class="fas fa-edit"></i> Roles
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+        <!-- Paginación inferior -->
+        <nav aria-label="Paginación de categorias">
+            <ul class="pagination-custom">
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Primera">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@(Model.PaginaIndice - 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Anterior">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+
+
+                @{
+                    int inicio = Math.Max(1, Model.PaginaIndice - 2);
+                    int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
+                }
+
+                @for (int i = inicio; i <= fin; i++)
+                {
+                    <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                        <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@i" asp-route-tamanioPagina="@Model.TamanioPagina">@i</a>
+                    </li>
+                }
+
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@(Model.PaginaIndice + 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Siguiente">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@Model.TotalPagias" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Última">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <!-- Estado vacío -->
+        <div class="estado-vacio">
+            <i class="fas fa-users"></i>
+            <h4>No hay categorias activas</h4>
+            <p>No se encontraron categorias activas en el sistema.</p>
+            <a asp-action="Registrar" class="btn-agregar">
+                <i class="fas fa-plus-circle"></i> Agregar Primera Categoria
+            </a>
+        </div>
+    }
+</div>
+
+@if ((bool)ViewBag.MostrarInactivos)
+{
+    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-primary">
+        Ver Activos
+    </a>
+}
+else
+{
+    <a asp-action="Listar" asp-route-mostrarInactivos="true" class="btn btn-warning">
+        Ver Inactivos
+    </a>
+}
