@@ -14,5 +14,7 @@
             new("ERROR_INTERNAL", message);        
         public static Error Database(string message = "Error de base de datos") =>
             new("ERROR_DATABASE", message);
+        public static Error Unknown(string message = "Error desconocido") =>
+            new("ERROR_UNKNOWN", message);
     }
 }
