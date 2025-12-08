@@ -1,0 +1,114 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Usuario.ListarRolPorUsuarioViewModel>
+
+@{
+    ViewData["Title"] = "Activos";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Usuario/Roles.css" />
+}
+<div class="clientes-container">
+
+    <div class="page-header">
+        <h1 class="page-title">Roles Asignados</h1>
+    </div>
+    <a asp-action="Registrar" class="btn-agregar">
+        <i class="fas fa-plus-circle"></i> Agregar
+    </a>
+
+    @if (Model.Items.Any())
+    {
+
+        <div class="pagination-controls">
+            <div class="registros-info">
+                Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+                @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+                @Model.TotalRegistros registros
+            </div>
+
+            <div class="tamanio-pagina">
+                <span class="tamanio-label">Registros por página:</span>
+                <div>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="5"
+                       class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="10"
+                       class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="25"
+                       class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="50"
+                       class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Nombre</td>
+                        <td>@item.Descripcion</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Paginación inferior -->
+        <nav aria-label="Paginación de articulos">
+            <ul class="pagination-custom">
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Roles" asp-route-pagina="1" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Primera">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Roles" asp-route-pagina="@(Model.PaginaIndice - 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Anterior">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+
+                @{
+                    int inicio = Math.Max(1, Model.PaginaIndice - 2);
+                    int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
+                }
+
+                @for (int i = inicio; i <= fin; i++)
+                {
+                    <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                        <a class="page-link-custom" asp-action="Roles" asp-route-pagina="@i" asp-route-tamanioPagina="@Model.TamanioPagina">@i</a>
+                    </li>
+                }
+
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Roles" asp-route-pagina="@(Model.PaginaIndice + 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Siguiente">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Roles" asp-route-pagina="@Model.TotalPagias" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Última">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <!-- Estado vacío -->
+        <div class="estado-vacio">
+            <i class="fas fa-users"></i>
+            <h4>No hay roles asignados </h4>
+            <p>No se le asignaron roles.</p>
+            <a asp-action="Registrar" class="btn-agregar">
+                <i class="fas fa-plus-circle"></i> Agregar Rol
+            </a>
+        </div>
+    }
+</div>
+
