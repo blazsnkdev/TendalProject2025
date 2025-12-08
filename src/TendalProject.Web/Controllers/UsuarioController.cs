@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TendalProject.Business.DTOs.Requests.Usuario;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -30,7 +31,7 @@ namespace TendalProject.Web.Controllers
             {
                 return View(model);
             }
-            var result = await _usuarioService.RegistrarUsuarioAsync(new Business.DTOs.Requests.Usuario.RegistrarUsuarioRequest(
+            var result = await _usuarioService.RegistrarUsuarioAsync(new RegistrarUsuarioRequest(
                 model.Email,
                 model.Password,
                 model.ConfirmarPassword
@@ -55,7 +56,6 @@ namespace TendalProject.Web.Controllers
             {
                 UsuarioId = u.UsuarioId,
                 Email = u.Email,
-                Password = u.Password,
                 Activo = u.Activo,
                 UltimaConexion = u.UltimaConexion
             }).ToList();
@@ -100,6 +100,18 @@ namespace TendalProject.Web.Controllers
                 Roles = usuario.Roles
             };
             return View(viewModel);
+        }
+        [Authorize(Roles = "Administrador")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ModificarEstado(Guid usuarioId)
+        {
+            var result = await _usuarioService.ActualizarEstadoUsuarioAsync(usuarioId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            return RedirectToAction(nameof(Detalle), new {usuarioId = result.Value});
         }
         private IActionResult HandleError(Error error)
         {
