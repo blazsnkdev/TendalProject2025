@@ -5,7 +5,7 @@
         Guid sesionId,
         Guid usuarioId,
         string nombre,
-        DateTime ultimoLogin,
+        DateTime? ultimoLogin,
         DateTime inicioSesion,
         string[] roles
         );

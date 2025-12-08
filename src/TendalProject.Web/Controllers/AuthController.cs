@@ -14,7 +14,6 @@ namespace TendalProject.Web.Controllers
         {
             _authService = authService;
         }
-
         public IActionResult Login()=> View();
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -28,12 +27,12 @@ namespace TendalProject.Web.Controllers
             
             if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, "Credenciales inválidas.");
+                ModelState.AddModelError(string.Empty, result.Error!.Message);
                 return View(viewModel);
             }
             if(result.Value is null)
             {
-                ModelState.AddModelError(string.Empty, "Error inesperado durante el inicio de sesión.");
+                ModelState.AddModelError(string.Empty, result.Error!.Message);
                 return View(viewModel);
             }
             await _authService.SignInAsync(HttpContext, result.Value, viewModel.Recordarme);
@@ -61,7 +60,7 @@ namespace TendalProject.Web.Controllers
 
             if (!result.IsSuccess)
             {
-                ModelState.AddModelError(string.Empty, "Error al registrar el usuario.");
+                ModelState.AddModelError(string.Empty, result.Error!.Message);
                 return View(viewModel);
             }
 
