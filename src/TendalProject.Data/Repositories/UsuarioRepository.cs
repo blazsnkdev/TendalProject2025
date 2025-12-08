@@ -30,7 +30,6 @@ namespace TendalProject.Data.Repositories
         public async Task<Usuario?> GetUsuarioConRolesPorEmailAsync(string email)
         {
             return await _appDbContext.TblUsuario
-                .AsNoTracking()
                 .Include(u => u.UsuariosRoles)
                     .ThenInclude(ur => ur.Rol)
                 .FirstOrDefaultAsync(u => u.Email == email);

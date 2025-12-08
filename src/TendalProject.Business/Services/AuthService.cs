@@ -34,8 +34,8 @@ namespace TendalProject.Business.Services
                 new Claim(ClaimTypes.NameIdentifier, response.usuarioId.ToString()),
                 new Claim(ClaimTypes.Name, response.nombre),
                 new Claim("SesionId", response.sesionId.ToString()),
-                new Claim("UltimoLogin", response.ultimoLogin.ToString("O")),
-                new Claim("InicioSesion", response.inicioSesion.ToString("O")),
+                new Claim("UltimoLogin",response.ultimoLogin?.ToString("O") ?? string.Empty),
+                new Claim("InicioSesion", response.inicioSesion.ToString("O"))
             };
 
             foreach (var rol in response.roles)
@@ -56,32 +56,50 @@ namespace TendalProject.Business.Services
                 props);
         }
 
-        public async Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginRequest request)//TODO: por ahora devuelve un result pq no se que dto debe devolver XD
+        public async Task<Result<LoginValidoResponse>> LoginAsync(CredencialesLoginRequest request)
         {
             var usuario = await _UoW.UsuarioRepository.GetUsuarioConRolesPorEmailAsync(request.Email);
-            if(usuario is null)
+
+            if (usuario is null)
             {
                 return Result<LoginValidoResponse>.Failure(Error.NotFound("Usuario no encontrado"));
             }
-            
-            if (!PasswordHelper.Verify(request.Password,usuario.PasswordHash))
+            var ahora = _dateTimeProvider.GetDateTimeNow();
+
+            if (usuario.FechaDesbloqueo is not null && usuario.FechaDesbloqueo > ahora)
             {
+                return Result<LoginValidoResponse>.Failure(Error.Unauthorized("Usuario bloqueado por múltiples intentos fallidos. Intente más tarde."));
+            }
+            if (!PasswordHelper.Verify(request.Password, usuario.PasswordHash))
+            {
+                usuario.IntentosFallidos++;
+
+                if (usuario.IntentosFallidos >= 5)
+                    usuario.FechaDesbloqueo = ahora.AddMinutes(10);
+
+                await _UoW.SaveChangesAsync();
+
                 return Result<LoginValidoResponse>.Failure(Error.Unauthorized());
             }
-            var ultimaConexion = _dateTimeProvider.GetDateTimeNow();
-            usuario.UltimaConexion = ultimaConexion;
+
+            usuario.IntentosFallidos = 0;
+            usuario.FechaDesbloqueo = null;
+            usuario.CantidadLogins += 1;
+            usuario.UltimaConexion = ahora;
+
             await _UoW.SaveChangesAsync();
-            var loginValidoResponse = new LoginValidoResponse
-            (
+
+            var loginValidoResponse = new LoginValidoResponse(
                 sesionId: Guid.NewGuid(),
                 usuarioId: usuario.UsuarioId,
                 nombre: usuario.Email,
-                ultimoLogin: usuario.UltimaConexion ?? ultimaConexion,
-                inicioSesion: ultimaConexion,
+                ultimoLogin: usuario.UltimaConexion,
+                inicioSesion: ahora,
                 roles: usuario.UsuariosRoles.Select(ur => ur.Rol.Nombre).ToArray()
             );
             return Result<LoginValidoResponse>.Success(loginValidoResponse);
         }
+
 
         public async Task<Result> RegistroAsync(RegistroUsuarioRequest request)
         {
