@@ -16,5 +16,10 @@ namespace TendalProject.Data.Repositories
         {
             return await _appDbContext.TblCliente.AnyAsync(c => c.CorreoElectronico == email);
         }
+
+        public async Task<List<Cliente>> GetAllClientesByNombre(string nombre)
+        {
+            return await _appDbContext.TblCliente.Where(c => c.Nombre.Contains(nombre)).ToListAsync();
+        }
     }
 }

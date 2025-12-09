@@ -1,0 +1,204 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Cliente.ListarClienteViewModel>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cliente/Listar.css" />
+}
+
+<div class="clientes-container">
+
+    <div class="page-header">
+        <h1 class="page-title">Módulo Clientes</h1>
+    </div>
+
+    <!-- BUSCADOR -->
+    <form asp-action="Listar" method="get" class="mb-3 d-flex gap-2">
+        <input type="text" name="nombre" value="@ViewBag.Nombre" class="form-control" placeholder="Buscar por nombre..." />
+        <input type="hidden" name="mostrarInactivos" value="@ViewBag.MostrarInactivos" />
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    @if (Model.Items.Any())
+    {
+        <!-- CONTROLES SUPERIORES -->
+        <div class="pagination-controls">
+
+            <div class="registros-info">
+                Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+                @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+                @Model.TotalRegistros registros
+            </div>
+
+            <div class="tamanio-pagina">
+                <span class="tamanio-label">Registros por página:</span>
+                <div>
+                    <a asp-action="Listar"
+                       asp-route-pagina="1"
+                       asp-route-tamanioPagina="5"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+
+                    <a asp-action="Listar"
+                       asp-route-pagina="1"
+                       asp-route-tamanioPagina="10"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+
+                    <a asp-action="Listar"
+                       asp-route-pagina="1"
+                       asp-route-tamanioPagina="25"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+
+                    <a asp-action="Listar"
+                       asp-route-pagina="1"
+                       asp-route-tamanioPagina="50"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TABLA -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Correo Electrónico</th>
+                    <th>Número Celular</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Nombre</td>
+                        <td>@item.Apellidos</td>
+                        <td>@item.CorreoElectronico</td>
+                        <td>@item.NumeroCelular</td>
+                        <td>@item.Estado</td>
+                        <td>
+                            <a asp-action="Detalle" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-info-circle"></i> Detalle
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- PAGINACIÓN INFERIOR -->
+        <nav aria-label="Paginación de clientes">
+            <ul class="pagination-custom">
+
+                <!-- Primera página -->
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom"
+                       asp-action="Listar"
+                       asp-route-pagina="1"
+                       asp-route-tamanioPagina="@Model.TamanioPagina"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+
+                <!-- Página anterior -->
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom"
+                       asp-action="Listar"
+                       asp-route-pagina="@(Model.PaginaIndice - 1)"
+                       asp-route-tamanioPagina="@Model.TamanioPagina"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+
+                @{
+
+                    int inicio = Math.Max(1, Model.PaginaIndice - 2);
+                    int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
+                }
+
+                @for (int i = inicio; i <= fin; i++)
+                {
+                    <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Listar"
+                           asp-route-pagina="@i"
+                           asp-route-tamanioPagina="@Model.TamanioPagina"
+                           asp-route-nombre="@ViewBag.Nombre"
+                           asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <!-- Página siguiente -->
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom"
+                       asp-action="Listar"
+                       asp-route-pagina="@(Model.PaginaIndice + 1)"
+                       asp-route-tamanioPagina="@Model.TamanioPagina"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+
+                <!-- Última página -->
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom"
+                       asp-action="Listar"
+                       asp-route-pagina="@Model.TotalPagias"
+                       asp-route-tamanioPagina="@Model.TamanioPagina"
+                       asp-route-nombre="@ViewBag.Nombre"
+                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div class="estado-vacio">
+            <i class="fas fa-users"></i>
+            <h4>No hay clientes</h4>
+            <p>No se encontraron clientes en el sistema.</p>
+        </div>
+    }
+</div>
+
+<!-- BOTÓN DE ACTIVOS / INACTIVOS -->
+@if ((bool)ViewBag.MostrarInactivos)
+{
+    <a asp-action="Listar"
+       asp-route-mostrarInactivos="false"
+       asp-route-nombre="@ViewBag.Nombre"
+       class="btn btn-primary mt-3">
+        Ver Activos
+    </a>
+}
+else
+{
+    <a asp-action="Listar"
+       asp-route-mostrarInactivos="true"
+       asp-route-nombre="@ViewBag.Nombre"
+       class="btn btn-warning mt-3">
+        Ver Inactivos
+    </a>
+}
