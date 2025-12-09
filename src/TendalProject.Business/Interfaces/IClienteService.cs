@@ -6,5 +6,6 @@ namespace TendalProject.Business.Interfaces
     public interface IClienteService
     {
         Task<Result<List<ListarClienteResponse>>> ListarClientesAsync(string? nombre);
+        Task<Result<DetalleClienteResponse>> ObtenerDetalleClienteAsync(Guid clienteId);
     }
 }

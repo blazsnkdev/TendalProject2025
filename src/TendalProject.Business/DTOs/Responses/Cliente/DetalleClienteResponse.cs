@@ -14,6 +14,7 @@
         DateTime FechaCreacion,
         DateTime? UltimaModificacion,
         decimal MontoTotalGastado,
+        string Nivel,
         int CantidadCompras
     );
 }

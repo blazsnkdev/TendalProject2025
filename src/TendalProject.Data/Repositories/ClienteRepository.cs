@@ -21,5 +21,12 @@ namespace TendalProject.Data.Repositories
         {
             return await _appDbContext.TblCliente.Where(c => c.Nombre.Contains(nombre)).ToListAsync();
         }
+
+        public Task<Cliente?> GetClienteWithUsuarioIdAsync(Guid clienteId)
+        {
+            return _appDbContext.TblCliente
+                .Include(c => c.Usuario)
+                .FirstOrDefaultAsync(c => c.ClienteId == clienteId);
+        }
     }
 }
