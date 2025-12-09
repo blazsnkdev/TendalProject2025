@@ -16,5 +16,11 @@ namespace TendalProject.Entities.Entidades
         public DateTime FechaCreacion { get; set; }
         public DateTime FechaModificacion { get; set; }
         public EstadoCliente Estado { get; set; }
+        public int CantidadPedidos { get; set; }
+        public NivelCliente Nivel { get; set; }
+
+        public Carrito? Carrito { get; set; }
+        public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
+        public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
     }
 }

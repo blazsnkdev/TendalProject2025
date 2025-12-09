@@ -34,5 +34,29 @@ namespace TendalProject.Business.Services
                     )).ToList();
             return Result<List<ListarClienteResponse>>.Success(response);
         }
+
+        public async Task<Result<DetalleClienteResponse>> ObtenerDetalleClienteAsync(Guid clienteId)
+        {
+            var cliente = await _UoW.ClienteRepository.GetClienteWithUsuarioIdAsync(clienteId);
+            if (cliente is null)
+            {
+                return Result<DetalleClienteResponse>.Failure(Error.NotFound("No se encontró el cliente con el ID proporcionado."));
+            }
+            var response = new DetalleClienteResponse
+            (cliente.ClienteId,cliente.Nombre, cliente.ApellidoPaterno,
+                cliente.ApellidoMaterno,
+                cliente.CorreoElectronico,
+                cliente.NumeroCelular!,
+                cliente.FechaNacimiento,
+                cliente.Estado.ToString(),
+                cliente.Usuario?.UltimaConexion,
+                cliente.FechaCreacion,
+                cliente.FechaModificacion,
+                cliente.Pedidos.Sum(p => p.Detalles.Sum(d => d.PrecioUnitario * d.Cantidad)),//NOTE: esto debemos cambiar
+                cliente.Nivel.ToString(),
+                cliente.CantidadPedidos
+            );
+            return Result<DetalleClienteResponse>.Success(response);
+        }
     }
 }

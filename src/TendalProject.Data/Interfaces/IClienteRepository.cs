@@ -6,5 +6,6 @@ namespace TendalProject.Data.Interfaces
     {
         Task<bool> ExisteClienteConEmailAsync(string email);
         Task<List<Cliente>> GetAllClientesByNombre(string nombre);
+        Task<Cliente?> GetClienteWithUsuarioIdAsync(Guid clienteId);
     }
 }
