@@ -5,9 +5,8 @@ namespace TendalProject.Data.Context
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
-        {
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
         public DbSet<Usuario> TblUsuario => Set<Usuario>();
         public DbSet<Rol> TblRol => Set<Rol>();
         public DbSet<Cliente> TblCliente => Set<Cliente>();
@@ -20,10 +19,10 @@ namespace TendalProject.Data.Context
         public DbSet<Pedido> TblPedido => Set<Pedido>();
         public DbSet<DetallePedido> TblDetallePedido => Set<DetallePedido>();
         public DbSet<Venta> TblVenta => Set<Venta>();
-        public DbSet<DetalleVenta> TblDetalleVenta => Set<DetalleVenta>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Usuario-Rol (many-to-many)
             modelBuilder.Entity<UsuarioRol>()
                 .HasKey(ur => new { ur.UsuarioId, ur.RolId });
 
@@ -39,12 +38,14 @@ namespace TendalProject.Data.Context
                 .HasForeignKey(ur => ur.RolId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Cliente - Usuario (1:1)
             modelBuilder.Entity<Cliente>()
                 .HasOne(c => c.Usuario)
                 .WithOne(u => u.Cliente)
                 .HasForeignKey<Cliente>(c => c.UsuarioId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Articulo - Categoria y Proveedor
             modelBuilder.Entity<Articulo>()
                 .HasOne(a => a.Categoria)
                 .WithMany(c => c.Articulos)
@@ -57,102 +58,87 @@ namespace TendalProject.Data.Context
                 .HasForeignKey(a => a.ProveedorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<Articulo>()
-                .HasIndex(a => a.Nombre);
+            // Índices
+            modelBuilder.Entity<Articulo>().HasIndex(a => a.Nombre);
+            modelBuilder.Entity<Articulo>().HasIndex(a => a.Codigo).IsUnique();
+            modelBuilder.Entity<Categoria>().HasIndex(c => c.Nombre).IsUnique();
+            modelBuilder.Entity<Proveedor>().HasIndex(p => p.Nombre).IsUnique();
 
-            modelBuilder.Entity<Articulo>()
-                .HasIndex(a => a.Codigo)
-                .IsUnique();
-
-            modelBuilder.Entity<Categoria>()
-                .HasIndex(c => c.Nombre)
-                .IsUnique();
-
-            modelBuilder.Entity<Proveedor>()
-                .HasIndex(p => p.Nombre)
-                .IsUnique();
-
+            // Default
             modelBuilder.Entity<Articulo>()
                 .Property(a => a.Destacado)
                 .HasDefaultValue(false);
 
+            // Cliente - Carrito (1:1)
             modelBuilder.Entity<Cliente>()
                 .HasOne(c => c.Carrito)
                 .WithOne(ca => ca.Cliente)
                 .HasForeignKey<Carrito>(ca => ca.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Cliente - Pedidos (1:N)
             modelBuilder.Entity<Cliente>()
                 .HasMany(c => c.Pedidos)
                 .WithOne(p => p.Cliente)
                 .HasForeignKey(p => p.ClienteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Carrito - Items (1:N)
             modelBuilder.Entity<Carrito>()
                 .HasMany(c => c.Items)
                 .WithOne(i => i.Carrito)
                 .HasForeignKey(i => i.CarritoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Item - Articulo (N:1)
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Articulo)
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(i => i.ArticuloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Pedido - Detalles (1:N)
             modelBuilder.Entity<Pedido>()
                 .HasMany(p => p.Detalles)
                 .WithOne(d => d.Pedido)
                 .HasForeignKey(d => d.PedidoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // DetallePedido - Articulo (N:1)
             modelBuilder.Entity<DetallePedido>()
                 .HasOne(d => d.Articulo)
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(d => d.ArticuloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Cliente>()
-                .HasMany(c => c.Ventas)
-                .WithOne(v => v.Cliente)
-                .HasForeignKey(v => v.ClienteId)
-                .OnDelete(DeleteBehavior.Restrict);
-
+            // Venta - Pedido (N:1)
             modelBuilder.Entity<Venta>()
-                .HasMany(v => v.Detalles)
-                .WithOne(dv => dv.Venta)
-                .HasForeignKey(dv => dv.VentaId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<DetalleVenta>()
-                .HasOne(dv => dv.Articulo)
-                .WithMany() 
-                .HasForeignKey(dv => dv.ArticuloId)
+                .HasOne(v => v.Pedido)
+                .WithMany()
+                .HasForeignKey(v => v.PedidoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Precisión
             modelBuilder.Entity<Item>()
-            .Property(i => i.PrecioUnitario)
-            .HasPrecision(10, 2);
+                .Property(i => i.PrecioUnitario)
+                .HasPrecision(10, 2);
 
             modelBuilder.Entity<DetallePedido>()
                 .Property(dp => dp.PrecioUnitario)
                 .HasPrecision(10, 2);
 
-            modelBuilder.Entity<DetalleVenta>()
-                .Property(dv => dv.PrecioUnitario)
+            modelBuilder.Entity<Pedido>()
+                .Property(p => p.SubTotal)
                 .HasPrecision(10, 2);
 
-            modelBuilder.Entity<Venta>()
-                .Property(v => v.Subtotal)
+            modelBuilder.Entity<Pedido>()
+                .Property(p => p.Igv)
                 .HasPrecision(10, 2);
 
-            modelBuilder.Entity<Venta>()
-                .Property(v => v.IGV)
+            modelBuilder.Entity<Pedido>()
+                .Property(p => p.Total)
                 .HasPrecision(10, 2);
 
-            modelBuilder.Entity<Venta>()
-                .Property(v => v.ImporteTotal)
-                .HasPrecision(10, 2);
 
             base.OnModelCreating(modelBuilder);
         }
