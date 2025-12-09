@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
+using TendalProject.Common.Results;
 using TendalProject.Web.ViewModels.Cliente;
 
 namespace TendalProject.Web.Controllers
@@ -32,6 +33,50 @@ namespace TendalProject.Web.Controllers
             ViewBag.MostrarInactivos = mostrarInactivos;
             ViewBag.Nombre = nombre;
             return View(paginacion);
+        }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Detalle(Guid clienteId)
+        {
+            var result = await _clienteService.ObtenerDetalleClienteAsync(clienteId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            var cliente = result.Value!;
+            var viewModel = new DetalleClienteViewModel()
+            {
+                ClienteId = cliente.ClienteId,
+                Nombre = cliente.Nombre,
+                ApellidoPaterno = cliente.ApellidoPaterno,
+                ApellidoMaterno = cliente.ApellidoMaterno,
+                CorreoElectronico = cliente.CorreoElectronico,
+                NumeroCelular = cliente.NumeroCelular,
+                FechaNacimiento = cliente.FechaNacimiento.ToDateTime(new TimeOnly(0, 0)),
+                Estado = cliente.Estado,
+                UltimaConexion = cliente.UltimaConexion ?? DateTime.MinValue,
+                FechaCreacion = cliente.FechaCreacion,
+                FechaModificacion = cliente.FechaModificacion ?? DateTime.MinValue,
+                MontoTotalGastado = cliente.MontoTotalGastado,
+                Nivel = cliente.Nivel,
+                ComprasTotales = cliente.CantidadCompras,
+                PedidosPendientes = cliente.TotalPedidosPendientes,
+                PedidosProcesando = cliente.TotalPedidosProcesando,
+                PedidosEnviados = cliente.TotalPedidosEnviados,
+                PedidosEntregados = cliente.TotalPedidosEntregados,
+                PedidosCancelados = cliente.TotalPedidosCancelados
+            };
+            return View(viewModel);
+        }
+        private IActionResult HandleError(Error error)
+        {
+            return error.Code switch
+            {
+                "ERROR_NOT_FOUND" => RedirectToAction("NotFoundPage", "Auth"),
+                "ERROR_UNAUTHORIZED" => RedirectToAction("UnauthorizedPage", "Auth"),
+                "ERROR_CONFLICT" => RedirectToAction("AccessDenied", "Auth"),
+                "ERROR_VALIDATION" => RedirectToAction("AccessDenied", "Auth"),
+                _ => RedirectToAction("AccessDenied", "Auth")
+            };
         }
     }
 }

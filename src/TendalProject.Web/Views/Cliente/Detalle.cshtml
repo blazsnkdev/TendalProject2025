@@ -1,0 +1,125 @@
+﻿@model TendalProject.Web.ViewModels.Cliente.DetalleClienteViewModel
+
+<div class="container mt-4">
+
+    <!-- Información del cliente -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title mb-3">Información del Cliente</h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>Nombre Completo:</strong>
+                    <p>@($"{Model.Nombre} {Model.ApellidoPaterno} {Model.ApellidoMaterno}")</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Correo:</strong>
+                    <p>@Model.CorreoElectronico</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Celular:</strong>
+                    <p>@Model.NumeroCelular</p>
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Fecha de Nacimiento:</strong>
+                    <p>@Model.FechaNacimiento.ToString("dd/MM/yyyy")</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Estado:</strong>
+                    <p>@Model.Estado</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Última Conexión:</strong>
+                    <p>@Model.UltimaConexion</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards de datos del cliente -->
+    <div class="row text-center mb-4">
+
+        <!-- Monto total gastado -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h6 class="text-muted">Monto Total Gastado</h6>
+                    <h3 class="text-success">S/. @Model.MontoTotalGastado</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nivel del cliente -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h6 class="text-muted">Nivel</h6>
+                    <h3 class="text-primary">@Model.Nivel</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compras Totales -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm border-info">
+                <div class="card-body">
+                    <h6 class="text-muted">Compras Totales</h6>
+                    <h3 class="text-info">@Model.ComprasTotales</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards de pedidos por estado -->
+    <h4 class="mb-3">Estado de Pedidos</h4>
+    <div class="row text-center">
+
+        <div class="col-md-2 mb-3">
+            <div class="card shadow-sm border-secondary">
+                <div class="card-body">
+                    <h6>Pendientes</h6>
+                    <h4>@Model.PedidosPendientes</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <div class="card shadow-sm border-warning">
+                <div class="card-body">
+                    <h6>Procesando</h6>
+                    <h4>@Model.PedidosProcesando</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h6>Enviados</h6>
+                    <h4>@Model.PedidosEnviados</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h6>Entregados</h6>
+                    <h4>@Model.PedidosEntregados</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 mb-3">
+            <div class="card shadow-sm border-danger">
+                <div class="card-body">
+                    <h6>Cancelados</h6>
+                    <h4>@Model.PedidosCancelados</h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

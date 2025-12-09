@@ -15,6 +15,8 @@ namespace TendalProject.Data.UnitOfWork
         public IRolRepository RolRepository { get; }
         public IProveedorRepository ProveedorRepository { get; }
         public IArticuloRepository ArticuloRepository { get; }
+        public IPedidoRepository PedidoRepository { get; }
+        public IVentaRepository VentaRepository { get; }
 
         public UnitOfWork(
             AppDbContext appDbContext,
@@ -23,7 +25,9 @@ namespace TendalProject.Data.UnitOfWork
             ICategoriaRepository categoriaRepository,
             IRolRepository rolRepository,
             IProveedorRepository proveedorRepository,
-            IArticuloRepository articuloRepository
+            IArticuloRepository articuloRepository,
+            IPedidoRepository pedidoRepository,
+            IVentaRepository ventaRepository
             )
         {
             _appDbContext = appDbContext;
@@ -33,6 +37,8 @@ namespace TendalProject.Data.UnitOfWork
             RolRepository = rolRepository;
             ProveedorRepository = proveedorRepository;
             ArticuloRepository = articuloRepository;
+            PedidoRepository = pedidoRepository;
+            VentaRepository = ventaRepository;
         }
 
         public async Task BeginTransactionAsync()
