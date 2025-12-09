@@ -12,9 +12,14 @@
         string Estado,
         DateTime? UltimaConexion,
         DateTime FechaCreacion,
-        DateTime? UltimaModificacion,
+        DateTime? FechaModificacion,
         decimal MontoTotalGastado,
         string Nivel,
-        int CantidadCompras
+        int CantidadCompras,
+        int TotalPedidosPendientes,
+        int TotalPedidosProcesando,
+        int TotalPedidosEnviados,
+        int TotalPedidosEntregados,
+        int TotalPedidosCancelados
     );
 }

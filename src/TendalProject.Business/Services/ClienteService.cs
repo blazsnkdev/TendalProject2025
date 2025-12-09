@@ -3,6 +3,7 @@ using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
 using TendalProject.Data.UnitOfWork;
 using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Business.Services
 {
@@ -37,24 +38,43 @@ namespace TendalProject.Business.Services
 
         public async Task<Result<DetalleClienteResponse>> ObtenerDetalleClienteAsync(Guid clienteId)
         {
+            if(clienteId == Guid.Empty)
+            {
+                return Result<DetalleClienteResponse>.Failure(Error.NotFound("ID de cliente no válido."));
+            }
             var cliente = await _UoW.ClienteRepository.GetClienteWithUsuarioIdAsync(clienteId);
             if (cliente is null)
             {
                 return Result<DetalleClienteResponse>.Failure(Error.NotFound("No se encontró el cliente con el ID proporcionado."));
             }
+            var importeTotal = await _UoW.VentaRepository.GetVentasPorClienteIdAsync(clienteId);
+            var cantidadCompras = await _UoW.VentaRepository.GetCantidadVentasPorClienteIdAsync(clienteId);
+            var pedidos = await _UoW.PedidoRepository.GetPedidosPorClienteAsync(clienteId);
+            var cantidadPedidosPendientes = pedidos.Count(p => p.Estado == EstadoPedido.Pendiente);
+            var cantidadPedidosProcesados = pedidos.Count(p => p.Estado == EstadoPedido.Procesando);
+            var cantidadPedidosEnviados = pedidos.Count(p => p.Estado == EstadoPedido.Enviado);
+            var cantidadPedidosEntregados = pedidos.Count(p => p.Estado == EstadoPedido.Entregado);
+            var cantidadPedidosCancelados = pedidos.Count(p => p.Estado == EstadoPedido.Cancelado);
+
+
             var response = new DetalleClienteResponse
-            (cliente.ClienteId,cliente.Nombre, cliente.ApellidoPaterno,
+            (cliente.ClienteId, cliente.Nombre, cliente.ApellidoPaterno,
                 cliente.ApellidoMaterno,
                 cliente.CorreoElectronico,
-                cliente.NumeroCelular!,
+                cliente.NumeroCelular ?? string.Empty,
                 cliente.FechaNacimiento,
                 cliente.Estado.ToString(),
                 cliente.Usuario?.UltimaConexion,
                 cliente.FechaCreacion,
                 cliente.FechaModificacion,
-                cliente.Pedidos.Sum(p => p.Detalles.Sum(d => d.PrecioUnitario * d.Cantidad)),//NOTE: esto debemos cambiar
+                importeTotal,
                 cliente.Nivel.ToString(),
-                cliente.CantidadPedidos
+                cantidadCompras,
+                cantidadPedidosPendientes,
+                cantidadPedidosProcesados,
+                cantidadPedidosEnviados,
+                cantidadPedidosEntregados,
+                cantidadPedidosCancelados
             );
             return Result<DetalleClienteResponse>.Success(response);
         }

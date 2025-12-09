@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TendalProject.Data.Context;
 
@@ -11,9 +12,11 @@ using TendalProject.Data.Context;
 namespace TendalProject.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251209222617_updateDecimalVentas")]
+    partial class updateDecimalVentas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +107,7 @@ namespace TendalProject.Data.Migrations
                     b.HasIndex("ClienteId")
                         .IsUnique();
 
-                    b.ToTable("TblCarrito");
+                    b.ToTable("Carrito");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Categoria", b =>
@@ -213,7 +216,7 @@ namespace TendalProject.Data.Migrations
 
                     b.HasIndex("PedidoId");
 
-                    b.ToTable("TblDetallePedido");
+                    b.ToTable("DetallePedido");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.DetalleVenta", b =>
@@ -241,7 +244,7 @@ namespace TendalProject.Data.Migrations
 
                     b.HasIndex("VentaId");
 
-                    b.ToTable("TblDetalleVenta");
+                    b.ToTable("DetalleVenta");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Item", b =>
@@ -269,7 +272,7 @@ namespace TendalProject.Data.Migrations
 
                     b.HasIndex("CarritoId");
 
-                    b.ToTable("TblItem");
+                    b.ToTable("Item");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Pedido", b =>
@@ -295,7 +298,7 @@ namespace TendalProject.Data.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("TblPedido");
+                    b.ToTable("Pedido");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Proveedor", b =>
@@ -456,7 +459,7 @@ namespace TendalProject.Data.Migrations
 
                     b.HasIndex("PedidoId");
 
-                    b.ToTable("TblVenta");
+                    b.ToTable("Venta");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Articulo", b =>

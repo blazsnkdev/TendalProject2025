@@ -15,6 +15,12 @@ namespace TendalProject.Data.Context
         public DbSet<Articulo> TblArticulo => Set<Articulo>();
         public DbSet<Categoria> TblCategoria => Set<Categoria>();
         public DbSet<Proveedor> TblProveedor => Set<Proveedor>();
+        public DbSet<Carrito> TblCarrito => Set<Carrito>();
+        public DbSet<Item> TblItem => Set<Item>();
+        public DbSet<Pedido> TblPedido => Set<Pedido>();
+        public DbSet<DetallePedido> TblDetallePedido => Set<DetallePedido>();
+        public DbSet<Venta> TblVenta => Set<Venta>();
+        public DbSet<DetalleVenta> TblDetalleVenta => Set<DetalleVenta>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -123,6 +129,31 @@ namespace TendalProject.Data.Context
                 .WithMany() 
                 .HasForeignKey(dv => dv.ArticuloId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Item>()
+            .Property(i => i.PrecioUnitario)
+            .HasPrecision(10, 2);
+
+            modelBuilder.Entity<DetallePedido>()
+                .Property(dp => dp.PrecioUnitario)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<DetalleVenta>()
+                .Property(dv => dv.PrecioUnitario)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<Venta>()
+                .Property(v => v.Subtotal)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<Venta>()
+                .Property(v => v.IGV)
+                .HasPrecision(10, 2);
+
+            modelBuilder.Entity<Venta>()
+                .Property(v => v.ImporteTotal)
+                .HasPrecision(10, 2);
+
             base.OnModelCreating(modelBuilder);
         }
     }
