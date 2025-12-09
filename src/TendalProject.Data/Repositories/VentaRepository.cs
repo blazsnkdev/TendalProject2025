@@ -16,15 +16,15 @@ namespace TendalProject.Data.Repositories
         public Task<int> GetCantidadVentasPorClienteIdAsync(Guid clienteId)
         {
             return _appDbContext.TblVenta
-                .Where(v => v.ClienteId == clienteId)
+                .Where(v => v.Pedido.ClienteId == clienteId)
                 .CountAsync();
         }
 
         public async Task<decimal> GetVentasPorClienteIdAsync(Guid clienteId)
         {
             var totalVentas = await _appDbContext.TblVenta
-                .Where(v => v.ClienteId == clienteId)
-                .SumAsync(v => v.ImporteTotal);
+                .Where(v => v.Pedido.ClienteId == clienteId)
+                .SumAsync(v => v.Pedido.Total);
             return totalVentas;
         }
     }
