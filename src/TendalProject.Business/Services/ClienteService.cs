@@ -78,5 +78,29 @@ namespace TendalProject.Business.Services
             );
             return Result<DetalleClienteResponse>.Success(response);
         }
+
+        public async Task<Result<List<ListaPedidosPorClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId)
+        {
+            if(clienteId == Guid.Empty)
+            {
+                return Result<List<ListaPedidosPorClienteResponse>>.Failure(Error.NotFound("ID de cliente no válido."));
+            }
+            var pedidos = await _UoW.PedidoRepository.GetPedidosPorClienteAsync(clienteId);
+            if (pedidos is null || !pedidos.Any())
+            {
+                return Result<List<ListaPedidosPorClienteResponse>>.Success(new List<ListaPedidosPorClienteResponse>());
+            }
+            var response = new List<ListaPedidosPorClienteResponse>(
+                pedidos.Select(p => new ListaPedidosPorClienteResponse  
+                (
+                    p.PedidoId,
+                    p.Codigo,
+                    p.FechaRegistro,
+                    p.Total,
+                    p.Estado.ToString()
+                ))
+            );
+            return Result<List<ListaPedidosPorClienteResponse>>.Success(response);
+        }
     }
 }

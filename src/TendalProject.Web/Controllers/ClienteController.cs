@@ -67,6 +67,29 @@ namespace TendalProject.Web.Controllers
             };
             return View(viewModel);
         }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Pedidos(Guid clienteId,string? estado, int pagina = 1, int tamanioPagina = 10)
+        {
+            var result = await _clienteService.ObtenerPedidosPorClienteAsync(clienteId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            var pedidos = result.Value!
+                .Where(p => p.Estado == estado);
+            var viewModel = pedidos.Select(p => new ListarPedidosClienteViewModel()
+            {
+                PedidoId = p.PedidoId,
+                Codigo = p.Codigo,
+                Total = p.Total,
+                FechaRegistro = p.FechaRegistro,
+                Estado = p.Estado
+            });
+            var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
+            ViewBag.ClienteId = clienteId;
+            return View(paginacion);
+        }
+
         private IActionResult HandleError(Error error)
         {
             return error.Code switch
