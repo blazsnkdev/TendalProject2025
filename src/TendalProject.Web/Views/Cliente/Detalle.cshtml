@@ -122,4 +122,18 @@
 
     </div>
 
+    <div>
+        <form id="formEstado" asp-action="ModificarEstado" asp-route-clienteId="@Model.ClienteId" method="post">
+            <button type="button"
+                    class="btn @(Model.Estado == "Activo" ? "btn-danger" : "btn-success") px-4"
+                    onclick="confirmarCambioEstado('@Model.Estado')">
+                <i class="bi @(Model.Estado == "Activo" ? "bi-x-circle" : "bi-check-circle")"></i>
+                @(Model.Estado == "Activo" ? "Desactivar" : "Activar")
+            </button>
+        </form>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/Cliente/Detalle.js"></script>
+}

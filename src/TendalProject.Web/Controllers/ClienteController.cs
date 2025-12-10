@@ -89,6 +89,16 @@ namespace TendalProject.Web.Controllers
             ViewBag.ClienteId = clienteId;
             return View(paginacion);
         }
+        [HttpPost]
+        public async Task<IActionResult> ModificarEstado(Guid clienteId)
+        {
+            var result = await _clienteService.ModificarEstadoClienteAsync(clienteId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            return RedirectToAction(nameof(Detalle), new { clienteId = result.Value });
+        }
 
         private IActionResult HandleError(Error error)
         {

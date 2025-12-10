@@ -36,6 +36,22 @@ namespace TendalProject.Business.Services
             return Result<List<ListarClienteResponse>>.Success(response);
         }
 
+        public async Task<Result<Guid>> ModificarEstadoClienteAsync(Guid clienteId)
+        {
+            if(clienteId == Guid.Empty)
+            {
+                return Result<Guid>.Failure(Error.NotFound("ID de cliente no válido."));
+            }
+            var cliente = await _UoW.ClienteRepository.GetByIdAsync(clienteId);
+            if(cliente is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound("No se encontró el cliente con el ID proporcionado."));
+            }
+            cliente.Estado = cliente.Estado == EstadoCliente.Activo ? EstadoCliente.Inactivo : EstadoCliente.Activo;
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(cliente.ClienteId);
+        }
+
         public async Task<Result<DetalleClienteResponse>> ObtenerDetalleClienteAsync(Guid clienteId)
         {
             if(clienteId == Guid.Empty)
