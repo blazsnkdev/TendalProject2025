@@ -8,5 +8,6 @@ namespace TendalProject.Business.Interfaces
         Task<Result<List<ListarClienteResponse>>> ListarClientesAsync(string? nombre);
         Task<Result<DetalleClienteResponse>> ObtenerDetalleClienteAsync(Guid clienteId);
         Task<Result<List<ListaPedidosPorClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId);
+        Task<Result<Guid>> ModificarEstadoClienteAsync(Guid clienteId);
     }
 }

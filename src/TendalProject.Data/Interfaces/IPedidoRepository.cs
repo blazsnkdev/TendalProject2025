@@ -1,5 +1,4 @@
 ﻿using TendalProject.Entities.Entidades;
-using TendalProject.Entities.Enum;
 
 namespace TendalProject.Data.Interfaces
 {
@@ -7,5 +6,6 @@ namespace TendalProject.Data.Interfaces
     {
         Task<List<Pedido>> GetPedidosPorClienteAsync(Guid clienteId);
         Task<List<Pedido>> GetPedidosIncludsPorClienteAsync(Guid clienteId);
+        IQueryable<Pedido> GetPedidosIncludsAsync();
     }
 }

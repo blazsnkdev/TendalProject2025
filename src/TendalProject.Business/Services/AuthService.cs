@@ -64,6 +64,10 @@ namespace TendalProject.Business.Services
             {
                 return Result<LoginValidoResponse>.Failure(Error.NotFound("Usuario no encontrado"));
             }
+            if (!usuario.Activo)
+            {
+                return Result<LoginValidoResponse>.Failure(Error.Unauthorized("Usuario inactivo"));
+            }
             var ahora = _dateTimeProvider.GetDateTimeNow();
 
             if (usuario.FechaDesbloqueo is not null && usuario.FechaDesbloqueo > ahora)
