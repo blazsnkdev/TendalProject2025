@@ -1,7 +1,8 @@
-﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Cliente.ListarClienteViewModel>
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Cliente.ListarPedidosClienteViewModel>
 
 @{
-    ViewData["Title"] = "Clientes";
+    ViewData["Title"] = "Pedidos";
+    var estadoSeleccionado = ViewBag.Estado?.ToString();
 }
 
 @section Styles {
@@ -11,16 +12,14 @@
 <div class="clientes-container">
 
     <div class="page-header">
-        <h1 class="page-title">Módulo Clientes</h1>
+        <h1 class="page-title">Módulo Pedidos</h1>
     </div>
 
-    <!-- BUSCADOR -->
-    <form asp-action="Listar" method="get" class="mb-3 d-flex gap-2">
-        <input type="text" name="nombre" value="@ViewBag.Nombre" class="form-control" placeholder="Buscar por nombre..." />
-        <input type="hidden" name="mostrarInactivos" value="@ViewBag.MostrarInactivos" />
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-
+<form asp-action="Pedidos" method="get" class="mb-3 d-flex gap-2">
+    <select id="estadoSelect" name="estado" class="form-control" data-selected="@ViewBag.EstadoSeleccionado"></select>
+    <input type="hidden" name="clienteId" value="@ViewBag.ClienteId" />
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
     @if (Model.Items.Any())
     {
         <!-- CONTROLES SUPERIORES -->
@@ -35,32 +34,32 @@
             <div class="tamanio-pagina">
                 <span class="tamanio-label">Registros por página:</span>
                 <div>
-                    <a asp-action="Listar"
+                    <a asp-action="Pedidos"
                        asp-route-pagina="1"
                        asp-route-tamanioPagina="5"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId"
                        class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
 
-                    <a asp-action="Listar"
+                    <a asp-action="Pedidos"
                        asp-route-pagina="1"
                        asp-route-tamanioPagina="10"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId"
                        class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
 
-                    <a asp-action="Listar"
+                    <a asp-action="Pedidos"
                        asp-route-pagina="1"
                        asp-route-tamanioPagina="25"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId"
                        class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
 
-                    <a asp-action="Listar"
+                    <a asp-action="Pedidos"
                        asp-route-pagina="1"
                        asp-route-tamanioPagina="50"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos"
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId"
                        class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
                 </div>
             </div>
@@ -71,10 +70,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Correo Electrónico</th>
-                    <th>Número Celular</th>
+                    <th>Codigo</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -83,17 +81,13 @@
                 @foreach (var item in Model.Items)
                 {
                     <tr>
-                        <td>@item.Nombre</td>
-                        <td>@item.Apellidos</td>
-                        <td>@item.CorreoElectronico</td>
-                        <td>@item.NumeroCelular</td>
+                        <td>@item.Codigo</td>
+                        <td>@item.Total</td>
+                        <td>@item.FechaRegistro</td>
                         <td>@item.Estado</td>
                         <td>
-                            <a asp-action="Detalle" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-outline-info">
+                            <a asp-controller="Pedido" asp-action="Detalle" asp-route-pedidoId="@item.PedidoId" class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-info-circle"></i> Detalle
-                            </a>
-                            <a asp-action="Pedidos" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-outline-info">
-                                <i class="fas fa-info-circle"></i> Pedidos
                             </a>
                         </td>
                     </tr>
@@ -102,35 +96,32 @@
         </table>
 
         <!-- PAGINACIÓN INFERIOR -->
-        <nav aria-label="Paginación de clientes">
+        <nav aria-label="Paginación de pedidos">
             <ul class="pagination-custom">
 
-                <!-- Primera página -->
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
                     <a class="page-link-custom"
-                       asp-action="Listar"
+                       asp-action="Pedidos"
                        asp-route-pagina="1"
                        asp-route-tamanioPagina="@Model.TamanioPagina"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId">
                         <i class="fas fa-angle-double-left"></i>
                     </a>
                 </li>
 
-                <!-- Página anterior -->
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
                     <a class="page-link-custom"
-                       asp-action="Listar"
+                       asp-action="Pedidos"
                        asp-route-pagina="@(Model.PaginaIndice - 1)"
                        asp-route-tamanioPagina="@Model.TamanioPagina"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId">
                         <i class="fas fa-angle-left"></i>
                     </a>
                 </li>
 
                 @{
-
                     int inicio = Math.Max(1, Model.PaginaIndice - 2);
                     int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
                 }
@@ -139,36 +130,34 @@
                 {
                     <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
                         <a class="page-link-custom"
-                           asp-action="Listar"
+                           asp-action="Pedidos"
                            asp-route-pagina="@i"
                            asp-route-tamanioPagina="@Model.TamanioPagina"
-                           asp-route-nombre="@ViewBag.Nombre"
-                           asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                           asp-route-estado="@ViewBag.Estado"
+                           asp-route-clienteId="@ViewBag.ClienteId">
                             @i
                         </a>
                     </li>
                 }
 
-                <!-- Página siguiente -->
                 <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
                     <a class="page-link-custom"
-                       asp-action="Listar"
+                       asp-action="Pedidos"
                        asp-route-pagina="@(Model.PaginaIndice + 1)"
                        asp-route-tamanioPagina="@Model.TamanioPagina"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId">
                         <i class="fas fa-angle-right"></i>
                     </a>
                 </li>
 
-                <!-- Última página -->
                 <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
                     <a class="page-link-custom"
-                       asp-action="Listar"
+                       asp-action="Pedidos"
                        asp-route-pagina="@Model.TotalPagias"
                        asp-route-tamanioPagina="@Model.TamanioPagina"
-                       asp-route-nombre="@ViewBag.Nombre"
-                       asp-route-mostrarInactivos="@ViewBag.MostrarInactivos">
+                       asp-route-estado="@ViewBag.Estado"
+                       asp-route-clienteId="@ViewBag.ClienteId">
                         <i class="fas fa-angle-double-right"></i>
                     </a>
                 </li>
@@ -179,29 +168,10 @@
     else
     {
         <div class="estado-vacio">
-            <i class="fas fa-users"></i>
-            <h4>No hay clientes</h4>
-            <p>No se encontraron clientes en el sistema.</p>
+            <i class="fas fa-box"></i>
+            <h4>No hay pedidos</h4>
+            <p>No se encontraron pedidos en el sistema.</p>
         </div>
     }
-</div>
 
-<!-- BOTÓN DE ACTIVOS / INACTIVOS -->
-@if ((bool)ViewBag.MostrarInactivos)
-{
-    <a asp-action="Listar"
-       asp-route-mostrarInactivos="false"
-       asp-route-nombre="@ViewBag.Nombre"
-       class="btn btn-primary mt-3">
-        Ver Activos
-    </a>
-}
-else
-{
-    <a asp-action="Listar"
-       asp-route-mostrarInactivos="true"
-       asp-route-nombre="@ViewBag.Nombre"
-       class="btn btn-warning mt-3">
-        Ver Inactivos
-    </a>
-}
+</div>
