@@ -18,6 +18,7 @@
             </div>
 
             <form asp-controller="Auth" asp-action="Registro" method="post">
+                @Html.AntiForgeryToken()
                 <h2 class="form-title">Tendal Market</h2>
 
                 <div class="row">

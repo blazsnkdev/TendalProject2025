@@ -11,5 +11,9 @@ namespace TendalProject.Data.Repositories
         {
             _appDbContext = appDbContext;
         }
+        public void EliminarItem(Item item)
+        {
+            _appDbContext.TblItem.Remove(item);
+        }
     }
 }
