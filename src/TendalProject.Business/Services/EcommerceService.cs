@@ -20,6 +20,33 @@ namespace TendalProject.Business.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
+        public async Task<Result<DetalleArticuloSeleccionadoResponse>> ObtenerArticuloSelccionadoAsync(Guid articuloId)
+        {
+            if(articuloId == Guid.Empty)
+            {
+                return Result<DetalleArticuloSeleccionadoResponse>.Failure(Error.Validation("El id es invalido"));
+            }
+            var articulo = await _UoW.ArticuloRepository.GetArticuloWithIncludesByIdAsync(articuloId);
+            if(articulo is null)
+            {
+                return Result<DetalleArticuloSeleccionadoResponse>.Failure(Error.NotFound("Articulo no encontrado"));
+            }
+            var precioFinal = articulo.PrecioOferta is 0 ? articulo.Precio : articulo.PrecioOferta;
+            var response = new DetalleArticuloSeleccionadoResponse(
+                articulo.ArticuloId,
+                articulo.Nombre,
+                articulo.Descripcion,
+                articulo.Categoria!.Nombre,
+                precioFinal,
+                articulo.Stock,
+                articulo.Imagen,
+                articulo.Reseñas.Any()
+                    ? (int)Math.Round(articulo.Reseñas.Average(r => r.Puntuacion), MidpointRounding.AwayFromZero)
+                    : 0
+                );
+            return Result<DetalleArticuloSeleccionadoResponse>.Success(response);
+        }
+
         public async Task<Result<List<CatalogoArticulosResponse>>>ObtenerCatalogoFiltradoAsync(
             Guid? categoriaId,
             string? q,

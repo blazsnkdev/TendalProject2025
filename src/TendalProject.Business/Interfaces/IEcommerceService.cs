@@ -16,5 +16,6 @@ namespace TendalProject.Business.Interfaces
                     bool? nuevo,
                     string? orden
                 );
+        Task<Result<DetalleArticuloSeleccionadoResponse>> ObtenerArticuloSelccionadoAsync(Guid articuloId);
     }
 }

@@ -61,6 +61,43 @@ namespace TendalProject.Web.Controllers
             await CargarCategoriaSelectList();
             return View(paginacion);
         }
+
+        [Authorize(Roles = "Administrador, Cliente")]
+        public async Task<IActionResult> Detalle(Guid articuloId)
+        {
+            var result = await _ecommerceService.ObtenerArticuloSelccionadoAsync(articuloId);
+            if (!result.IsSuccess || result.Value is null)
+            {
+                return HandleError(result.Error!);
+            }
+            var value = result.Value;
+            var viewModel = new DetalleArticuloSeleccionadoViewModel()
+            {
+                ArticuloId = value.ArticuloId,
+                NombreArticulo = value.NombreArticulo,
+                NombreCategoria = value.NombreCategoria,
+                Descripcion = value.Descripcion,
+                Stock = value.Stock,
+                Precio = value.PrecioFinal,
+                Imagen = value.Imagen,
+                Calificacion = value.Calificacion,
+            };
+            return View(viewModel);
+        }
+        [Authorize(Roles ="Administrador, Cliente")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Agregar(Guid articuloId, int cantidad)
+        {
+            return RedirectToAction(nameof(Carrito));
+        }
+        public async Task<IActionResult> Carrito()
+        {
+            return View();
+        }
+
+
+
         private IActionResult HandleError(Error error)
         {
             return error.Code switch
