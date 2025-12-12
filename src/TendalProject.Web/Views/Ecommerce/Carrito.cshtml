@@ -1,0 +1,86 @@
+﻿@model TendalProject.Web.ViewModels.Ecommerce.CarritoViewModel
+
+<div class="container mt-4">
+    <h2 class="mb-4">🛒 Tu Carrito</h2>
+
+    @if (!Model.Items.Any())
+    {
+        <div class="alert alert-warning text-center">
+            Tu carrito está vacío 😕
+            <br /><br />
+            <a class="btn btn-primary" asp-controller="Ecommerce" asp-action="Catalogo">
+                Seguir comprando
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Artículo</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td style="width:120px;">
+                                    <img src="@item.Imagen" class="img-fluid rounded" />
+                                </td>
+                                <td>@item.NombreArticulo</td>
+                                <td>S/ @item.Precio</td>
+                                <td>@item.Cantidad</td>
+                                <td><strong>S/ @item.SubTotal</strong></td>
+                                <td>
+                                    <form asp-action="EliminarItem" method="post">
+                                        <input type="hidden" name="itemId" value="@item.ItemId" />
+                                        <button class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Quitar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="card-title">Resumen</h4>
+                        <hr />
+
+                        <p class="d-flex justify-content-between">
+                            <span>Total Items:</span>
+                            <strong>@Model.CantidadTotal</strong>
+                        </p>
+
+                        <p class="d-flex justify-content-between fs-5">
+                            <span>Total a pagar:</span>
+                            <strong>S/ @Model.PrecioTotal</strong>
+                        </p>
+
+                        <hr />
+
+                        <a asp-action="Checkout" class="btn btn-success w-100">
+                            <i class="bi bi-credit-card"></i> Proceder al Pago
+                        </a>
+
+                        <a asp-controller="Ecommerce" asp-action="Catalogo" class="btn btn-outline-primary w-100 mt-2">
+                            Seguir comprando
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

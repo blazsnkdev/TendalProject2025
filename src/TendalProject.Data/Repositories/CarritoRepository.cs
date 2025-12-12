@@ -1,4 +1,5 @@
-﻿using TendalProject.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using TendalProject.Data.Context;
 using TendalProject.Data.Interfaces;
 using TendalProject.Entities.Entidades;
 
@@ -11,5 +12,13 @@ namespace TendalProject.Data.Repositories
         {
             _appDbContext = appDbContext;
         }
+        public async Task<Carrito?> GetCarritoByClienteIdAsync(Guid clienteId)
+        {
+            return await _appDbContext.TblCarrito
+                .Include(c => c.Items)
+                    .ThenInclude(i => i.Articulo)
+                .FirstOrDefaultAsync(c => c.ClienteId == clienteId);
+        }
+
     }
 }

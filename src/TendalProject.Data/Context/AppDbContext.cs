@@ -121,7 +121,7 @@ namespace TendalProject.Data.Context
 
             // Precisión
             modelBuilder.Entity<Item>()
-                .Property(i => i.PrecioUnitario)
+                .Property(i => i.PrecioFinal)
                 .HasPrecision(10, 2);
 
             modelBuilder.Entity<DetallePedido>()
@@ -152,6 +152,16 @@ namespace TendalProject.Data.Context
                 .HasOne(r => r.Cliente)
                 .WithMany(c => c.Reseñas)
                 .HasForeignKey(r => r.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Carrito
+            modelBuilder.Entity<Carrito>()
+                .HasKey(c => c.CarritoId);
+
+            modelBuilder.Entity<Carrito>()
+                .HasOne(c => c.Cliente)
+                .WithOne(c => c.Carrito)
+                .HasForeignKey<Carrito>(c => c.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);

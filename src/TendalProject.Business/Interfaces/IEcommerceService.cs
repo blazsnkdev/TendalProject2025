@@ -1,4 +1,5 @@
-﻿using TendalProject.Business.DTOs.Responses.Ecommerce;
+﻿using TendalProject.Business.DTOs.Requests.Ecommerce;
+using TendalProject.Business.DTOs.Responses.Ecommerce;
 using TendalProject.Common.Results;
 
 namespace TendalProject.Business.Interfaces
@@ -17,5 +18,8 @@ namespace TendalProject.Business.Interfaces
                     string? orden
                 );
         Task<Result<DetalleArticuloSeleccionadoResponse>> ObtenerArticuloSelccionadoAsync(Guid articuloId);
+        Task<Result<Guid>> AgregarItemAlCarritoAsync(SeleccionarArticuloRequest request);
+        Task<Result<CarritoResponse>> ObtenerCarritoAsync(Guid clienteId);
+
     }
 }
