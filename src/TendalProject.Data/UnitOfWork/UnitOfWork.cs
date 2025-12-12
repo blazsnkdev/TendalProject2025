@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using TendalProject.Data.Context;
 using TendalProject.Data.Interfaces;
+using TendalProject.Data.Repositories;
 
 namespace TendalProject.Data.UnitOfWork
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly AppDbContext _appDbContext;
         private IDbContextTransaction? _transaction;
 
+        // Repositorios
         public IUsuarioRepository UsuarioRepository { get; }
         public IClienteRepository ClienteRepository { get; }
         public ICategoriaRepository CategoriaRepository { get; }
@@ -19,31 +21,22 @@ namespace TendalProject.Data.UnitOfWork
         public IVentaRepository VentaRepository { get; }
         public ICarritoRepository CarritoRepository { get; }
         public IItemRepository ItemRepository { get; }
-        public UnitOfWork(
-            AppDbContext appDbContext,
-            IUsuarioRepository usuarioRepository,
-            IClienteRepository clienteRepository,
-            ICategoriaRepository categoriaRepository,
-            IRolRepository rolRepository,
-            IProveedorRepository proveedorRepository,
-            IArticuloRepository articuloRepository,
-            IPedidoRepository pedidoRepository,
-            IVentaRepository ventaRepository,
-            ICarritoRepository carritoRepository,
-            IItemRepository itemRepository
-            )
+
+        public UnitOfWork(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            UsuarioRepository = usuarioRepository;
-            ClienteRepository = clienteRepository;
-            CategoriaRepository = categoriaRepository;
-            RolRepository = rolRepository;
-            ProveedorRepository = proveedorRepository;
-            ArticuloRepository = articuloRepository;
-            PedidoRepository = pedidoRepository;
-            VentaRepository = ventaRepository;
-            CarritoRepository = carritoRepository;
-            ItemRepository = itemRepository;    
+
+            // IMPORTANTE: Todos los repos usan el MISMO DbContext
+            UsuarioRepository = new UsuarioRepository(_appDbContext);
+            ClienteRepository = new ClienteRepository(_appDbContext);
+            CategoriaRepository = new CategoriaRepository(_appDbContext);
+            RolRepository = new RolRepository(_appDbContext);
+            ProveedorRepository = new ProveedorRepository(_appDbContext);
+            ArticuloRepository = new ArticuloRepository(_appDbContext);
+            PedidoRepository = new PedidoRepository(_appDbContext);
+            VentaRepository = new VentaRepository(_appDbContext);
+            CarritoRepository = new CarritoRepository(_appDbContext);
+            ItemRepository = new ItemRepository(_appDbContext);
         }
 
         public async Task BeginTransactionAsync()
@@ -58,12 +51,6 @@ namespace TendalProject.Data.UnitOfWork
                 await _transaction.CommitAsync();
         }
 
-        public void Dispose()
-        {
-            _transaction?.Dispose();
-            _appDbContext.Dispose();
-        }
-
         public async Task RollBackAsync()
         {
             if (_transaction != null)
@@ -73,6 +60,12 @@ namespace TendalProject.Data.UnitOfWork
         public async Task<int> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            _transaction?.Dispose();
+            _appDbContext.Dispose();
         }
     }
 }

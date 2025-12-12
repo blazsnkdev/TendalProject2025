@@ -12,17 +12,17 @@ using TendalProject.Data.UnitOfWork;
 var builder = WebApplication.CreateBuilder(args);
 
 //Repositorios
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-builder.Services.AddScoped<IRolRepository, RolRepository>();
-builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
-builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
-builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-builder.Services.AddScoped<IVentaRepository, VentaRepository>();
-builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
+//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+//builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+//builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+//builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+//builder.Services.AddScoped<IRolRepository, RolRepository>();
+//builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
+//builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
+//builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
+//builder.Services.AddScoped<IVentaRepository, VentaRepository>();
+//builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
+//builder.Services.AddScoped<IItemRepository, ItemRepository>();
 //UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Servicios
@@ -79,7 +79,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Ecommerce}/{action=Catalogo}/{id?}")
     .WithStaticAssets();
 
 

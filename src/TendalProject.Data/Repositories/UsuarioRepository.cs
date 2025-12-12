@@ -32,6 +32,7 @@ namespace TendalProject.Data.Repositories
             return await _appDbContext.TblUsuario
                 .Include(u => u.UsuariosRoles)
                     .ThenInclude(ur => ur.Rol)
+                    .Include(c=>c.Cliente)//NOTE: aqui creo que debi agregar esto che
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 

@@ -3,6 +3,8 @@
     public record SeleccionarArticuloRequest
     (
         Guid ArticuloId,
-        int Cantidad
+        int Cantidad,
+        string ClienteId,
+        decimal PrecioFinal
     );
 }

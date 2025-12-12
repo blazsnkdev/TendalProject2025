@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TendalProject.Data.Context;
 
@@ -11,9 +12,11 @@ using TendalProject.Data.Context;
 namespace TendalProject.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251212165420_updateColumnPrecioInItemCarrito")]
+    partial class updateColumnPrecioInItemCarrito
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,26 +24,6 @@ namespace TendalProject.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Carrito", b =>
-                {
-                    b.Property<Guid>("CarritoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClienteId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("CarritoId");
-
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
-
-                    b.ToTable("TblCarrito");
-                });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Articulo", b =>
                 {
@@ -105,6 +88,26 @@ namespace TendalProject.Data.Migrations
                     b.HasIndex("ProveedorId");
 
                     b.ToTable("TblArticulo");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Carrito", b =>
+                {
+                    b.Property<Guid>("CarritoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClienteId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CarritoId");
+
+                    b.HasIndex("ClienteId")
+                        .IsUnique();
+
+                    b.ToTable("TblCarrito");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Categoria", b =>
@@ -471,17 +474,6 @@ namespace TendalProject.Data.Migrations
                     b.ToTable("TblVenta");
                 });
 
-            modelBuilder.Entity("Carrito", b =>
-                {
-                    b.HasOne("TendalProject.Entities.Entidades.Cliente", "Cliente")
-                        .WithOne("Carrito")
-                        .HasForeignKey("Carrito", "ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
             modelBuilder.Entity("TendalProject.Entities.Entidades.Articulo", b =>
                 {
                     b.HasOne("TendalProject.Entities.Entidades.Categoria", "Categoria")
@@ -497,6 +489,17 @@ namespace TendalProject.Data.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Proveedor");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Carrito", b =>
+                {
+                    b.HasOne("TendalProject.Entities.Entidades.Cliente", "Cliente")
+                        .WithOne("Carrito")
+                        .HasForeignKey("TendalProject.Entities.Entidades.Carrito", "ClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Cliente", b =>
@@ -537,7 +540,7 @@ namespace TendalProject.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Carrito", "Carrito")
+                    b.HasOne("TendalProject.Entities.Entidades.Carrito", "Carrito")
                         .WithMany("Items")
                         .HasForeignKey("CarritoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -612,14 +615,14 @@ namespace TendalProject.Data.Migrations
                     b.Navigation("Pedido");
                 });
 
-            modelBuilder.Entity("Carrito", b =>
-                {
-                    b.Navigation("Items");
-                });
-
             modelBuilder.Entity("TendalProject.Entities.Entidades.Articulo", b =>
                 {
                     b.Navigation("Reseñas");
+                });
+
+            modelBuilder.Entity("TendalProject.Entities.Entidades.Carrito", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("TendalProject.Entities.Entidades.Categoria", b =>

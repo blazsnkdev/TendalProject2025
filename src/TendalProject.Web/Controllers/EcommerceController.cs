@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using TendalProject.Business.DTOs.Requests.Ecommerce;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -20,7 +21,6 @@ namespace TendalProject.Web.Controllers
             _ecommerceService = ecommerceService;
             _categoriaService = categoriaService;
         }
-        [Authorize(Roles = "Cliente")]
         public async Task<IActionResult> Catalogo(
             Guid? categoriaId,
             string? q,
@@ -62,7 +62,7 @@ namespace TendalProject.Web.Controllers
             return View(paginacion);
         }
 
-        [Authorize(Roles = "Administrador, Cliente")]
+        
         public async Task<IActionResult> Detalle(Guid articuloId)
         {
             var result = await _ecommerceService.ObtenerArticuloSelccionadoAsync(articuloId);
@@ -87,15 +87,44 @@ namespace TendalProject.Web.Controllers
         [Authorize(Roles ="Administrador, Cliente")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Agregar(Guid articuloId, int cantidad)
+        public async Task<IActionResult> Agregar(Guid articuloId, int cantidad, decimal precioFinal)
         {
-            return RedirectToAction(nameof(Carrito));
+            var clienteId = User.FindFirst("ClienteId")?.Value;
+            if(clienteId is null || string.IsNullOrWhiteSpace(clienteId))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            var request = new SeleccionarArticuloRequest(articuloId,cantidad,clienteId,precioFinal);
+            var result = await _ecommerceService.AgregarItemAlCarritoAsync(request);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            //NOTE: el carrito necesito el id
+            return RedirectToAction(nameof(Carrito), new {clienteId = result.Value });
         }
-        public async Task<IActionResult> Carrito()
+        public async Task<IActionResult> Carrito(Guid clienteId)
         {
-            return View();
+            var result = await _ecommerceService.ObtenerCarritoAsync(clienteId);
+            var value = result.Value!;
+            var itemsViewModel = value.Items.Select(x => new ItemCarritoViewModel
+            {
+                ItemId = x.ItemId,
+                ArticuloId = x.ArticuloId,
+                NombreArticulo = x.NombreArticulo,
+                Cantidad = x.Cantidad,
+                Precio = x.Precio,
+                Imagen = x.Imagen,
+                SubTotal = x.SubTotal
+            }).ToList();
+            var viewModel = new CarritoViewModel()
+            {
+                CarritoId = value.CarritoId,
+                ClienteId = value.ClienteId,
+                Items = itemsViewModel,
+            };
+            return View(viewModel);
         }
-
 
 
         private IActionResult HandleError(Error error)

@@ -33,6 +33,7 @@ namespace TendalProject.Business.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, response.usuarioId.ToString()),
                 new Claim(ClaimTypes.Name, response.nombre),
+                new Claim("ClienteId",response.clienteId.ToString()),
                 new Claim("SesionId", response.sesionId.ToString()),
                 new Claim("UltimoLogin",response.ultimoLogin?.ToString("O") ?? string.Empty),
                 new Claim("InicioSesion", response.inicioSesion.ToString("O"))
@@ -96,6 +97,7 @@ namespace TendalProject.Business.Services
             var loginValidoResponse = new LoginValidoResponse(
                 sesionId: Guid.NewGuid(),
                 usuarioId: usuario.UsuarioId,
+                clienteId: usuario.Cliente?.ClienteId,
                 nombre: usuario.Email,
                 ultimoLogin: usuario.UltimaConexion,
                 inicioSesion: ahora,

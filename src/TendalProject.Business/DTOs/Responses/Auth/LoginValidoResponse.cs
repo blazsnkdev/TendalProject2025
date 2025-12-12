@@ -4,6 +4,7 @@
     (
         Guid sesionId,
         Guid usuarioId,
+        Guid? clienteId,
         string nombre,
         DateTime? ultimoLogin,
         DateTime inicioSesion,

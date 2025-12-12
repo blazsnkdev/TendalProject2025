@@ -36,7 +36,7 @@ namespace TendalProject.Web.Controllers
                 return View(viewModel);
             }
             await _authService.SignInAsync(HttpContext, result.Value, viewModel.Recordarme);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Catalogo", "Ecommerce");
         }
         public IActionResult Registro()=> View();
         [HttpPost]
