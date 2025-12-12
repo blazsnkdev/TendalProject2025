@@ -1,0 +1,20 @@
+﻿using TendalProject.Business.DTOs.Responses.Ecommerce;
+using TendalProject.Common.Results;
+
+namespace TendalProject.Business.Interfaces
+{
+    public interface IEcommerceService
+    {
+        Task<Result<List<CatalogoArticulosResponse>>> ObtenerCatalogoFiltradoAsync(
+                    Guid? categoriaId,
+                    string? q,
+                    decimal? minPrecio,
+                    decimal? maxPrecio,
+                    bool? oferta,
+                    bool? disponible,
+                    double? minRating,
+                    bool? nuevo,
+                    string? orden
+                );
+    }
+}

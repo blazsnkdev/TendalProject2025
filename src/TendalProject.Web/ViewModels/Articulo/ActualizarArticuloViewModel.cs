@@ -20,7 +20,7 @@ namespace TendalProject.Web.ViewModels.Articulo
 
         [Required(ErrorMessage = "El precio oferta es obligatorio.")]
         [Range(0.00, 99999, ErrorMessage = "El precio oferta no es válido.")]
-        public decimal PrecioOferta { get; set; }
+        public decimal? PrecioOferta { get; set; }
 
         [Required(ErrorMessage = "El stock es obligatorio.")]
         [Range(0, 999999, ErrorMessage = "El stock debe ser un número positivo.")]

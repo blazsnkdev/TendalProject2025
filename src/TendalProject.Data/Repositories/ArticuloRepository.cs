@@ -14,6 +14,14 @@ namespace TendalProject.Data.Repositories
             _appDbContext = appDbContext;
         }
 
+        public async Task<List<Articulo>> GetArticulosDisponiblesWithCategoriaAsync()
+        {
+            return await _appDbContext.TblArticulo
+                .Include(c=>c.Categoria)
+                .Where(a=>a.Estado == EstadoArticulo.Activo)
+                .ToListAsync();
+        }
+
         public async Task<List<Articulo>> GetArticulosWithCategoriaAsync()
         {
             return await _appDbContext.TblArticulo

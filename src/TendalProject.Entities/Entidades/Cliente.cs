@@ -22,5 +22,6 @@ namespace TendalProject.Entities.Entidades
         public Carrito? Carrito { get; set; }
         public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
         public ICollection<Venta> Ventas { get; set; } = new List<Venta>();
+        public ICollection<Reseña> Reseñas { get; set; } = new List<Reseña>();
     }
 }
