@@ -6,6 +6,7 @@ namespace TendalProject.Data.Interfaces
     {
         Task<Articulo?> GetArticuloWithIncludesByIdAsync(Guid articuloId);
         Task<List<Articulo>> GetArticulosWithCategoriaAsync();
+        Task<List<Articulo>> GetArticulosDisponiblesWithCategoriaAsync();
         Task UpdateEstadoArticuloByIdAsync(Guid articuloId);
     }
 }

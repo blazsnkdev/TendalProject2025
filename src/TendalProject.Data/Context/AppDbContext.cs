@@ -19,6 +19,7 @@ namespace TendalProject.Data.Context
         public DbSet<Pedido> TblPedido => Set<Pedido>();
         public DbSet<DetallePedido> TblDetallePedido => Set<DetallePedido>();
         public DbSet<Venta> TblVenta => Set<Venta>();
+        public DbSet<Reseña> TblReseña => Set<Reseña>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -139,6 +140,19 @@ namespace TendalProject.Data.Context
                 .Property(p => p.Total)
                 .HasPrecision(10, 2);
 
+            //Articulo - Reseñas (1:N)
+            modelBuilder.Entity<Reseña>()
+                .HasOne(r => r.Articulo)
+                .WithMany(a => a.Reseñas)
+                .HasForeignKey(r => r.ArticuloId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Cliente - Reseñas (1:N)
+            modelBuilder.Entity<Reseña>()
+                .HasOne(r => r.Cliente)
+                .WithMany(c => c.Reseñas)
+                .HasForeignKey(r => r.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

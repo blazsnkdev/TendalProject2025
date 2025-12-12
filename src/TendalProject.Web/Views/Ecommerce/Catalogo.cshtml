@@ -1,0 +1,695 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Ecommerce.CatalogoArticulosViewModel>
+@using TendalProject.Common.Helpers
+
+@{
+    ViewData["Title"] = "Catálogo de Productos";
+    Layout = "_Layout";
+    
+}
+
+<style>
+    /* Estilos personalizados */
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid #eaeaea;
+        border-radius: 12px;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .product-image-container {
+        position: relative;
+        padding-top: 75%; /* 4:3 Aspect Ratio */
+        overflow: hidden;
+        background: #f8f9fa;
+    }
+
+    .product-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+
+    .badge-container {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 2;
+    }
+
+    .badge-new {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .badge-oferta {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .price-container {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .current-price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .original-price {
+        font-size: 1rem;
+        text-decoration: line-through;
+        color: #a0aec0;
+    }
+
+    .discount-percentage {
+        background-color: #feb2b2;
+        color: #c53030;
+        font-size: 0.75rem;
+        padding: 0.125rem 0.5rem;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+
+    .rating-container {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .rating-star {
+        color: #fbbf24;
+        font-size: 1rem;
+    }
+
+    .rating-text {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .stock-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .stock-available {
+        background-color: #c6f6d5;
+        color: #22543d;
+    }
+
+    .stock-low {
+        background-color: #fed7d7;
+        color: #742a2a;
+    }
+
+    .btn-seleccionar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-seleccionar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-seleccionar:active {
+        transform: translateY(0);
+    }
+
+    .filter-sidebar {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.5rem;
+        height: fit-content;
+    }
+
+    .filter-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .filter-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .filter-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 1rem;
+    }
+
+    .form-check-label {
+        cursor: pointer;
+    }
+
+    .form-range::-webkit-slider-thumb {
+        background: #667eea;
+    }
+
+    .form-range::-moz-range-thumb {
+        background: #667eea;
+    }
+
+    .sort-select {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.5rem;
+        font-size: 0.875rem;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 3rem;
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+    }
+
+    .product-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d3748;
+        line-height: 1.4;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-description {
+        color: #718096;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .category-badge {
+        display: inline-block;
+        background-color: #edf2f7;
+        color: #4a5568;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar de Filtros -->
+        <div class="col-lg-3 mb-4">
+            <div class="filter-sidebar">
+                <h5 class="mb-4">Filtros</h5>
+                
+                <!-- Buscador -->
+                <div class="filter-section">
+                    <h6 class="filter-title">Buscar</h6>
+                    <form method="get" id="searchForm">
+                        <div class="input-group mb-3">
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="q" 
+                                   placeholder="Buscar productos..."
+                                   value="@Context.Request.Query["q"]">
+                            <button class="btn btn-outline-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Categorías -->
+                <div class="filter-section">
+                    <h6 class="filter-title">Categorías</h6>
+                    <select class="form-select" name="categoriaId" onchange="this.form.submit()" form="filterForm">
+                        <option value="">Todas las categorías</option>
+                        @if (ViewBag.Categorias != null)
+                        {
+                            foreach (var item in ViewBag.Categorias)
+                            {
+                                <option value="@item.Value" 
+                                        selected="@(Context.Request.Query["categoriaId"] == item.Value)">
+                                    @item.Text
+                                </option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <!-- Precio -->
+                <div class="filter-section">
+                    <h6 class="filter-title">Rango de Precio</h6>
+                    <div class="row g-2">
+                        <div class="col">
+                            <input type="number" 
+                                   class="form-control" 
+                                   name="minPrecio" 
+                                   placeholder="Mín" 
+                                   form="filterForm"
+                                   value="@Context.Request.Query["minPrecio"]">
+                        </div>
+                        <div class="col">
+                            <input type="number" 
+                                   class="form-control" 
+                                   name="maxPrecio" 
+                                   placeholder="Máx" 
+                                   form="filterForm"
+                                   value="@Context.Request.Query["maxPrecio"]">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="filter-section">
+                    <h6 class="filter-title">Estado</h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               name="oferta" 
+                               value="true" 
+                               id="filterOferta"
+                               form="filterForm"
+                               checked="@(Context.Request.Query["oferta"] == "true")">
+                        <label class="form-check-label" for="filterOferta">
+                            En oferta
+                        </label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               name="disponible" 
+                               value="true" 
+                               id="filterDisponible"
+                               form="filterForm"
+                               checked="@(Context.Request.Query["disponible"] == "true")">
+                        <label class="form-check-label" for="filterDisponible">
+                            Disponible
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               name="nuevo" 
+                               value="true" 
+                               id="filterNuevo"
+                               form="filterForm"
+                               checked="@(Context.Request.Query["nuevo"] == "true")">
+                        <label class="form-check-label" for="filterNuevo">
+                            Nuevo
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Calificación -->
+                <div class="filter-section">
+                    <h6 class="filter-title">Calificación Mínima</h6>
+                    <select class="form-select" name="minRating" onchange="this.form.submit()" form="filterForm">
+                        <option value="">Todas</option>
+                        <option value="4" selected="@(Context.Request.Query["minRating"] == "4")">4+ Estrellas</option>
+                        <option value="3" selected="@(Context.Request.Query["minRating"] == "3")">3+ Estrellas</option>
+                        <option value="2" selected="@(Context.Request.Query["minRating"] == "2")">2+ Estrellas</option>
+                    </select>
+                </div>
+
+                <!-- Botones de Filtro -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary" form="filterForm">
+                        <i class="fas fa-filter me-2"></i>Aplicar Filtros
+                    </button>
+                    <a href="@Url.Action("Catalogo")" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-2"></i>Limpiar Filtros
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido Principal -->
+        <div class="col-lg-9">
+            <!-- Header del Catálogo -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-2">Catálogo de Productos</h1>
+                    <p class="text-muted mb-0">
+                        Mostrando @Model.Items.Count de @Model.TotalRegistros productos
+                    </p>
+                </div>
+                <div>
+                    <select class="sort-select" name="orden" onchange="this.form.submit()" form="filterForm">
+                        <option value="">Ordenar por</option>
+                        <option value="precio_asc" selected="@(Context.Request.Query["orden"] == "precio_asc")">Precio: Menor a Mayor</option>
+                        <option value="precio_desc" selected="@(Context.Request.Query["orden"] == "precio_desc")">Precio: Mayor a Menor</option>
+                        <option value="nombre_asc" selected="@(Context.Request.Query["orden"] == "nombre_asc")">Nombre: A-Z</option>
+                        <option value="nombre_desc" selected="@(Context.Request.Query["orden"] == "nombre_desc")">Nombre: Z-A</option>
+                        <option value="nuevo" selected="@(Context.Request.Query["orden"] == "nuevo")">Más Nuevo</option>
+                        <option value="rating" selected="@(Context.Request.Query["orden"] == "rating")">Mejor Calificado</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Formulario de Filtros (oculto) -->
+            <form id="filterForm" method="get" class="d-none">
+                @foreach (var key in Context.Request.Query.Keys)
+                {
+                    if (key != "pagina")
+                    {
+                        <input type="hidden" name="@key" value="@Context.Request.Query[key]" />
+                    }
+                }
+            </form>
+
+            <!-- Grid de Productos -->
+            @if (Model.Items.Any())
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (var producto in Model.Items)
+                    {
+                        
+                        <div class="col">
+                            <div class="card product-card h-100">
+                                <!-- Imagen del Producto -->
+                                <div class="product-image-container">
+                                    <img src="@Url.Content("~/" + producto.Imagen + "?v=" + DateTime.Now.Ticks)
+                                         alt="@producto.NombreArticulo" 
+                                         class="product-image"
+                                         onerror="this.src='/images/default-product.png'">
+                                    
+                                    <!-- Badges -->
+                                    <div class="badge-container">
+                                        @if (producto.EsNuevo)
+                                        {
+                                            <span class="badge-new mb-1">NUEVO</span>
+                                        }
+                                        @if (producto.PrecioOferta.HasValue && producto.PrecioOferta < producto.PrecioUnitario)
+                                        {
+                                            <span class="badge-oferta">OFERTA</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Contenido de la Tarjeta -->
+                                <div class="card-body d-flex flex-column">
+                                    <!-- Categoría -->
+                                    <span class="category-badge">@producto.NombreCategoria</span>
+                                    
+                                    <!-- Título -->
+                                    <h5 class="product-title">@producto.NombreArticulo</h5>
+                                    
+                                    <!-- Descripción -->
+                                    <p class="product-description">@producto.Descripcion</p>
+                                    
+                                    <!-- Calificación -->
+                                    @if (producto.Calificacion.HasValue)
+                                    {
+                                        <div class="rating-container mb-3">
+                                            @{
+                                                int fullStars = (int)producto.Calificacion.Value;
+                                                bool hasHalfStar = producto.Calificacion.Value % 1 >= 0.5;
+                                            }
+                                            
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                if (i < fullStars)
+                                                {
+                                                    <span class="rating-star">★</span>
+                                                }
+                                                else if (i == fullStars && hasHalfStar)
+                                                {
+                                                    <span class="rating-star">☆</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="rating-star" style="color: #e2e8f0;">★</span>
+                                                }
+                                            }
+                                            <span class="rating-text ms-2">@producto.Calificacion.Value.ToString("0.0")</span>
+                                        </div>
+                                    }
+
+                                    <!-- Precio -->
+                                    <div class="price-container mb-3">
+                                        @if (producto.PrecioOferta.HasValue
+                                                                        && producto.PrecioOferta > 0
+                                                                        && producto.PrecioOferta < producto.PrecioUnitario)
+
+                                        {
+                                            <span class="current-price">@producto.PrecioOferta.Value.ToString("C")</span>
+                                            <span class="original-price">@producto.PrecioUnitario.ToString("C")</span>
+
+                                            decimal descuento = 100m - ((producto.PrecioOferta.Value * 100m) / producto.PrecioUnitario);
+
+                                            <span class="discount-percentage">-@descuento.ToString("0")%</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="current-price">@producto.PrecioUnitario.ToString("C")</span>
+                                        }
+                                    </div>
+
+                                    
+                                    <!-- Stock -->
+                                    <div class="mb-3">
+                                        @if (producto.Stock > 0)
+                                        {
+                                            <span class="stock-badge stock-available">
+                                                <i class="fas fa-check-circle me-1"></i>
+                                                @(producto.Stock > 10 ? "Disponible" : $"Últimas {producto.Stock} unidades")
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="stock-badge stock-low">
+                                                <i class="fas fa-times-circle me-1"></i>
+                                                Agotado
+                                            </span>
+                                        }
+                                    </div>
+                                    
+                                    <!-- Botón de Seleccionar -->
+                                    @if (producto.Disponible && producto.Stock > 0)
+                                    {
+                                        <div class="mt-auto">
+                                            <button class="btn-seleccionar" 
+                                                    onclick="seleccionarProducto('@producto.ArticuloId')">
+                                                <i class="fas fa-shopping-cart me-2"></i>Seleccionar
+                                            </button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="mt-auto">
+                                            <button class="btn btn-secondary w-100" disabled>
+                                                <i class="fas fa-ban me-2"></i>No Disponible
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Paginación -->
+                @if (Model.TotalPagias > 1)
+                {
+                    <div class="pagination-container">
+                        <nav aria-label="Paginación">
+                            <ul class="pagination">
+                                @if (Model.TienePaginaAnterior)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" 
+                                           href="@Url.Action("Catalogo", new { pagina = Model.PaginaIndice - 1 })">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                }
+
+                                @for (int i = 1; i <= Model.TotalPagias; i++)
+                                {
+                                    <li class="page-item @(i == Model.PaginaIndice ? "active" : "")">
+                                        <a class="page-link" 
+                                           href="@Url.Action("Catalogo", new { pagina = i })">@i</a>
+                                    </li>
+                                }
+
+                                @if (Model.TienePaginaSiguiente)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" 
+                                           href="@Url.Action("Catalogo", new { pagina = Model.PaginaIndice + 1 })">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- Estado Vacío -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-search fa-4x text-muted"></i>
+                    </div>
+                    <h3 class="h4 mb-3">No se encontraron productos</h3>
+                    <p class="text-muted mb-4">Intenta ajustar tus filtros o términos de búsqueda.</p>
+                    <a href="@Url.Action("Catalogo")" class="btn btn-primary">
+                        <i class="fas fa-redo me-2"></i>Ver todo el catálogo
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function seleccionarProducto(articuloId) {
+            // Mostrar modal de carga
+            const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'), {});
+            loadingModal.show();
+            
+            // Aquí puedes implementar la lógica para agregar al carrito o redirigir
+            fetch(`/Carrito/Agregar/${articuloId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Mostrar notificación de éxito
+                    mostrarNotificacion('success', 'Producto agregado al carrito');
+                    
+                    // Actualizar contador del carrito
+                    actualizarContadorCarrito();
+                } else {
+                    mostrarNotificacion('error', 'Error al agregar el producto');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                mostrarNotificacion('error', 'Error de conexión');
+            })
+            .finally(() => {
+                loadingModal.hide();
+            });
+        }
+
+        function mostrarNotificacion(tipo, mensaje) {
+            // Implementar notificación toast
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-bg-${tipo} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${mensaje}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.querySelector('.toast-container');
+            if (!container) {
+                const newContainer = document.createElement('div');
+                newContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+                document.body.appendChild(newContainer);
+                newContainer.appendChild(toast);
+            } else {
+                container.appendChild(toast);
+            }
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
+        function actualizarContadorCarrito() {
+            // Implementar actualización del contador del carrito
+            fetch('/Carrito/ObtenerCantidad')
+                .then(response => response.json())
+                .then(data => {
+                    const counter = document.getElementById('carrito-counter');
+                    if (counter) {
+                        counter.textContent = data.cantidad;
+                    }
+                });
+        }
+
+        // Inicializar tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+}
+
+<!-- Modal de Carga -->
+<div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+            <div class="modal-body text-center py-5">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mb-0">Agregando producto al carrito...</p>
+            </div>
+        </div>
+    </div>
+</div>

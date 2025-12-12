@@ -12,7 +12,7 @@ namespace TendalProject.Entities.Entidades
         [Column(TypeName = "decimal(18,2)")]
         public decimal Precio { get; set; }
         [Column(TypeName = "decimal(18,2)")]
-        public decimal PrecioOferta { get; set; }
+        public decimal? PrecioOferta { get; set; }
         public int Stock { get; set; }
         public Guid? CategoriaId { get; set; }
         public Categoria? Categoria { get; set; }
@@ -23,5 +23,6 @@ namespace TendalProject.Entities.Entidades
         public DateTime FechaRegistro { get; set; }
         public string Imagen { get; set; } = string.Empty;
         public int CantidadVentas { get; set; }
+        public ICollection<Reseña> Reseñas { get; set; } = new List<Reseña>();
     }
 }

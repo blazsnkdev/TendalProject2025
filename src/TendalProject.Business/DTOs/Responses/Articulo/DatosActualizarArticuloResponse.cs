@@ -6,7 +6,7 @@
             string Nombre,
             string Descripcion,
             decimal Precio,
-            decimal PrecioOferta,
+            decimal? PrecioOferta,
             int Stock,
             bool Destacado,
             Guid CategoriaId,
