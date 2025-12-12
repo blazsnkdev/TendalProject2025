@@ -9,6 +9,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-controller="Categoria" asp-action="Actualizar" method="post">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="CategoriaId" type="hidden" class="form-control" />

@@ -37,11 +37,17 @@
                                 </td>
                                 <td>@item.NombreArticulo</td>
                                 <td>S/ @item.Precio</td>
-                                <td>@item.Cantidad</td>
+                                <td>
+                                    <form asp-action="ActualizarCantidad" asp-route-itemId="@item.ItemId" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="number" name="cantidad" value="@item.Cantidad" min="1" class="form-control form-control-sm" />
+                                        <button type="submit" class="btn btn-success"></button>
+                                    </form>
+                                </td>
                                 <td><strong>S/ @item.SubTotal</strong></td>
                                 <td>
-                                    <form asp-action="EliminarItem" method="post">
-                                        <input type="hidden" name="itemId" value="@item.ItemId" />
+                                    <form asp-action="EliminarItem" asp-route-itemId="@item.ItemId" method="post">
+                                        @Html.AntiForgeryToken()
                                         <button class="btn btn-danger btn-sm">
                                             <i class="bi bi-trash"></i> Quitar
                                         </button>

@@ -25,6 +25,26 @@ namespace TendalProject.Business.Services
             _dateTimeProvider = dateTimeProvider;
         }
 
+        public async Task<Result<Guid>> ActualizarCantidadItemCarritoAsync(ActualizarCantidadItenRequest request)
+        {
+            if (request.Cantidad <= 0)
+                return Result<Guid>.Failure(Error.Validation("La cantidad debe ser mayor a 0."));
+
+            var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(request.ClienteId);
+            if (carrito is null)
+                return Result<Guid>.Failure(Error.NotFound("Carrito no encontrado."));
+
+            var itemSeleccionado = carrito.Items.FirstOrDefault(i => i.ItemId == request.ItemId);
+            if (itemSeleccionado is null)
+                return Result<Guid>.Failure(Error.NotFound("Item no encontrado en el carrito."));
+
+            itemSeleccionado.Cantidad = request.Cantidad;
+
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(request.ClienteId);
+        }
+
+
         public async Task<Result<Guid>> AgregarItemAlCarritoAsync(SeleccionarArticuloRequest request)
         {
             await _UoW.BeginTransactionAsync();
@@ -87,6 +107,22 @@ namespace TendalProject.Business.Services
             }
         }
 
+        public async Task<Result<Guid>> EliminarItemCarritoAsync(EliminarItemCarritoRequest request)
+        {
+            var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(request.ClienteId);
+            if(carrito is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound());
+            }
+            var item = carrito.Items.FirstOrDefault(x => x.ItemId == request.ItemId);
+            if(item is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound());
+            }
+            _UoW.ItemRepository.EliminarItem(item);
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(request.ClienteId);
+        }
 
         public async Task<Result<DetalleArticuloSeleccionadoResponse>> ObtenerArticuloSelccionadoAsync(Guid articuloId)
         {
@@ -117,6 +153,12 @@ namespace TendalProject.Business.Services
 
         public async Task<Result<CarritoResponse>> ObtenerCarritoAsync(Guid clienteId)
         {
+            var cliente = await _UoW.ClienteRepository.GetByIdAsync(clienteId);
+            if (cliente is null || clienteId == Guid.Empty)
+            {
+                var carritoVacio = new CarritoResponse(Guid.Empty, clienteId, new List<ItemCarritoResponse>());
+                return Result<CarritoResponse>.Success(carritoVacio);
+            }
             var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
             if (carrito is null)
             {

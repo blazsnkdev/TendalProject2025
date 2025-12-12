@@ -89,22 +89,26 @@ namespace TendalProject.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Agregar(Guid articuloId, int cantidad, decimal precioFinal)
         {
-            var clienteId = User.FindFirst("ClienteId")?.Value;
-            if(clienteId is null || string.IsNullOrWhiteSpace(clienteId))
+            var clienteId = ObtenerClienteId();
+            if (clienteId == Guid.Empty)
             {
                 return RedirectToAction("Login", "Auth");
             }
-            var request = new SeleccionarArticuloRequest(articuloId,cantidad,clienteId,precioFinal);
+            var request = new SeleccionarArticuloRequest(articuloId,cantidad, clienteId.ToString(), precioFinal);
             var result = await _ecommerceService.AgregarItemAlCarritoAsync(request);
             if (!result.IsSuccess)
             {
                 return HandleError(result.Error!);
             }
-            //NOTE: el carrito necesito el id
-            return RedirectToAction(nameof(Carrito), new {clienteId = result.Value });
+            return RedirectToAction(nameof(Carrito));
         }
-        public async Task<IActionResult> Carrito(Guid clienteId)
+        public async Task<IActionResult> Carrito()
         {
+            var clienteId = ObtenerClienteId();
+            if (clienteId == Guid.Empty)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
             var result = await _ecommerceService.ObtenerCarritoAsync(clienteId);
             var value = result.Value!;
             var itemsViewModel = value.Items.Select(x => new ItemCarritoViewModel
@@ -124,6 +128,32 @@ namespace TendalProject.Web.Controllers
                 Items = itemsViewModel,
             };
             return View(viewModel);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Cliente")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActualizarCantidad(Guid itemId,int cantidad)
+        {
+            var request = new ActualizarCantidadItenRequest(ObtenerClienteId(), itemId,cantidad);
+            var result = await _ecommerceService.ActualizarCantidadItemCarritoAsync(request);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            return RedirectToAction(nameof(Carrito));
+        }
+        [HttpPost]
+        [Authorize(Roles = "Cliente")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EliminarItem(Guid itemId)
+        {
+            var request = new EliminarItemCarritoRequest(ObtenerClienteId(), itemId);
+            var result = await _ecommerceService.EliminarItemCarritoAsync(request);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            return RedirectToAction(nameof(Carrito));
         }
 
 
@@ -145,6 +175,15 @@ namespace TendalProject.Web.Controllers
                 ? new SelectList(categorias.Value, "CategoriaId", "Nombre")
                 : new SelectList(Enumerable.Empty<SelectListItem>(), "CategoriaId", "Nombre");
 
+        }
+        private Guid ObtenerClienteId()
+        {
+            var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId")?.Value;
+            if (string.IsNullOrEmpty(clienteIdClaim) || !Guid.TryParse(clienteIdClaim, out var clienteId))
+            {
+                return Guid.Empty;
+            }
+            return clienteId;
         }
     }
 }

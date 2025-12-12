@@ -60,6 +60,7 @@
           asp-route-articuloId="@Model.ArticuloId"
           asp-route-precioFinal="@Model.Precio"
           method="post">
+        @Html.AntiForgeryToken()
         <label for="cantidad" class="form-label">Cantidad:</label>
         @Html.TextBox("cantidad", "1", new {
         type = "number",
