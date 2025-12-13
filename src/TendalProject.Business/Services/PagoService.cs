@@ -26,6 +26,10 @@ namespace TendalProject.Business.Services
         public async Task<Result<string>> CrearPrefernciaPagoAsync(Guid clienteId)
         {
             var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
+            if (carrito == null || !carrito.Items.Any())
+            {
+                return Result<string>.Failure(Error.NotFound("El carrito está vacío o no existe."));
+            }
             var s = ***REMOVED***
             var items = carrito.Items.Select(i => new PreferenceItemRequest
             {
@@ -39,7 +43,7 @@ namespace TendalProject.Business.Services
                 Items = items,
                 Payer = new PreferencePayerRequest
                 {
-                    Email = carrito.Cliente.CorreoElectronico // luego pones el email real
+                    Email = carrito.Cliente.CorreoElectronico 
                 },
                 BackUrls = new PreferenceBackUrlsRequest
                 {
@@ -53,7 +57,7 @@ namespace TendalProject.Business.Services
             var client = new PreferenceClient();
             var preference = await client.CreateAsync(request);
 
-            return Result<string>.Success(preference.InitPoint); // URL de ***REMOVED***
+            return Result<string>.Success(preference.InitPoint); 
         }
 
         public async Task<Result> ProcesarPagoExitosoAsync(Guid clienteId, string paymentId)

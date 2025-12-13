@@ -4,14 +4,13 @@ using TendalProject.Business.Interfaces;
 
 namespace TendalProject.Web.Controllers
 {
+    [Route("Pago")]
     public class PagoController : Controller
     {
-        private readonly IEcommerceService _ecommerceService;
         private readonly IPagoService _pagoService;
 
-        public PagoController(IEcommerceService ecommerceService, IPagoService pagoService)
+        public PagoController(IPagoService pagoService)
         {
-            _ecommerceService = ecommerceService;
             _pagoService = pagoService;
         }
         [Authorize(Roles = "Cliente")]
@@ -20,16 +19,25 @@ namespace TendalProject.Web.Controllers
         {
             var clienteId = ObtenerClienteId();
             var result = await _pagoService.CrearPrefernciaPagoAsync(clienteId);
-            return Redirect(result.Value!);
+            return Redirect(result.Value);
         }
-        [HttpGet("PagoExitoso")]
-        public async Task<IActionResult> PagoExitoso([FromQuery] Dictionary<string, string> queryParams)
+        [HttpGet("PagoExitoso", Name = "PagoExitoso")]
+        public async Task<IActionResult> PagoExitoso(
+            [FromQuery] string payment_id,
+            [FromQuery] string collection_id,
+            [FromQuery] string status)
         {
-            var payment_id = queryParams["payment_id"];
             var clienteId = ObtenerClienteId();
-            await _pagoService.ProcesarPagoExitosoAsync(clienteId, payment_id);
-            return RedirectToAction("Catalogo");
+            var result = await _pagoService.ProcesarPagoExitosoAsync(clienteId, payment_id);
+            if (!result.IsSuccess)
+            {
+                return RedirectToAction("Catalogo", "Ecommerce");
+            }
+            return View();
         }
+
+
+
 
 
 
