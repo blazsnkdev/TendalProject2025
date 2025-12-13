@@ -35,6 +35,8 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IEcommerceService, EcommerceService>();
+builder.Services.AddScoped<IPagoService, PagoService>();
+
 //AppDbContext para EntityFramework
 var cn1 = builder.Configuration.GetConnectionString("cn1");
 builder.Services.AddDbContext<AppDbContext>(option =>

@@ -5,6 +5,7 @@
         TarjetaCredito,
         TarjetaDebito,
         Paypal,
-        TransferenciaBancaria
+        TransferenciaBancaria,
+        ***REMOVED***
     }
 }

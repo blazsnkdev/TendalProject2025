@@ -1,8 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+
+    <!-- HERO -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Tendal</h1>
+        <p class="lead">
+            Tienda virtual para la compra de productos de forma rápida y segura.
+        </p>
+    </div>
+
+    <!-- INFO DEL NEGOCIO -->
+    <div class="row text-center mb-5">
+        <div class="col-md-4">
+            <h4>🛒 Compra Online</h4>
+            <p>Explora nuestros productos y agrégalos al carrito de compras.</p>
+        </div>
+        <div class="col-md-4">
+            <h4>🔒 Pagos Seguros</h4>
+            <p>Pagos protegidos mediante pasarela de pago con certificado SSL.</p>
+        </div>
+        <div class="col-md-4">
+            <h4>🚚 Entrega</h4>
+            <p>Entregas coordinadas según disponibilidad y ubicación.</p>
+        </div>
+    </div>
+
+    <!-- BOTONES -->
+    <div class="text-center mb-5">
+        <a asp-controller="Catalogo" asp-action="Index" class="btn btn-primary btn-lg me-3">
+            Ver productos
+        </a>
+        <a asp-controller="Home" asp-action="Contacto" class="btn btn-outline-secondary btn-lg">
+            Contáctanos
+        </a>
+    </div>
+
+    <!-- INFO LEGAL VISIBLE -->
+    <div class="text-center text-muted mt-4">
+        <p>
+            © 2025 Tendal — Comercio electrónico<br />
+            <a asp-controller="Legal" asp-action="Terminos">Términos y Condiciones</a> |
+            <a asp-controller="Legal" asp-action="Privacidad">Política de Privacidad</a>
+        </p>
+    </div>
+
 </div>
