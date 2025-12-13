@@ -13,6 +13,7 @@ namespace TendalProject.Business.Interfaces
         Task<Result<CarritoResponse>> ObtenerCarritoAsync(Guid clienteId);
         Task<Result<Guid>> ActualizarCantidadItemCarritoAsync(ActualizarCantidadItenRequest request);
         Task<Result<Guid>> EliminarItemCarritoAsync(EliminarItemCarritoRequest request);
+        Task<Result<Guid>> VaciarItemsCarritoAsync(Guid clienteId);
 
     }
 }

@@ -155,8 +155,23 @@ namespace TendalProject.Web.Controllers
             }
             return RedirectToAction(nameof(Carrito));
         }
-
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> VaciarCarrito()
+        {
+            var clienteId = ObtenerClienteId();
+            if(clienteId == Guid.Empty)
+            {
+                return HandleError(Error.NotFound());
+            }
+            var result = await _ecommerceService.VaciarItemsCarritoAsync(clienteId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            return RedirectToAction(nameof(Catalogo));
+        }
         private IActionResult HandleError(Error error)
         {
             return error.Code switch
