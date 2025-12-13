@@ -262,5 +262,16 @@ namespace TendalProject.Business.Services
             return Result<List<CatalogoArticulosResponse>>.Success(response);
         }
 
+        public async Task<Result<Guid>> VaciarItemsCarritoAsync(Guid clienteId)
+        {
+            var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
+            if(carrito is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound("Carrito no encotrado"));
+            }
+            carrito.Items.Clear();
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(clienteId);
+        }
     }
 }
