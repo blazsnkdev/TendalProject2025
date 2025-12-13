@@ -17,7 +17,7 @@ namespace TendalProject.Web.Controllers
         {
             return View();
         }
-
+        public IActionResult Politica() => View();
         public IActionResult Privacy()
         {
             return View();

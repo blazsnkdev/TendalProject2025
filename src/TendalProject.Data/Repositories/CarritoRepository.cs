@@ -16,7 +16,8 @@ namespace TendalProject.Data.Repositories
         {
             return await _appDbContext.TblCarrito
                 .Include(c => c.Items)
-                    .ThenInclude(i => i.Articulo)
+                    .ThenInclude(i => i.Articulo).
+                    Include(c=>c.Cliente)
                 .FirstOrDefaultAsync(c => c.ClienteId == clienteId);
         }
 

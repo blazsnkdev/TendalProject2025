@@ -183,6 +183,34 @@ namespace TendalProject.Web.Controllers
                 _ => RedirectToAction("AccessDenied", "Auth")
             };
         }
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> Checkout()
+        {
+            var clienteId = ObtenerClienteId();
+            var carrito = await _ecommerceService.ObtenerCarritoAsync(clienteId);
+            if (!carrito.IsSuccess || !carrito.Value.Items.Any())
+            {
+                return RedirectToAction(nameof(Carrito));
+            }
+            var viewModel = new CarritoCheckoutViewModel()
+            {
+                CarritoId = carrito.Value.CarritoId,
+                ClienteId = clienteId,
+                Items = carrito.Value.Items.Select(i => new ItemCarritoViewModel()
+                {
+                    ItemId = i.ItemId,
+                    ArticuloId = i.ArticuloId,
+                    NombreArticulo = i.NombreArticulo,
+                    Imagen = i.Imagen,
+                    Precio = i.Precio,
+                    Cantidad = i.Cantidad,
+                    SubTotal = i.SubTotal
+                }).ToList(),
+                Total = carrito.Value.Items.Sum(i => i.SubTotal),
+                CantidadTotal = carrito.Value.Items.Sum(i => i.Cantidad)
+            };
+            return View(viewModel);
+        }
         private async Task CargarCategoriaSelectList()
         {
             var categorias = await _categoriaService.ObtenerCategoriasActivasSelectListAsync();

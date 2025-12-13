@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Pago exitoso";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center p-5">
+
+                    <!-- ICONO -->
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success"
+                           style="font-size: 5rem;"></i>
+                    </div>
+
+                    <!-- TITULO -->
+                    <h2 class="fw-bold text-success mb-3">
+                        ¡Pago realizado con éxito!
+                    </h2>
+
+                    <!-- MENSAJE -->
+                    <p class="fs-5 text-muted mb-4">
+                        Tu pago fue procesado correctamente.
+                        Hemos registrado tu pedido y pronto nos comunicaremos contigo.
+                    </p>
+
+                    <!-- INFO -->
+                    <div class="alert alert-success mb-4">
+                        <strong>Estado del pedido:</strong> Pagado <br />
+                        <strong>Fecha:</strong> @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                    <!-- BOTONES -->
+                    <div class="d-flex justify-content-center gap-3">
+                        <a asp-action="Catalogo"
+                           asp-controller="Ecommerce"
+                           class="btn btn-primary btn-lg">
+                            Seguir comprando
+                        </a>
+
+                        <a asp-action="MisPedidos"
+                           asp-controller="Pedido"
+                           class="btn btn-outline-secondary btn-lg">
+                            Ver mis pedidos
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
