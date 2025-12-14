@@ -13,6 +13,6 @@ namespace TendalProject.Business.Interfaces
                     string? ordenarPor = "fecha",
                     string? orden = "desc"
                 );
-
+        Task<Result<List<HistorialPedidosClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId);
     }
 }

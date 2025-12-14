@@ -35,7 +35,6 @@ namespace TendalProject.Web.Controllers
                 ordenarPor,
                 orden
             );
-
             if (!result.IsSuccess || result.Value is null)
             {
                 return HandleError(result.Error!);
@@ -52,13 +51,41 @@ namespace TendalProject.Web.Controllers
                 Estado = p.Estado,
                 CantidadArticulos = p.CantidadArticulos
             }).ToList();
-
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
-
             return View(paginacion);
         }
-
-
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> Historial(int pagina = 1,int tamanioPagina = 10)
+        {
+            var clienteId = ObtenerClienteId();
+            if(clienteId == Guid.Empty)
+            {
+                return HandleError(Error.Validation("No hay Cliente"));
+            }
+            var result = await _pedidoService.ObtenerPedidosPorClienteAsync(clienteId);
+            var pedidos = result.Value;
+            var viewModel = pedidos!.Select(p => new HistorialPedidosViewModel()
+            {
+                PedidoId = p.PedidoId,
+                Codigo = p.Codigo,
+                Total =p.MontoTotal,
+                FechaRegistro = p.FechaRegistro,
+                FechaEntrega = p.FechaEntrega,
+                Estado = p.Estado,
+                CantidadArticulos = p.CantidadArticulos
+            }).ToList();
+            var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
+            return View(paginacion);
+        }
+        private Guid ObtenerClienteId()
+        {
+            var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId")?.Value;
+            if (string.IsNullOrEmpty(clienteIdClaim) || !Guid.TryParse(clienteIdClaim, out var clienteId))
+            {
+                return Guid.Empty;
+            }
+            return clienteId;
+        }
         private void ConfigurarFiltrosViewBag(DateTime? fechaInicio,DateTime? fechaFin,string? codigo,bool? proximosAEntregar,string? ordenarPor,string? orden)
         {
             ViewBag.FechaInicio = fechaInicio?.ToString("yyyy-MM-dd");
@@ -78,7 +105,6 @@ namespace TendalProject.Web.Controllers
                 { "orden", orden }
             };
         }
-
         private IActionResult HandleError(Error error)
         {
             return error.Code switch

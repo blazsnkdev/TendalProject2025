@@ -1,0 +1,144 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Pedido.HistorialPedidosViewModel>
+
+@{
+    ViewData["Title"] = "Historial de Pedidos";
+    Layout = "_Layout"; // Ajusta según tu layout
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pedido/Historial.css" />
+}
+<div class="container">
+    <h1 class="mb-4">Historial de Pedidos</h1>
+
+    @if (!Model.Items.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            No tienes pedidos registrados.
+        </div>
+    }
+    else
+    {
+        <!-- Cards de pedidos en 4 columnas -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+            @foreach (var pedido in Model.Items)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-light">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-1 text-truncate" title="@pedido.Codigo">
+                                @pedido.Codigo
+                            </h5>
+                            <small class="text-muted">ID: @pedido.PedidoId.ToString().Substring(0, 8)...</small>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <span class="badge @GetEstadoBadgeClass(pedido.Estado)">
+                                    @pedido.Estado
+                                </span>
+                            </div>
+
+                            <div class="mb-2">
+                                <strong>Total:</strong>
+                                <span class="float-end">@pedido.Total.ToString("C")</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <strong>Artículos:</strong>
+                                <span class="float-end">@pedido.CantidadArticulos</span>
+                            </div>
+
+                            <div class="mb-2">
+                                <strong>Registro:</strong>
+                                <span class="float-end">@pedido.FechaRegistro.ToString("dd/MM/yyyy")</span>
+                            </div>
+
+                            @if (pedido.FechaEntrega.HasValue)
+                            {
+                                <div class="mb-3">
+                                    <strong>Entrega:</strong>
+                                    <span class="float-end">@pedido.FechaEntrega.Value.ToString("dd/MM/yyyy")</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a href="@Url.Action("Detalle", "Pedido", new { id = pedido.PedidoId })"
+                               class="btn btn-primary w-100">
+                                <i class="bi bi-eye me-2"></i>Ver Detalle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Paginación -->
+        <nav aria-label="Paginación de pedidos">
+            <ul class="pagination justify-content-center">
+                <!-- Botón anterior -->
+                <li class="page-item @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    @if (Model.TienePaginaAnterior)
+                    {
+                        <a class="page-link"
+                           href="@Url.Action("Historial", new { pagina = Model.PaginaIndice - 1, tamanioPagina = Model.TamanioPagina })">
+                            &laquo; Anterior
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="page-link">&laquo; Anterior</span>
+                    }
+                </li>
+
+                <!-- Números de página -->
+                @for (int i = 1; i <= Model.TotalPagias; i++)
+                {
+                    <li class="page-item @(i == Model.PaginaIndice ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Action("Historial", new { pagina = i, tamanioPagina = Model.TamanioPagina })">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <!-- Botón siguiente -->
+                <li class="page-item @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    @if (Model.TienePaginaSiguiente)
+                    {
+                        <a class="page-link"
+                           href="@Url.Action("Historial", new { pagina = Model.PaginaIndice + 1, tamanioPagina = Model.TamanioPagina })">
+                            Siguiente &raquo;
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="page-link">Siguiente &raquo;</span>
+                    }
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Información de paginación -->
+        <div class="text-center text-muted mt-3">
+            <small>
+                Mostrando @(((Model.PaginaIndice - 1) * Model.TamanioPagina) + 1)
+                a @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros)
+                de @Model.TotalRegistros pedidos
+            </small>
+        </div>
+    }
+</div>
+
+@functions {
+    string GetEstadoBadgeClass(string estado)
+    {
+        return estado.ToLower() switch
+        {
+            "pendiente" => "bg-warning text-dark",
+            "en proceso" => "bg-info text-white",
+            "completado" => "bg-success text-white",
+            "cancelado" => "bg-danger text-white",
+            "entregado" => "bg-primary text-white",
+            _ => "bg-secondary text-white"
+        };
+    }
+}

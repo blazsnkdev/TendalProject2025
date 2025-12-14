@@ -69,5 +69,28 @@ namespace TendalProject.Business.Services
             return Result<List<ListaPedidosResponse>>.Success(listaPedidos);
         }
 
+        public async Task<Result<List<HistorialPedidosClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId)
+        {
+            if(clienteId == Guid.Empty)
+            {
+                return Result<List<HistorialPedidosClienteResponse>>.Failure(Error.Validation("ClienteId es invalido"));
+            }
+            var pedidos = await _UoW.PedidoRepository.GetPedidosPorClienteAsync(clienteId);
+            var response = new List<HistorialPedidosClienteResponse>();
+            if(!pedidos.Any())
+            {
+                return Result<List<HistorialPedidosClienteResponse>>.Success(response);
+            }
+            response = pedidos.Select(p => new HistorialPedidosClienteResponse(
+                p.PedidoId,
+                p.Codigo,
+                p.Total,
+                p.FechaRegistro,
+                p.FechaEntrega.HasValue ? DateOnly.FromDateTime(p.FechaEntrega.Value) : null,
+                p.Estado.ToString(),
+                p.Detalles.Count()
+                )).ToList();
+            return Result<List<HistorialPedidosClienteResponse>>.Success(response);
+        }
     }
 }
