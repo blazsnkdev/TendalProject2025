@@ -18,5 +18,6 @@ namespace TendalProject.Business.Interfaces
         Task<Result<List<HistorialPedidosClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId);
         Task<Result<string>> GenerarCodigoPedidoAsync();
         Task<Result<Pedido>> CrearPedidoPendienteAsync(CrearPedidoPendienteRequest request);
+        Task<Result<List<DetallePedidoResponse>>> ObtenerDetallesPedidoAsync(Guid pedidoId);
     }
 }
