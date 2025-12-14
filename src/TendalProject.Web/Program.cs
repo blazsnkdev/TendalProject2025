@@ -5,24 +5,10 @@ using TendalProject.Business.Interfaeces;
 using TendalProject.Business.Services;
 using TendalProject.Common.Time;
 using TendalProject.Data.Context;
-using TendalProject.Data.Interfaces;
-using TendalProject.Data.Repositories;
 using TendalProject.Data.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Repositorios
-//builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-//builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-//builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
-//builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-//builder.Services.AddScoped<IRolRepository, RolRepository>();
-//builder.Services.AddScoped<IProveedorRepository, ProveedorRepository>();
-//builder.Services.AddScoped<IArticuloRepository, ArticuloRepository>();
-//builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
-//builder.Services.AddScoped<IVentaRepository, VentaRepository>();
-//builder.Services.AddScoped<ICarritoRepository, CarritoRepository>();
-//builder.Services.AddScoped<IItemRepository, ItemRepository>();
 //UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //Servicios
@@ -35,12 +21,21 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IEcommerceService, EcommerceService>();
-builder.Services.AddScoped<IPagoService, PagoService>();
+//SecretsKey
+builder.Services.AddScoped<IPagoService>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>(); 
+    var uow = sp.GetRequiredService<IUnitOfWork>();
+    var dateTimeProvider = sp.GetRequiredService<IDateTimeProvider>();
+    var pedidoService = sp.GetRequiredService<IPedidoService>();
+
+    return new PagoService(config, uow, dateTimeProvider, pedidoService);
+});
 
 //AppDbContext para EntityFramework
 var cn1 = builder.Configuration.GetConnectionString("cn1");
 builder.Services.AddDbContext<AppDbContext>(option =>
-option.UseSqlServer(cn1));
+    option.UseSqlServer(cn1));
 
 //Authentication Cookies
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
