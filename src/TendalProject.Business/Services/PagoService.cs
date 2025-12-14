@@ -1,7 +1,7 @@
 ﻿using Azure.Core;
-using ***REMOVED***
-using ***REMOVED***
-using ***REMOVED***
+using MercadoPago.Client.Preference;
+using MercadoPago.Config;
+using MercadoPago.Resource.Preference;
 using Microsoft.Extensions.Configuration;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
@@ -24,10 +24,10 @@ namespace TendalProject.Business.Services
             IPedidoService pedidoService
             )
         {
-            var token = config["***REMOVED***
+            var token = config["MercadoPago:AccessToken"];
             if (string.IsNullOrEmpty(token))
-                throw new Exception("¡No se encontró el ***REMOVED***
-            ***REMOVED***
+                throw new Exception("¡No se encontró el AccessToken de MercadoPago!");
+            MercadoPagoConfig.AccessToken = token;
             _UoW = UoW;
             _dateTimeProvider = dateTimeProvider;
             _pedidoService = pedidoService;
@@ -85,7 +85,7 @@ namespace TendalProject.Business.Services
                     VentaId = Guid.NewGuid(),
                     Pedido = pedido,
                     FechaVenta = _dateTimeProvider.GetDateTimeNow(),
-                    MetodoPago = MetodoPago.***REMOVED***
+                    MetodoPago = MetodoPago.MercadoPago,
                     TipoComprobante = TipoComprobante.Boleta,
                     NumeroComprobante = $"B-{_dateTimeProvider.GetDateTimeNow().Ticks}" // TODO: generar número válido
                 };

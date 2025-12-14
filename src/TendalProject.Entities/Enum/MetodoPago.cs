@@ -6,6 +6,6 @@
         TarjetaDebito,
         Paypal,
         TransferenciaBancaria,
-        ***REMOVED***
+        MercadoPago
     }
 }
