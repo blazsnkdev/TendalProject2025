@@ -27,7 +27,6 @@ namespace TendalProject.Business.Services
             var token = config["***REMOVED***
             if (string.IsNullOrEmpty(token))
                 throw new Exception("¡No se encontró el ***REMOVED***
-
             ***REMOVED***
             _UoW = UoW;
             _dateTimeProvider = dateTimeProvider;
