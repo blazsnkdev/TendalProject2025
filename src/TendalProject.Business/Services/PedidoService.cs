@@ -166,5 +166,26 @@ namespace TendalProject.Business.Services
 
             return Result<Pedido>.Success(pedido);
         }
+
+        public async Task<Result<List<DetallePedidoResponse>>> ObtenerDetallesPedidoAsync(Guid pedidoId)
+        {
+            var detalles = await _UoW.DetallePedidoRepository.GetDetallesIncludArticuloByPedidoId(pedidoId);
+            var response = new List<DetallePedidoResponse>();
+            if (!detalles.Any())
+            {
+                return Result<List<DetallePedidoResponse>>.Success(response);
+            }
+            response = detalles.Select(x => new DetallePedidoResponse(
+                x.PedidoId,
+                x.Articulo.Nombre,
+                x.Articulo.Codigo,
+                x.Articulo.Descripcion,
+                x.Articulo.Categoria?.Nombre ?? "Sin Categoria",
+                x.Cantidad,
+                x.PrecioUnitario,
+                x.Cantidad * x.PrecioUnitario
+                )).ToList();
+            return Result<List<DetallePedidoResponse>>.Success(response);
+        }
     }
 }

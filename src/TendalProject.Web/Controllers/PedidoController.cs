@@ -77,6 +77,29 @@ namespace TendalProject.Web.Controllers
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
             return View(paginacion);
         }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Detalles(Guid pedidoId, int pagina = 1,int tamanioPagina = 10)
+        {
+            var result = await _pedidoService.ObtenerDetallesPedidoAsync(pedidoId);
+            if(result.Value is null)
+            {
+                return HandleError(result.Error!);
+            }
+            var detalles = result.Value;
+            var viewModel = detalles.Select(x => new DetallePedidoViewModel()
+            {
+                DetallePedidoId = x.DetallePedidoId,
+                NombreArticulo = x.NombreArticulo,
+                CodigoArticulo = x.CodigoArticulo,
+                NombreCategoria = x.NombreCategoria,
+                Cantidad = x.Cantidad,
+                DescripcionArticulo = x.DescripcionArticulo,
+                PrecioFinal = x.PrecioFinal,
+                SubTotal = x.SubTotal
+            }).ToList();
+            var paginacion = PaginacionHelper.Paginacion(viewModel,pagina,tamanioPagina);
+            return View(paginacion);
+        }
         private Guid ObtenerClienteId()
         {
             var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId")?.Value;

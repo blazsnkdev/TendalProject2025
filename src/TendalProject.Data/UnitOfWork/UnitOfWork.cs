@@ -10,7 +10,6 @@ namespace TendalProject.Data.UnitOfWork
         private readonly AppDbContext _appDbContext;
         private IDbContextTransaction? _transaction;
 
-        // Repositorios
         public IUsuarioRepository UsuarioRepository { get; }
         public IClienteRepository ClienteRepository { get; }
         public ICategoriaRepository CategoriaRepository { get; }
@@ -21,12 +20,11 @@ namespace TendalProject.Data.UnitOfWork
         public IVentaRepository VentaRepository { get; }
         public ICarritoRepository CarritoRepository { get; }
         public IItemRepository ItemRepository { get; }
+        public IDetallPedidoRepository DetallePedidoRepository { get; }
 
         public UnitOfWork(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-
-            // IMPORTANTE: Todos los repos usan el MISMO DbContext
             UsuarioRepository = new UsuarioRepository(_appDbContext);
             ClienteRepository = new ClienteRepository(_appDbContext);
             CategoriaRepository = new CategoriaRepository(_appDbContext);
@@ -37,6 +35,7 @@ namespace TendalProject.Data.UnitOfWork
             VentaRepository = new VentaRepository(_appDbContext);
             CarritoRepository = new CarritoRepository(_appDbContext);
             ItemRepository = new ItemRepository(_appDbContext);
+            DetallePedidoRepository = new DetallePedidoRepository(_appDbContext);
         }
 
         public async Task BeginTransactionAsync()
