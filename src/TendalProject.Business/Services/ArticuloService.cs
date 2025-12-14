@@ -112,14 +112,14 @@ namespace TendalProject.Business.Services
 
         public async Task<Result<string>> GenerarCodigoArticuloAsync()
         {
-            var pedidos = await _UoW.ArticuloRepository.GetAllAsync();
-            if (pedidos is null || !pedidos.Any())
+            var articulos = await _UoW.ArticuloRepository.GetAllAsync();
+            if (articulos is null || !articulos.Any())
             {
                 return Result<string>.Success("ART-00000001");
             }
             else
             {
-                var ultimoArticulo = pedidos
+                var ultimoArticulo = articulos
                     .OrderByDescending(p => p.FechaRegistro)
                     .FirstOrDefault();
                 if (ultimoArticulo is null)

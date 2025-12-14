@@ -65,12 +65,26 @@
                 </p>
 
                 <hr />
-
                 <form asp-controller="Pago" asp-action="Pagar" method="post">
+                    <input type="hidden" name="ClienteId" value="@Model.ClienteId" />
+                    <input type="hidden" name="CarritoId" value="@Model.CarritoId" />
+
+                    <!-- Fecha de entrega -->
+                    <div class="mb-3">
+                        <label for="FechaEntrega" class="form-label">Fecha de entrega</label>
+                        <input type="date"
+                               class="form-control"
+                               id="FechaEntrega"
+                               name="FechaEntrega"
+                               value="@Model.FechaEntrega.ToString("yyyy-MM-dd")"
+                               min="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                    </div>
+
                     <button class="btn btn-success btn-lg w-100">
                         Pagar con Mercado Pago
                     </button>
                 </form>
+
 
 
                 <a asp-action="Carrito" class="btn btn-outline-secondary w-100 mt-2">

@@ -1,5 +1,7 @@
-﻿using TendalProject.Business.DTOs.Responses.Pedido;
+﻿using TendalProject.Business.DTOs.Requests.Pedido;
+using TendalProject.Business.DTOs.Responses.Pedido;
 using TendalProject.Common.Results;
+using TendalProject.Entities.Entidades;
 
 namespace TendalProject.Business.Interfaces
 {
@@ -14,5 +16,7 @@ namespace TendalProject.Business.Interfaces
                     string? orden = "desc"
                 );
         Task<Result<List<HistorialPedidosClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId);
+        Task<Result<string>> GenerarCodigoPedidoAsync();
+        Task<Result<Pedido>> CrearPedidoPendienteAsync(CrearPedidoPendienteRequest request);
     }
 }

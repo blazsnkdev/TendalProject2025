@@ -1,4 +1,5 @@
-﻿using ***REMOVED***
+﻿using Azure.Core;
+using ***REMOVED***
 using ***REMOVED***
 using ***REMOVED***
 using Microsoft.Extensions.Configuration;
@@ -15,10 +16,13 @@ namespace TendalProject.Business.Services
     {
         private readonly IUnitOfWork _UoW;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IPedidoService _pedidoService;
         public PagoService(
             IConfiguration config,
             IUnitOfWork UoW,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            IPedidoService pedidoService
+            )
         {
             var token = config["***REMOVED***
             if (string.IsNullOrEmpty(token))
@@ -27,29 +31,28 @@ namespace TendalProject.Business.Services
             ***REMOVED***
             _UoW = UoW;
             _dateTimeProvider = dateTimeProvider;
+            _pedidoService = pedidoService;
         }
 
-        public async Task<Result<string>> CrearPrefernciaPagoAsync(Guid clienteId)
+        public async Task<Result<string>> CrearPrefernciaPagoAsync(Guid pedidoId)
         {
-            var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
-            if (carrito == null || !carrito.Items.Any())
+            var pedido = await _UoW.PedidoRepository.GetByIdAsync(pedidoId);//ojito
+            if (pedido == null || !pedido.Detalles.Any())
+                return Result<string>.Failure(Error.NotFound("Pedido no encontrado"));
+
+            var items = pedido.Detalles.Select(d => new PreferenceItemRequest
             {
-                return Result<string>.Failure(Error.NotFound("El carrito está vacío o no existe."));
-            }
-            var s = ***REMOVED***
-            var items = carrito.Items.Select(i => new PreferenceItemRequest
-            {
-                Title = i.Articulo.Nombre,
-                Quantity = i.Cantidad,
-                UnitPrice = i.PrecioFinal
+                Title = d.Articulo.Nombre,
+                Quantity = d.Cantidad,
+                UnitPrice = d.PrecioUnitario
             }).ToList();
 
-            var request = new PreferenceRequest
+            var preferenceRequest = new PreferenceRequest
             {
                 Items = items,
                 Payer = new PreferencePayerRequest
                 {
-                    Email = carrito.Cliente.CorreoElectronico 
+                    Email = pedido.Cliente.CorreoElectronico
                 },
                 BackUrls = new PreferenceBackUrlsRequest
                 {
@@ -61,59 +64,48 @@ namespace TendalProject.Business.Services
             };
 
             var client = new PreferenceClient();
-            var preference = await client.CreateAsync(request);
+            var preference = await client.CreateAsync(preferenceRequest);
 
-            return Result<string>.Success(preference.InitPoint); 
+            return Result<string>.Success(preference.InitPoint);
         }
 
         public async Task<Result> ProcesarPagoExitosoAsync(Guid clienteId, string paymentId)
         {
-            var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
+            var pedido = await _UoW.PedidoRepository.GetPedidoPendienteByClienteIdAsync(clienteId);
+            if (pedido == null)
+                return Result.Failure(Error.NotFound("Pedido pendiente no encontrado"));
 
-            var subtotal = carrito.Items.Sum(i => i.PrecioFinal);
-            var igv = subtotal * 0.18m;
-
-            var pedido = new Pedido
+            await _UoW.BeginTransactionAsync();
+            try
             {
-                PedidoId = Guid.NewGuid(),
-                ClienteId = clienteId,
-                Codigo = $"P{_dateTimeProvider.GetDateTimeNow()}",
-                FechaRegistro = DateTime.Now,
-                FechaPago = DateTime.Now,
-                SubTotal = subtotal,
-                Igv = igv,
-                Total = subtotal + igv,
-                Estado = EstadoPedido.Cancelado
-            };
+                pedido.Estado = EstadoPedido.Pagado;
+                pedido.FechaPago = _dateTimeProvider.GetDateTimeNow();
 
-            foreach (var item in carrito.Items)
-            {
-                pedido.Detalles.Add(new DetallePedido
+                var venta = new Venta
                 {
-                    DetallePedidoId = Guid.NewGuid(),
-                    ArticuloId = item.ArticuloId,
-                    Cantidad = item.Cantidad,
-                    PrecioUnitario = item.PrecioFinal
-                });
+                    VentaId = Guid.NewGuid(),
+                    Pedido = pedido,
+                    FechaVenta = _dateTimeProvider.GetDateTimeNow(),
+                    MetodoPago = MetodoPago.***REMOVED***
+                    TipoComprobante = TipoComprobante.Boleta,
+                    NumeroComprobante = $"B-{_dateTimeProvider.GetDateTimeNow().Ticks}" // TODO: generar número válido
+                };
+
+                await _UoW.VentaRepository.AddAsync(venta);
+
+                var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
+                carrito.Items.Clear();
+
+                await _UoW.CommitTransactionAsync();
+                return Result.Success();
             }
-
-            var venta = new Venta
+            catch (Exception ex)
             {
-                VentaId = Guid.NewGuid(),
-                Pedido = pedido,
-                FechaVenta = DateTime.Now,
-                MetodoPago = MetodoPago.***REMOVED***
-                TipoComprobante = TipoComprobante.Boleta,
-                NumeroComprobante = $"B-{DateTime.Now.Ticks}"
-            };
-
-            await _UoW.PedidoRepository.AddAsync(pedido);
-            await _UoW.VentaRepository.AddAsync(venta);
-
-            carrito.Items.Clear();
-
-            await _UoW.SaveChangesAsync();
-            return Result.Success();
+                await _UoW.RollBackAsync();
+                return Result.Failure(Error.Internal($"Error procesando el pago: {ex.Message}"));
+            }
         }
+
+
     }
 }

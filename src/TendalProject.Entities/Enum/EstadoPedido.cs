@@ -6,6 +6,7 @@
         Procesando,
         Enviado,
         Entregado,
-        Cancelado
+        Cancelado,
+        Pagado
     }
 }
