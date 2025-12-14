@@ -207,7 +207,8 @@ namespace TendalProject.Web.Controllers
                     SubTotal = i.SubTotal
                 }).ToList(),
                 Total = carrito.Value.Items.Sum(i => i.SubTotal),
-                CantidadTotal = carrito.Value.Items.Sum(i => i.Cantidad)
+                CantidadTotal = carrito.Value.Items.Sum(i => i.Cantidad),
+                FechaEntrega = DateTime.Today//
             };
             return View(viewModel);
         }

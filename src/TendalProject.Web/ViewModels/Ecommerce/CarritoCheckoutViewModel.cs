@@ -9,9 +9,7 @@
 
         public decimal Total { get; set; }
         public int CantidadTotal { get; set; }
+        public DateTime FechaEntrega { get; set; }//
 
-        // Pago
-        public string Moneda { get; set; } = "PEN";
-        public string? TokenPago { get; set; }
     }
 }

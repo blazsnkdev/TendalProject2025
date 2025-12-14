@@ -1,18 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TendalProject.Business.DTOs.Requests.Pedido;
 using TendalProject.Business.DTOs.Responses.Pedido;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
+using TendalProject.Common.Time;
 using TendalProject.Data.UnitOfWork;
+using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Business.Services
 {
     public class PedidoService : IPedidoService
     {
         private readonly IUnitOfWork _UoW;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public PedidoService(IUnitOfWork uoW)
+        public PedidoService(
+            IUnitOfWork uoW,
+            IDateTimeProvider dateTimeProvider
+            )
         {
             _UoW = uoW;
+            _dateTimeProvider = dateTimeProvider;
         }
         public async Task<Result<List<ListaPedidosResponse>>> ObtenerPedidosAsync(
             DateTime? fechaInicio = null,
@@ -75,7 +84,7 @@ namespace TendalProject.Business.Services
             {
                 return Result<List<HistorialPedidosClienteResponse>>.Failure(Error.Validation("ClienteId es invalido"));
             }
-            var pedidos = await _UoW.PedidoRepository.GetPedidosPorClienteAsync(clienteId);
+            var pedidos = await _UoW.PedidoRepository.GetPedidosIncludsPorClienteAsync(clienteId);
             var response = new List<HistorialPedidosClienteResponse>();
             if(!pedidos.Any())
             {
@@ -91,6 +100,71 @@ namespace TendalProject.Business.Services
                 p.Detalles.Count()
                 )).ToList();
             return Result<List<HistorialPedidosClienteResponse>>.Success(response);
+        }
+
+        public async Task<Result<string>> GenerarCodigoPedidoAsync()
+        {
+            var pedidos = await _UoW.PedidoRepository.GetAllAsync();
+            if (pedidos is null || !pedidos.Any())
+            {
+                return Result<string>.Success("PED-00000001");
+            }
+            else
+            {
+                var ultimoPedido = pedidos
+                    .OrderByDescending(p => p.FechaRegistro)
+                    .FirstOrDefault();
+                if (ultimoPedido is null)
+                {
+                    return Result<string>.Success("PED-00000001");
+                }
+                var ultimoCodigo = ultimoPedido.Codigo;
+                var numeroUltimoCodigo = int.Parse(ultimoCodigo.Split('-')[1]);
+                var nuevoNumeroCodigo = numeroUltimoCodigo + 1;
+                var nuevoCodigo = $"PED-{nuevoNumeroCodigo.ToString("D8")}";
+                return Result<string>.Success(nuevoCodigo);
+            }
+        }
+
+        public async Task<Result<Pedido>> CrearPedidoPendienteAsync(CrearPedidoPendienteRequest request)
+        {
+            var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(request.ClienteId);
+            if (!carrito.Items.Any())
+            {
+                return Result<Pedido>.Failure(Error.NotFound("No se encontraron articulos agregados"));
+            }
+            var subtotal = carrito.Items.Sum(i => i.PrecioFinal);
+            var igv = subtotal * 0.18m;
+            var codigoPedido = await GenerarCodigoPedidoAsync();
+
+            var pedido = new Pedido
+            {
+                PedidoId = Guid.NewGuid(),
+                ClienteId = request.ClienteId,
+                Codigo = codigoPedido.Value!,
+                FechaRegistro = _dateTimeProvider.GetDateTimeNow(),
+                FechaEntrega = request.FechaEntrega,
+                SubTotal = subtotal,
+                Igv = igv,
+                Total = subtotal + igv,
+                Estado = EstadoPedido.Pendiente
+            };
+
+            foreach (var item in carrito.Items)
+            {
+                pedido.Detalles.Add(new DetallePedido
+                {
+                    DetallePedidoId = Guid.NewGuid(),
+                    ArticuloId = item.ArticuloId,
+                    Cantidad = item.Cantidad,
+                    PrecioUnitario = item.PrecioFinal
+                });
+            }
+
+            await _UoW.PedidoRepository.AddAsync(pedido);
+            await _UoW.SaveChangesAsync();
+
+            return Result<Pedido>.Success(pedido);
         }
     }
 }

@@ -7,5 +7,6 @@ namespace TendalProject.Data.Interfaces
         Task<List<Pedido>> GetPedidosPorClienteAsync(Guid clienteId);
         Task<List<Pedido>> GetPedidosIncludsPorClienteAsync(Guid clienteId);
         IQueryable<Pedido> GetPedidosIncludsAsync();
+        Task<Pedido?> GetPedidoPendienteByClienteIdAsync(Guid clienteId);
     }
 }
