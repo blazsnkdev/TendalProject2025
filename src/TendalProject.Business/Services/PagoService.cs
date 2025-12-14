@@ -4,6 +4,7 @@ using ***REMOVED***
 using Microsoft.Extensions.Configuration;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Results;
+using TendalProject.Common.Time;
 using TendalProject.Data.UnitOfWork;
 using TendalProject.Entities.Entidades;
 using TendalProject.Entities.Enum;
@@ -13,7 +14,11 @@ namespace TendalProject.Business.Services
     public class PagoService : IPagoService
     {
         private readonly IUnitOfWork _UoW;
-        public PagoService(IConfiguration config, IUnitOfWork UoW)
+        private readonly IDateTimeProvider _dateTimeProvider;
+        public PagoService(
+            IConfiguration config,
+            IUnitOfWork UoW,
+            IDateTimeProvider dateTimeProvider)
         {
             var token = config["***REMOVED***
             if (string.IsNullOrEmpty(token))
@@ -21,6 +26,7 @@ namespace TendalProject.Business.Services
 
             ***REMOVED***
             _UoW = UoW;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<string>> CrearPrefernciaPagoAsync(Guid clienteId)
@@ -71,6 +77,7 @@ namespace TendalProject.Business.Services
             {
                 PedidoId = Guid.NewGuid(),
                 ClienteId = clienteId,
+                Codigo = $"P{_dateTimeProvider.GetDateTimeNow()}",
                 FechaRegistro = DateTime.Now,
                 FechaPago = DateTime.Now,
                 SubTotal = subtotal,
