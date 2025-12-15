@@ -29,7 +29,8 @@ namespace TendalProject.Business.Services
             string? codigo = null,
             bool? proximosAEntregar = null,
             string? ordenarPor = "fecha",       
-            string? orden = "desc"              
+            string? orden = "desc",
+            EstadoPedido? estado = null
         )
         {
             var query = _UoW.PedidoRepository.GetPedidosIncludsAsync();
@@ -51,16 +52,22 @@ namespace TendalProject.Business.Services
                     p.FechaEntrega.Value.Date <= manana
                 );
             }
+            // Filtro por estado (nuevo)
+            if (estado.HasValue)
+            {
+                query = query.Where(p => p.Estado == estado.Value);
+            }
 
             query = (ordenarPor, orden.ToLower()) switch
             {
                 ("fecha", "asc") => query.OrderBy(p => p.FechaRegistro),
                 ("fecha", "desc") => query.OrderByDescending(p => p.FechaRegistro),
-
                 ("entrega", "asc") => query.OrderBy(p => p.FechaEntrega),
                 ("entrega", "desc") => query.OrderByDescending(p => p.FechaEntrega),
+                ("estado", "asc") => query.OrderBy(p => p.Estado.ToString()),
+                ("estado", "desc") => query.OrderByDescending(p => p.Estado.ToString()),
 
-                _ => query.OrderByDescending(p => p.FechaRegistro) // default
+                _ => query.OrderByDescending(p => p.FechaRegistro) 
             };
 
             var pedidos = await query.ToListAsync();
@@ -165,6 +172,27 @@ namespace TendalProject.Business.Services
             await _UoW.SaveChangesAsync();
 
             return Result<Pedido>.Success(pedido);
+        }
+
+        public async Task<Result<List<DetallePedidoResponse>>> ObtenerDetallesPedidoAsync(Guid pedidoId)
+        {
+            var detalles = await _UoW.DetallePedidoRepository.GetDetallesIncludArticuloByPedidoId(pedidoId);
+            var response = new List<DetallePedidoResponse>();
+            if (!detalles.Any())
+            {
+                return Result<List<DetallePedidoResponse>>.Success(response);
+            }
+            response = detalles.Select(x => new DetallePedidoResponse(
+                x.PedidoId,
+                x.Articulo.Nombre,
+                x.Articulo.Codigo,
+                x.Articulo.Descripcion,
+                x.Articulo.Categoria?.Nombre ?? "Sin Categoria",
+                x.Cantidad,
+                x.PrecioUnitario,
+                x.Cantidad * x.PrecioUnitario
+                )).ToList();
+            return Result<List<DetallePedidoResponse>>.Success(response);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
+using TendalProject.Entities.Enum;
 using TendalProject.Web.ViewModels.Pedido;
 
 namespace TendalProject.Web.Controllers
@@ -24,7 +25,8 @@ namespace TendalProject.Web.Controllers
             string? codigo = null,
             bool? proximosAEntregar = null,
             string? ordenarPor = "fecha",
-            string? orden = "desc"
+            string? orden = "desc",
+            EstadoPedido? estado = null
         )
         {
             var result = await _pedidoService.ObtenerPedidosAsync(
@@ -33,13 +35,14 @@ namespace TendalProject.Web.Controllers
                 codigo,
                 proximosAEntregar,
                 ordenarPor,
-                orden
+                orden,
+                estado
             );
             if (!result.IsSuccess || result.Value is null)
             {
                 return HandleError(result.Error!);
             }
-            ConfigurarFiltrosViewBag(fechaInicio,fechaFin,codigo,proximosAEntregar,ordenarPor,orden);
+            ConfigurarFiltrosViewBag(fechaInicio,fechaFin,codigo,proximosAEntregar,ordenarPor,orden,estado);
             var viewModel = result.Value.Select(p => new ListarPedidoViewModel
             {
                 PedidoId = p.PedidoId,
@@ -77,6 +80,29 @@ namespace TendalProject.Web.Controllers
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
             return View(paginacion);
         }
+        [Authorize(Roles = "Administrador")]
+        public async Task<IActionResult> Detalles(Guid pedidoId, int pagina = 1,int tamanioPagina = 10)
+        {
+            var result = await _pedidoService.ObtenerDetallesPedidoAsync(pedidoId);
+            if(result.Value is null)
+            {
+                return HandleError(result.Error!);
+            }
+            var detalles = result.Value;
+            var viewModel = detalles.Select(x => new DetallePedidoViewModel()
+            {
+                DetallePedidoId = x.DetallePedidoId,
+                NombreArticulo = x.NombreArticulo,
+                CodigoArticulo = x.CodigoArticulo,
+                NombreCategoria = x.NombreCategoria,
+                Cantidad = x.Cantidad,
+                DescripcionArticulo = x.DescripcionArticulo,
+                PrecioFinal = x.PrecioFinal,
+                SubTotal = x.SubTotal
+            }).ToList();
+            var paginacion = PaginacionHelper.Paginacion(viewModel,pagina,tamanioPagina);
+            return View(paginacion);
+        }
         private Guid ObtenerClienteId()
         {
             var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId")?.Value;
@@ -86,13 +112,21 @@ namespace TendalProject.Web.Controllers
             }
             return clienteId;
         }
-        private void ConfigurarFiltrosViewBag(DateTime? fechaInicio,DateTime? fechaFin,string? codigo,bool? proximosAEntregar,string? ordenarPor,string? orden)
+        private void ConfigurarFiltrosViewBag(
+            DateTime? fechaInicio,
+            DateTime? fechaFin,
+            string? codigo,
+            bool? proximosAEntregar,
+            string? ordenarPor,
+            string? orden,
+            EstadoPedido? estado)
         {
             ViewBag.FechaInicio = fechaInicio?.ToString("yyyy-MM-dd");
             ViewBag.FechaFin = fechaFin?.ToString("yyyy-MM-dd");
             ViewBag.Codigo = codigo;
             ViewBag.ProximosAEntregar = proximosAEntregar;
             ViewBag.OrdenarPor = ordenarPor;
+            ViewBag.Estado = estado;
             ViewBag.Orden = orden;
 
             ViewBag.Routes = new Dictionary<string, string?>
@@ -100,6 +134,7 @@ namespace TendalProject.Web.Controllers
                 { "fechaInicio", fechaInicio?.ToString("yyyy-MM-dd") },
                 { "fechaFin", fechaFin?.ToString("yyyy-MM-dd") },
                 { "codigo", codigo },
+                { "estado", estado?.ToString("D") },
                 { "proximosAEntregar", proximosAEntregar?.ToString() },
                 { "ordenarPor", ordenarPor },
                 { "orden", orden }

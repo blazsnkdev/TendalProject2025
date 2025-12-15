@@ -2,6 +2,7 @@
 using TendalProject.Business.DTOs.Responses.Pedido;
 using TendalProject.Common.Results;
 using TendalProject.Entities.Entidades;
+using TendalProject.Entities.Enum;
 
 namespace TendalProject.Business.Interfaces
 {
@@ -13,10 +14,12 @@ namespace TendalProject.Business.Interfaces
                     string? codigo = null,
                     bool? proximosAEntregar = null,
                     string? ordenarPor = "fecha",
-                    string? orden = "desc"
+                    string? orden = "desc",
+                    EstadoPedido? estado = null
                 );
         Task<Result<List<HistorialPedidosClienteResponse>>> ObtenerPedidosPorClienteAsync(Guid clienteId);
         Task<Result<string>> GenerarCodigoPedidoAsync();
         Task<Result<Pedido>> CrearPedidoPendienteAsync(CrearPedidoPendienteRequest request);
+        Task<Result<List<DetallePedidoResponse>>> ObtenerDetallesPedidoAsync(Guid pedidoId);
     }
 }

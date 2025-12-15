@@ -1,5 +1,5 @@
 ﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Pedido.ListarPedidoViewModel>
-
+@using TendalProject.Entities.Enum
 @{
     ViewData["Title"] = "Pedidos";
 }
@@ -13,10 +13,6 @@
     <div class="page-header">
         <h1 class="page-title">Módulo Pedidos</h1>
     </div>
-
-    <!-- ===================== -->
-    <!--   FORMULARIO FILTROS  -->
-    <!-- ===================== -->
     <form method="get" class="row g-3 mb-4 filtros-container">
 
         <div class="col-md-3">
@@ -35,6 +31,20 @@
                    value="@ViewBag.Codigo" />
         </div>
 
+        <!-- NUEVO: Filtro por Estado -->
+        <div class="col-md-3">
+            <label>Estado</label>
+            <select name="estado" class="form-control">
+                <option value="">Todos los estados</option>
+                <option value="0" selected="@(ViewBag.Estado?.ToString() == "0")">Pendiente</option>
+                <option value="1" selected="@(ViewBag.Estado?.ToString() == "1")">Procesando</option>
+                <option value="2" selected="@(ViewBag.Estado?.ToString() == "2")">Enviado</option>
+                <option value="3" selected="@(ViewBag.Estado?.ToString() == "3")">Entregado</option>
+                <option value="4" selected="@(ViewBag.Estado?.ToString() == "4")">Cancelado</option>
+                <option value="5" selected="@(ViewBag.Estado?.ToString() == "5")">Pagado</option>
+            </select>
+        </div>
+
         <div class="col-md-3 d-flex align-items-end">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="proximosAEntregar" value="true"
@@ -45,21 +55,27 @@
             </div>
         </div>
 
-        <select id="ordenarPor" name="ordenarPor" class="form-control">
-            <option value="fecha">Fecha Registro</option>
-            <option value="entrega">Fecha Entrega</option>
-        </select>
+        <div class="col-md-3">
+            <label>Ordenar por</label>
+            <select id="ordenarPor" name="ordenarPor" class="form-control">
+                <option value="fecha" selected="@(ViewBag.OrdenarPor == "fecha")">Fecha Registro</option>
+                <option value="entrega" selected="@(ViewBag.OrdenarPor == "entrega")">Fecha Entrega</option>
+                <option value="estado" selected="@(ViewBag.OrdenarPor == "estado")">Estado</option>
+            </select>
+        </div>
 
-        <select id="orden" name="orden" class="form-control">
-            <option value="asc">Ascendente</option>
-            <option value="desc">Descendente</option>
-        </select>
-
+        <div class="col-md-3">
+            <label>Orden</label>
+            <select id="orden" name="orden" class="form-control">
+                <option value="asc" selected="@(ViewBag.Orden == "asc")">Ascendente</option>
+                <option value="desc" selected="@(ViewBag.Orden == "desc")">Descendente</option>
+            </select>
+        </div>
 
         <div class="col-md-3 d-flex align-items-end">
             <button type="submit" class="btn btn-primary w-100">Filtrar</button>
         </div>
-    </form>
+    </form> 
 
     @if (Model.Items.Any())
     {
@@ -79,16 +95,17 @@
                            asp-route-pagina="1"
                            asp-route-tamanioPagina="@size"
                            asp-all-route-data="@(new Dictionary<string,string> {
-                               { "fechaInicio", ViewBag.FechaInicio },
-                               { "fechaFin", ViewBag.FechaFin },
-                               { "codigo", ViewBag.Codigo },
-                               { "ordenarPor", ViewBag.OrdenarPor },
-                               { "orden", ViewBag.Orden }
-                           })"
-                           class="btn-tamanio @(Model.TamanioPagina == size ? "active" : "")">
-                            @size
-                        </a>
-                    }
+                                      { "fechaInicio", ViewBag.FechaInicio },
+                                      { "fechaFin", ViewBag.FechaFin },
+                                      { "codigo", ViewBag.Codigo },
+                                      { "estado", ViewBag.Estado?.ToString() },
+                                      { "ordenarPor", ViewBag.OrdenarPor },
+                                      { "orden", ViewBag.Orden }
+                                  })"
+                   class="btn-tamanio @(Model.TamanioPagina == size ? "active" : "")">
+                    @size
+                </a>
+                                }
                 </div>
             </div>
         </div>
@@ -118,7 +135,7 @@
                         <td>@item.Estado</td>
                         <td>@item.CantidadArticulos</td>
                         <td>
-                            <a asp-action="Detalle" asp-route-pedidoId="@item.PedidoId"
+                            <a asp-action="Detalles" asp-route-pedidoId="@item.PedidoId"
                                class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-info-circle"></i> Detalle
                             </a>
