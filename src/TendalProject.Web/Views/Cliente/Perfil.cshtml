@@ -1,0 +1,58 @@
+﻿@using TendalProject.Web.ViewModels.Cliente
+@model TendalProject.Web.ViewModels.Cliente.PerfilClienteViewModel
+
+@{
+    ViewData["Title"] = "Mi Perfil";
+}
+@if (TempData["ErrorPasswordMensaje"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorPasswordMensaje"]
+    </div>
+}
+
+@if (TempData["AbrirModal"] != null)
+{
+    <span id="abrirModalPassword" data-open="true"></span>
+}
+
+<section class="container mt-4">
+    <h2 class="mb-3">Mi Perfil</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Nombre</dt>
+                <dd class="col-sm-8">@Model.Nombre</dd>
+
+                <dt class="col-sm-4">Apellido Paterno</dt>
+                <dd class="col-sm-8">@Model.ApellidoPaterno</dd>
+
+                <dt class="col-sm-4">Apellido Materno</dt>
+                <dd class="col-sm-8">@Model.ApellidoMaterno</dd>
+
+                <dt class="col-sm-4">Correo electrónico</dt>
+                <dd class="col-sm-8">@Model.CorreoElectronico</dd>
+
+                <dt class="col-sm-4">Número de celular</dt>
+                <dd class="col-sm-8">@Model.NumeroCelular</dd>
+
+                <dt class="col-sm-4">Nivel</dt>
+                <dd class="col-sm-8">@Model.Nivel</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <a asp-action="EditarPerfil" asp-controller="Cliente" class="btn btn-outline-primary">
+            Editar datos
+        </a>
+
+        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cambiarPasswordModal">
+            Cambiar contraseña
+        </button>
+
+
+        @await Html.PartialAsync("_CambiarPassword", new CambiarPasswordViewModel())
+    </div>
+</section>
