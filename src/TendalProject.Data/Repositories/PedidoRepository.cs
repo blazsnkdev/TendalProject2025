@@ -14,6 +14,15 @@ namespace TendalProject.Data.Repositories
             _appDbContext = appDbContext;
         }
 
+        public async Task<Pedido?> GetPedidoIncludsByIdAsync(Guid pedidoId)
+        {
+            return await _appDbContext.TblPedido
+                .Where(p => p.PedidoId == pedidoId)
+                .Include(c => c.Cliente)
+                .Include(d => d.Detalles)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Pedido?> GetPedidoPendienteByClienteIdAsync(Guid clienteId)
         {
             return await _appDbContext.TblPedido
