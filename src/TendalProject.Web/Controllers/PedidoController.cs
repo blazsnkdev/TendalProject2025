@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -139,6 +140,18 @@ namespace TendalProject.Web.Controllers
                 { "ordenarPor", ordenarPor },
                 { "orden", orden }
             };
+        }
+        [HttpPost]
+        [Authorize(Roles = "Administrador")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Enviar(Guid pedidoId)
+        {
+            var result = await _pedidoService.EnviarPedidoAsync(pedidoId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            return RedirectToAction(nameof(Listar));//NOTE: corregir esto pq necesito agregar el detalle Pedido
         }
         private IActionResult HandleError(Error error)
         {
