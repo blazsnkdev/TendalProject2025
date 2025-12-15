@@ -1,0 +1,36 @@
+﻿.badge-estado {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.badge-Pendiente {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge-Procesando {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.badge-Enviado {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.badge-Entregado {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-Cancelado {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge-Pagado {
+    background-color: #6f42c1;
+    color: #fff;
+}
