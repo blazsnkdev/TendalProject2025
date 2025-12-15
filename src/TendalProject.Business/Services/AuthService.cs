@@ -138,7 +138,8 @@ namespace TendalProject.Business.Services
                 FechaCreacion = _dateTimeProvider.GetDateTimeNow(),
                 CorreoElectronico = request.Email,
                 Estado = EstadoCliente.Activo,
-                UsuarioId = usuarioId
+                UsuarioId = usuarioId,
+                Nivel = NivelCliente.Nuevo
             };
             var usuario = new Usuario()
             {

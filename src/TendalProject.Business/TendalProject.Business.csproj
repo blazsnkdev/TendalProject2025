@@ -17,8 +17,4 @@
     <ProjectReference Include="..\TendalProject.Data\TendalProject.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\Requests\Pago\" />
-  </ItemGroup>
-
 </Project>

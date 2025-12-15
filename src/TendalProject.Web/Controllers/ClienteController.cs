@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TendalProject.Business.DTOs.Requests.Cliente;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -90,6 +91,7 @@ namespace TendalProject.Web.Controllers
             return View(paginacion);
         }
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> ModificarEstado(Guid clienteId)
         {
             var result = await _clienteService.ModificarEstadoClienteAsync(clienteId);
@@ -99,7 +101,66 @@ namespace TendalProject.Web.Controllers
             }
             return RedirectToAction(nameof(Detalle), new { clienteId = result.Value });
         }
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> Perfil()
+        {
+            var clienteId = ObtenerClienteId();
+            if(clienteId == Guid.Empty)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            var result = await _clienteService.ObtenerPerfilClienteAsync(clienteId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            var value = result.Value!;
+            var viewModel = new PerfilClienteViewModel()
+            {
+                ClienteId = value.ClienteId,
+                Nombre = value.Nombre,
+                ApellidoPaterno = value.ApellidoPaterno,
+                ApellidoMaterno = value.ApellidoMaterno,
+                CorreoElectronico = value.CorreoElectronico,
+                NumeroCelular = value.NumeroCelular,
+                FechaNacimiento = value.FechaNacimiento,
+                Nivel = value.Nivel
 
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> ActualizarPassword(CambiarPasswordViewModel viewModel)
+        {
+            var clienteId = ObtenerClienteId();
+            if(clienteId == Guid.Empty)
+            {
+                return RedirectToAction("Login", "Auh");
+            }
+            var request = new ActualizarPasswordClienteRequest(
+                clienteId,
+                viewModel.PasswordActual,
+                viewModel.NuevoPassword,
+                viewModel.ConfirmarPassword);
+            var result = await  _clienteService.ActualizarPasswordAsync(request);
+            if (!result.IsSuccess)
+            {
+                TempData["ErrorPasswordMensaje"] = result.Error!.Message;
+                TempData["AbrirModal"] = true;
+                return RedirectToAction(nameof(Perfil));
+            }
+            return RedirectToAction(nameof(Perfil));
+        }
+        private Guid ObtenerClienteId()
+        {
+            var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId")?.Value;
+            if (string.IsNullOrEmpty(clienteIdClaim) || !Guid.TryParse(clienteIdClaim, out var clienteId))
+            {
+                return Guid.Empty;
+            }
+            return clienteId;
+        }
         private IActionResult HandleError(Error error)
         {
             return error.Code switch
