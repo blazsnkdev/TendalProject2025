@@ -20,6 +20,27 @@ namespace TendalProject.Data.Repositories
                 .CountAsync();
         }
 
+        public async Task<decimal> GetVentasHoyAsync()
+        {
+            var hoy = DateTime.Today;
+            var manana = hoy.AddDays(1);
+            return await _appDbContext.TblVenta
+                .Where(x=>x.FechaVenta >= hoy && x.FechaVenta < manana)
+                .SumAsync(x => x.Pedido.Total);
+        }
+
+        public async Task<decimal> GetVentasMesAsync()
+        {
+            var hoy = DateTime.Now;
+            var inicioMes = new DateTime(hoy.Year, hoy.Month, 1);
+            var inicioMesSiguiente = inicioMes.AddMonths(1);
+
+            return await _appDbContext.TblVenta
+                .Where(x => x.FechaVenta >= inicioMes &&
+                            x.FechaVenta < inicioMesSiguiente)
+                .SumAsync(x => x.Pedido.Total);
+        }
+
         public async Task<decimal> GetVentasPorClienteIdAsync(Guid clienteId)
         {
             var totalVentas = await _appDbContext.TblVenta

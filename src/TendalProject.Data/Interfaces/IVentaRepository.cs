@@ -6,5 +6,7 @@ namespace TendalProject.Data.Interfaces
     {
         Task<decimal> GetVentasPorClienteIdAsync(Guid clienteId);
         Task<int> GetCantidadVentasPorClienteIdAsync(Guid clienteId);
+        Task<decimal> GetVentasHoyAsync();
+        Task<decimal> GetVentasMesAsync();
     }
 }

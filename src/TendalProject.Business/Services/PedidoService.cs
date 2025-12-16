@@ -166,6 +166,11 @@ namespace TendalProject.Business.Services
                     Cantidad = item.Cantidad,
                     PrecioUnitario = item.PrecioFinal
                 });
+                var artitulo = await _UoW.ArticuloRepository.GetByIdAsync(item.ArticuloId);
+                if(artitulo is not null)
+                {
+                    artitulo.CantidadVentas += 1;
+                }
             }
 
             await _UoW.PedidoRepository.AddAsync(pedido);
@@ -195,45 +200,6 @@ namespace TendalProject.Business.Services
             return Result<List<DetallePedidoResponse>>.Success(response);
         }
 
-        public async Task<Result<Guid>> EnviarPedidoAsync(Guid pedidoId)
-        {
-            if (pedidoId == Guid.Empty)
-            {
-                return Result<Guid>.Failure(Error.Validation("PedidoId invalido"));
-            }
-            var pedido = await _UoW.PedidoRepository.GetPedidoIncludsByIdAsync(pedidoId);
-            if(pedido is null)
-            {
-                return Result<Guid>.Failure(Error.NotFound("pedido no encontrado"));
-            }
-            if(pedido.Estado is not EstadoPedido.Pagado)
-            {
-                return Result<Guid>.Failure(Error.Validation("pedido no disponible para enviar"));
-            }
-            pedido.Estado = EstadoPedido.Enviado;
-            await _UoW.SaveChangesAsync();
-            return Result<Guid>.Success(pedido.PedidoId);
-        }
-
-        public async Task<Result<Guid>> CancelarPedidoAsync(Guid pedidoId)
-        {
-            if (pedidoId == Guid.Empty)
-            {
-                return Result<Guid>.Failure(Error.Validation("PedidoId invalido"));
-            }
-            var pedido = await _UoW.PedidoRepository.GetPedidoIncludsByIdAsync(pedidoId);
-            if (pedido is null)
-            {
-                return Result<Guid>.Failure(Error.NotFound("pedido no encontrado"));
-            }
-            if (pedido.Estado is not EstadoPedido.Pagado)
-            {
-                return Result<Guid>.Failure(Error.Validation("pedido no disponible para enviar"));
-            }
-            pedido.Estado = EstadoPedido.Cancelado;
-            await _UoW.SaveChangesAsync();
-            return Result<Guid>.Success(pedido.PedidoId);
-        }
         public async Task<Result<Guid>> ModificarEstadoAsync(ModificarEstadoPedidoRequest request)
         {
 
