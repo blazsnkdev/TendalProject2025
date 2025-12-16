@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol;
+using TendalProject.Business.DTOs.Requests.Pedido;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
 using TendalProject.Common.Results;
@@ -141,18 +142,22 @@ namespace TendalProject.Web.Controllers
                 { "orden", orden }
             };
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrador")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Enviar(Guid pedidoId)
+        public async Task<IActionResult> CambiarEstado(CambiarEstadoViewModel viewModel)
         {
-            var result = await _pedidoService.EnviarPedidoAsync(pedidoId);
+            var result = await _pedidoService.ModificarEstadoAsync(
+                new ModificarEstadoPedidoRequest(viewModel.PedidoId, viewModel.EstadoSeleccionado)
+            );
+
             if (!result.IsSuccess)
-            {
                 return HandleError(result.Error!);
-            }
-            return RedirectToAction(nameof(Listar));//NOTE: corregir esto pq necesito agregar el detalle Pedido
+
+            return RedirectToAction(nameof(Listar));
         }
+
         private IActionResult HandleError(Error error)
         {
             return error.Code switch

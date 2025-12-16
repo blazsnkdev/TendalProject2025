@@ -31,7 +31,6 @@
                    value="@ViewBag.Codigo" />
         </div>
 
-        <!-- NUEVO: Filtro por Estado -->
         <div class="col-md-3">
             <label>Estado</label>
             <select name="estado" class="form-control">
@@ -138,7 +137,29 @@
                             <a asp-action="Detalles" asp-route-pedidoId="@item.PedidoId"
                                class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-info-circle"></i> Detalle
-                            </a>
+                            </a> |
+                            <form asp-action="CambiarEstado" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="PedidoId" value="@item.PedidoId" />
+
+                                <select name="EstadoSeleccionado" class="form-select form-select-sm d-inline w-auto">
+                                    @if (item.Estado == "Pagado")
+                                    {
+                                        <option value="@EstadoPedido.Enviado">Enviar</option>
+                                        <option value="@EstadoPedido.Cancelado">Cancelar</option>
+                                    }
+                                    else if (item.Estado == "Enviado")
+                                    {
+                                        <option value="@EstadoPedido.Entregado">Entregar</option>
+                                    }
+                                </select>
+
+                                <button type="submit" class="btn btn-primary btn-sm ms-1">
+                                    Actualizar
+                                </button>
+                            </form>
+
                         </td>
                     </tr>
                 }

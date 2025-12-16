@@ -214,5 +214,45 @@ namespace TendalProject.Business.Services
             await _UoW.SaveChangesAsync();
             return Result<Guid>.Success(pedido.PedidoId);
         }
+
+        public async Task<Result<Guid>> CancelarPedidoAsync(Guid pedidoId)
+        {
+            if (pedidoId == Guid.Empty)
+            {
+                return Result<Guid>.Failure(Error.Validation("PedidoId invalido"));
+            }
+            var pedido = await _UoW.PedidoRepository.GetPedidoIncludsByIdAsync(pedidoId);
+            if (pedido is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound("pedido no encontrado"));
+            }
+            if (pedido.Estado is not EstadoPedido.Pagado)
+            {
+                return Result<Guid>.Failure(Error.Validation("pedido no disponible para enviar"));
+            }
+            pedido.Estado = EstadoPedido.Cancelado;
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(pedido.PedidoId);
+        }
+        public async Task<Result<Guid>> ModificarEstadoAsync(ModificarEstadoPedidoRequest request)
+        {
+
+            if (request.PedidoId == Guid.Empty)
+            {
+                return Result<Guid>.Failure(Error.Validation("PedidoId invalido"));
+            }
+            var pedido = await _UoW.PedidoRepository.GetPedidoIncludsByIdAsync(request.PedidoId);
+            if (pedido is null)
+            {
+                return Result<Guid>.Failure(Error.NotFound("pedido no encontrado"));
+            }
+            if (pedido.Estado == request.EstadoPedido)
+            {
+                return Result<Guid>.Failure(Error.Validation("pedido no disponible para enviar"));
+            }
+            pedido.Estado = request.EstadoPedido;
+            await _UoW.SaveChangesAsync();
+            return Result<Guid>.Success(pedido.PedidoId);
+        }
     }
 }
