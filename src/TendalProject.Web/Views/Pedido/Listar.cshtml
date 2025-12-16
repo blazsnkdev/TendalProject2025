@@ -31,7 +31,6 @@
                    value="@ViewBag.Codigo" />
         </div>
 
-        <!-- NUEVO: Filtro por Estado -->
         <div class="col-md-3">
             <label>Estado</label>
             <select name="estado" class="form-control">
@@ -139,15 +138,28 @@
                                class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-info-circle"></i> Detalle
                             </a> |
-                            @if (item.Estado == "Pagado")
-                            {
-                                <form asp-action="Enviar" asp-route-pedidoId="@item.PedidoId" method="post" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" onclick="confirmarEnvioPedido('@item.Estado')" class="btn btn-success btn-sm">
-                                        Enviar
-                                    </button>
-                                </form>
-                            }
+                            <form asp-action="CambiarEstado" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" name="PedidoId" value="@item.PedidoId" />
+
+                                <select name="EstadoSeleccionado" class="form-select form-select-sm d-inline w-auto">
+                                    @if (item.Estado == "Pagado")
+                                    {
+                                        <option value="@EstadoPedido.Enviado">Enviar</option>
+                                        <option value="@EstadoPedido.Cancelado">Cancelar</option>
+                                    }
+                                    else if (item.Estado == "Enviado")
+                                    {
+                                        <option value="@EstadoPedido.Entregado">Entregar</option>
+                                    }
+                                </select>
+
+                                <button type="submit" class="btn btn-primary btn-sm ms-1">
+                                    Actualizar
+                                </button>
+                            </form>
+
                         </td>
                     </tr>
                 }
