@@ -138,7 +138,16 @@
                             <a asp-action="Detalles" asp-route-pedidoId="@item.PedidoId"
                                class="btn btn-sm btn-outline-info">
                                 <i class="fas fa-info-circle"></i> Detalle
-                            </a>
+                            </a> |
+                            @if (item.Estado == "Pagado")
+                            {
+                                <form asp-action="Enviar" asp-route-pedidoId="@item.PedidoId" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" onclick="confirmarEnvioPedido('@item.Estado')" class="btn btn-success btn-sm">
+                                        Enviar
+                                    </button>
+                                </form>
+                            }
                         </td>
                     </tr>
                 }
