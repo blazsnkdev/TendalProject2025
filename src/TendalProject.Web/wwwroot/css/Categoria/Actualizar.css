@@ -1,0 +1,39 @@
+﻿h1 {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+form {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+label {
+    font-weight: 600;
+    color: #333333;
+}
+
+.form-control {
+    border-radius: 6px;
+}
+
+.btn-primary {
+    background-color: #800080;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #5d005d;
+    }
+
+a {
+    color: #800080;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #5d005d;
+    }
