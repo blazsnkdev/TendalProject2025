@@ -35,7 +35,7 @@ namespace TendalProject.Business.Services
 
         public async Task<Result<DetalleUsuarioResponse>> ObtenerDetalleUsuarioAsync(Guid usuarioId)
         {
-            var usuario = await _UoW.UsuarioRepository.GetByIdAsync(usuarioId);
+            var usuario = await _UoW.UsuarioRepository.GetUsuarioWithRolesAsync(usuarioId);
             if (usuario == null)
             {
                 return Result<DetalleUsuarioResponse>.Failure(Error.NotFound("Usuario no encontrado."));

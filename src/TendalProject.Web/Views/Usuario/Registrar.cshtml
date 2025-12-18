@@ -1,12 +1,14 @@
 ﻿@model TendalProject.Web.ViewModels.Usuario.RegistrarUsuarioViewModel
 
 @{
-    ViewData["Title"] = "Registrar";
+    ViewData["Title"] = "Registrar Usuario";
 }
-
+@section Styles {
+    <link rel="stylesheet" href="~/css/Usuario/Registrar.css" />
+}
 <h1>Registrar</h1>
 
-<h4>RegistrarUsuarioViewModel</h4>
+<h4>Nuevo Usuario</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -27,14 +29,15 @@
                 <input asp-for="ConfirmarPassword" class="form-control" />
                 <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Registrar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>
 
