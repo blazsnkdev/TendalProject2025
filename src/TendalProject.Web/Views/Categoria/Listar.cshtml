@@ -1,7 +1,7 @@
 ﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Categoria.ListarCategoriasViewModel>
 
 @{
-    ViewData["Title"] = "Activos";
+    ViewData["Title"] = "Módulo Categoria";
 }
 
 @section Styles {
@@ -13,7 +13,7 @@
     </div>
 
     <a asp-action="Registrar" class="btn-agregar">
-        <i class="fas fa-plus-circle"></i> Agregar
+        <i class="bi bi-plus-circle"></i>  Agregar
     </a>
 
     @if (Model.Items.Any())

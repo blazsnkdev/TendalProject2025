@@ -1,13 +1,15 @@
 ﻿@model TendalProject.Web.ViewModels.Proveedor.DetalleProveedorViewModel
 
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Detalle Proveedor";
 }
-
+@section Styles {
+    <link rel="stylesheet" href="~/css/Proveedor/Detalle.css" />
+}
 <h1>Detalle</h1>
 
 <div>
-    <h4>DetalleProveedorViewModel</h4>
+    <h4>Datos del Proveedor</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -77,7 +79,9 @@
         </button>
     </form>
     <br />
-    <a asp-action="Listar">Back to List</a>
+</div>
+<div>
+    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>
 
 

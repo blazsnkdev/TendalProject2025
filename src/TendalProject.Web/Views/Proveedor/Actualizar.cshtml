@@ -1,12 +1,13 @@
 ﻿@model TendalProject.Web.ViewModels.Proveedor.ActualizarProveedorViewModel
 
 @{
-    ViewData["Title"] = "Actualizar";
+    ViewData["Title"] = "Actualizar Proveedor";
 }
-
+@section Styles {
+    <link rel="stylesheet" href="~/css/Proveedor/Actualizar.css" />
+}
 <h1>Actualizar</h1>
-
-<h4>ActualizarProveedorViewModel</h4>
+<h4>Editar Proveedor</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -52,14 +53,15 @@
                 <input asp-for="Direccion" class="form-control" />
                 <span asp-validation-for="Direccion" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Listar">Back to List</a>
+    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>
 
