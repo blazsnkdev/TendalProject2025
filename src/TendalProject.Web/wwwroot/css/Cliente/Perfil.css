@@ -1,0 +1,182 @@
+﻿.title-page {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+.container {
+    max-width: 1200px;
+}
+
+/* Tarjeta de perfil */
+.card {
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+    .card:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+.card-title {
+    color: black;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f1f1f1;
+}
+
+/* Campos de formulario */
+.form-control-lg {
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+    .form-control-lg:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+.form-label {
+    color: #34495e;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+/* Inputs de solo lectura */
+.form-control[readonly] {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+/* Badge para información importante */
+.input-group-text {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    border: none;
+    font-weight: 500;
+}
+
+/* Botones */
+.btn {
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background-color: #800080;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #5d005d;
+    }
+
+.btn-outline-secondary {
+    border-color: #bdc3c7;
+    color: #7f8c8d;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: #f8f9fa;
+        border-color: #95a5a6;
+        color: #2c3e50;
+    }
+
+.btn-outline-warning {
+    color: #800080;
+    border-color: #800080;
+}
+
+    .btn-outline-warning:hover {
+        color: #fff;
+        background-color: #5d005d;
+        border-color: #5d005d;
+    }
+
+/* Separadores */
+hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+    margin: 2rem 0;
+}
+
+/* Texto de ayuda */
+.text-muted {
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Mensajes de validación */
+.text-danger {
+    font-size: 0.85rem;
+    margin-top: 4px;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .d-flex.gap-3 {
+        flex-direction: column;
+        gap: 10px !important;
+    }
+}
+
+/* Animación suave para toda la página */
+section {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para íconos */
+.bi {
+    font-size: 1.1rem;
+}
+
+/* Estilo para el nivel del cliente */
+.input-group .bg-primary {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad) !important;
+}
+
+/* Efecto hover en la tarjeta completa */
+.card-body {
+    transition: background-color 0.3s ease;
+}
+
+    .card-body:hover {
+        background-color: #fafafa;
+    }
+
+/* Placeholders personalizados */
+.form-control::placeholder {
+    color: #bdc3c7;
+    font-weight: 300;
+}

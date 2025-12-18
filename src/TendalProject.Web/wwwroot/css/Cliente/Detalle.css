@@ -1,0 +1,46 @@
+﻿.card {
+    border-radius: 12px;
+}
+
+.card-title {
+    color: #5d005d;
+    font-weight: 700;
+}
+/* Solo afecta a los cards dentro de .cliente-cards */
+.cliente-cards .card {
+    border-color: #800080 !important;
+}
+
+/* Para mantener el efecto de sombra con color púrpura */
+.cliente-cards .shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(128, 0, 128, 0.1) !important;
+}
+
+    .cliente-cards .shadow-sm:hover {
+        box-shadow: 0 0.5rem 1rem rgba(128, 0, 128, 0.15) !important;
+    }
+
+.btn-danger {
+    display: inline-block;
+    background-color: #800080;
+    color: white;
+    border : none;
+    text-decoration: none;
+}
+
+    .btn-danger:hover {
+        background-color: #ff0000;
+        color: white;
+    }
+.btn-success {
+    display: inline-block;
+    background-color: #800080;
+    color: white;
+    border : none;
+    text-decoration: none;
+}
+
+    .btn-success:hover {
+        background-color: lawngreen;
+        color: white;
+    }

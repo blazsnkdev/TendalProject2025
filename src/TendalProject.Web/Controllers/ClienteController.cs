@@ -64,7 +64,8 @@ namespace TendalProject.Web.Controllers
                 PedidosProcesando = cliente.TotalPedidosProcesando,
                 PedidosEnviados = cliente.TotalPedidosEnviados,
                 PedidosEntregados = cliente.TotalPedidosEntregados,
-                PedidosCancelados = cliente.TotalPedidosCancelados
+                PedidosCancelados = cliente.TotalPedidosCancelados,
+                PedidosPagados = cliente.TotalPedidosPagados
             };
             return View(viewModel);
         }
@@ -76,8 +77,9 @@ namespace TendalProject.Web.Controllers
             {
                 return HandleError(result.Error!);
             }
-            var pedidos = result.Value!
-                .Where(p => p.Estado == estado);
+            var pedidos = string.IsNullOrWhiteSpace(estado)
+                        ? result.Value! 
+                        : result.Value!.Where(p => p.Estado == estado);
             var viewModel = pedidos.Select(p => new ListarPedidosClienteViewModel()
             {
                 PedidoId = p.PedidoId,
@@ -88,6 +90,7 @@ namespace TendalProject.Web.Controllers
             });
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
             ViewBag.ClienteId = clienteId;
+            ViewBag.EstadoSeleccionado = estado;
             return View(paginacion);
         }
         [HttpPost]

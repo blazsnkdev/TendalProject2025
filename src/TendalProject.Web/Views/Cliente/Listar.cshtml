@@ -14,16 +14,14 @@
         <h1 class="page-title">Módulo Clientes</h1>
     </div>
 
-    <!-- BUSCADOR -->
     <form asp-action="Listar" method="get" class="mb-3 d-flex gap-2">
         <input type="text" name="nombre" value="@ViewBag.Nombre" class="form-control" placeholder="Buscar por nombre..." />
         <input type="hidden" name="mostrarInactivos" value="@ViewBag.MostrarInactivos" />
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="submit" class="btn btn-buscar">Buscar</button>
     </form>
 
     @if (Model.Items.Any())
     {
-        <!-- CONTROLES SUPERIORES -->
         <div class="pagination-controls">
 
             <div class="registros-info">
@@ -67,7 +65,7 @@
 
         </div>
 
-        <!-- TABLA -->
+        <br />
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -88,11 +86,11 @@
                         <td>@item.CorreoElectronico</td>
                         <td>@item.NumeroCelular</td>
                         <td>@item.Estado</td>
-                        <td>
-                            <a asp-action="Detalle" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-outline-info">
+                        <td class="custom-buttons">
+                            <a asp-action="Detalle" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-outline-primary">
                                 <i class="fas fa-info-circle"></i> Detalle
                             </a>
-                            <a asp-action="Pedidos" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-outline-info">
+                            <a asp-action="Pedidos" asp-route-clienteId="@item.ClienteId" class="btn btn-sm btn-primary">
                                 <i class="fas fa-info-circle"></i> Pedidos
                             </a>
                         </td>

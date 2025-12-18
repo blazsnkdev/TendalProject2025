@@ -15,44 +15,89 @@
 {
     <span id="abrirModalPassword" data-open="true"></span>
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cliente/Perfil.css" />
+}
+
 
 <section class="container mt-4">
-    <h2 class="mb-3">Mi Perfil</h2>
+    <h2 class="mb-3 title-page">Mi Perfil</h2>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <dl class="row">
-                <dt class="col-sm-4">Nombre</dt>
-                <dd class="col-sm-8">@Model.Nombre</dd>
+    <form asp-action="GuardarPerfil" method="post" class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h5 class="card-title mb-4">
+                <i class="bi bi-person-gear me-2"></i>Información Personal
+            </h5>
 
-                <dt class="col-sm-4">Apellido Paterno</dt>
-                <dd class="col-sm-8">@Model.ApellidoPaterno</dd>
+            <div class="row">
+                <!-- Nombre -->
+                <div class="col-md-4 mb-3">
+                    <label asp-for="Nombre" class="form-label fw-semibold">Nombre *</label>
+                    <input asp-for="Nombre" class="form-control form-control-lg" placeholder="Ingresa tu nombre">
+                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                </div>
 
-                <dt class="col-sm-4">Apellido Materno</dt>
-                <dd class="col-sm-8">@Model.ApellidoMaterno</dd>
+                <!-- Apellido Paterno -->
+                <div class="col-md-4 mb-3">
+                    <label asp-for="ApellidoPaterno" class="form-label fw-semibold">Apellido Paterno *</label>
+                    <input asp-for="ApellidoPaterno" class="form-control form-control-lg" placeholder="Ingresa apellido paterno">
+                    <span asp-validation-for="ApellidoPaterno" class="text-danger small"></span>
+                </div>
 
-                <dt class="col-sm-4">Correo electrónico</dt>
-                <dd class="col-sm-8">@Model.CorreoElectronico</dd>
+                <!-- Apellido Materno -->
+                <div class="col-md-4 mb-3">
+                    <label asp-for="ApellidoMaterno" class="form-label fw-semibold">Apellido Materno</label>
+                    <input asp-for="ApellidoMaterno" class="form-control form-control-lg" placeholder="Ingresa apellido materno">
+                    <span asp-validation-for="ApellidoMaterno" class="text-danger small"></span>
+                </div>
+            </div>
 
-                <dt class="col-sm-4">Número de celular</dt>
-                <dd class="col-sm-8">@Model.NumeroCelular</dd>
+            <!-- Correo electrónico (solo lectura) -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CorreoElectronico" class="form-label fw-semibold">Correo Electrónico</label>
+                    <input asp-for="CorreoElectronico" class="form-control form-control-lg" readonly>
+                    <small class="text-muted">El correo no se puede modificar</small>
+                </div>
 
-                <dt class="col-sm-4">Nivel</dt>
-                <dd class="col-sm-8">@Model.Nivel</dd>
-            </dl>
+                <!-- Número de celular -->
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NumeroCelular" class="form-label fw-semibold">Número de Celular *</label>
+                    <input asp-for="NumeroCelular" class="form-control form-control-lg" placeholder="Ej: 999 888 777">
+                    <span asp-validation-for="NumeroCelular" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <!-- Información de nivel (solo lectura) -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Nivel Actual</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg bg-light" value="@Model.Nivel" readonly>
+                        <span class="input-group-text bg-primary text-white">
+                            <i class="bi bi-award"></i>
+                        </span>
+                    </div>
+                    <small class="text-muted">Tu nivel se actualiza automáticamente según tus compras</small>
+                </div>
+            </div>
+
+            <!-- Separador -->
+            <hr class="my-4">
+
+            <!-- Botones de acción -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex gap-3">
+                    <button type="button" class="btn btn-outline-warning px-4" data-bs-toggle="modal" data-bs-target="#cambiarPasswordModal">
+                        <i class="bi bi-key me-2"></i>Cambiar Contraseña
+                    </button>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi bi-check-circle me-2"></i>Guardar Cambios
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
+    @await Html.PartialAsync("_CambiarPassword", new CambiarPasswordViewModel())
 
-    <div class="mt-4 d-flex gap-2">
-        <a asp-action="EditarPerfil" asp-controller="Cliente" class="btn btn-outline-primary">
-            Editar datos
-        </a>
-
-        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cambiarPasswordModal">
-            Cambiar contraseña
-        </button>
-
-
-        @await Html.PartialAsync("_CambiarPassword", new CambiarPasswordViewModel())
-    </div>
 </section>

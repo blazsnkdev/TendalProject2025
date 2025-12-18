@@ -111,6 +111,7 @@ namespace TendalProject.Business.Services
             var cantidadPedidosEnviados = pedidos.Count(p => p.Estado == EstadoPedido.Enviado);
             var cantidadPedidosEntregados = pedidos.Count(p => p.Estado == EstadoPedido.Entregado);
             var cantidadPedidosCancelados = pedidos.Count(p => p.Estado == EstadoPedido.Cancelado);
+            var cantidadPedidosPagados = pedidos.Count(p => p.Estado == EstadoPedido.Pagado);
 
             //TODO : AQUI MODIFICAR PARA INCLUIR PEDIDOS PAGADOS
             var response = new DetalleClienteResponse
@@ -130,7 +131,8 @@ namespace TendalProject.Business.Services
                 cantidadPedidosProcesados,
                 cantidadPedidosEnviados,
                 cantidadPedidosEntregados,
-                cantidadPedidosCancelados
+                cantidadPedidosCancelados,
+                cantidadPedidosPagados
             );
             return Result<DetalleClienteResponse>.Success(response);
         }

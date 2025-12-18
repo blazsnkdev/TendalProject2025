@@ -1,8 +1,14 @@
 ﻿@model TendalProject.Web.ViewModels.Cliente.DetalleClienteViewModel
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "Detalle Cliente";
+}
 
-    <!-- Información del cliente -->
+@section Styles {
+    <link rel="stylesheet" href="~/css/Cliente/Detalle.css" />
+}
+
+<div class="container mt-4">
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <h4 class="card-title mb-3">Información del Cliente</h4>
@@ -36,7 +42,7 @@
             </div>
         </div>
     </div>
-
+    <div class="cliente-cards">
     <!-- Cards de datos del cliente -->
     <div class="row text-center mb-4">
 
@@ -45,7 +51,7 @@
             <div class="card shadow-sm border-success">
                 <div class="card-body">
                     <h6 class="text-muted">Monto Total Gastado</h6>
-                    <h3 class="text-success">S/. @Model.MontoTotalGastado</h3>
+                    <h3>S/. @Model.MontoTotalGastado</h3>
                 </div>
             </div>
         </div>
@@ -55,7 +61,7 @@
             <div class="card shadow-sm border-primary">
                 <div class="card-body">
                     <h6 class="text-muted">Nivel</h6>
-                    <h3 class="text-primary">@Model.Nivel</h3>
+                    <h3>@Model.Nivel</h3>
                 </div>
             </div>
         </div>
@@ -65,7 +71,7 @@
             <div class="card shadow-sm border-info">
                 <div class="card-body">
                     <h6 class="text-muted">Compras Totales</h6>
-                    <h3 class="text-info">@Model.ComprasTotales</h3>
+                    <h3>@Model.ComprasTotales</h3>
                 </div>
             </div>
         </div>
@@ -120,8 +126,17 @@
             </div>
         </div>
 
-    </div>
+        <div class="col-md-2 mb-3">
+            <div class="card shadow-sm border-danger">
+                <div class="card-body">
+                    <h6>Pagados</h6>
+                    <h4>@Model.PedidosPagados</h4>
+                </div>
+            </div>
+        </div>
 
+    </div>
+    </div>
     <div>
         <form id="formEstado" asp-action="ModificarEstado" asp-route-clienteId="@Model.ClienteId" method="post">
             <button type="button"

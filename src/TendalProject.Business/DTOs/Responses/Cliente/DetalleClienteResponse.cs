@@ -20,6 +20,7 @@
         int TotalPedidosProcesando,
         int TotalPedidosEnviados,
         int TotalPedidosEntregados,
-        int TotalPedidosCancelados
+        int TotalPedidosCancelados,
+        int TotalPedidosPagados
     );
 }
