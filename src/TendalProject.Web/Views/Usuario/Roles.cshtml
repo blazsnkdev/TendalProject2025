@@ -1,7 +1,7 @@
 ﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Usuario.ListarRolPorUsuarioViewModel>
 
 @{
-    ViewData["Title"] = "Activos";
+    ViewData["Title"] = "Detalle Roles de Usuario";
 }
 
 @section Styles {
@@ -10,7 +10,7 @@
 <div class="clientes-container">
 
     <div class="page-header">
-        <h1 class="page-title">Roles Asignados @ViewBag.UsuarioId</h1>
+        <h1 class="page-title">Roles Asignados</h1>
     </div>
     <a asp-action="Registrar" class="btn-agregar">
         <i class="fas fa-plus-circle"></i> Agregar
@@ -29,18 +29,18 @@
             <div class="tamanio-pagina">
                 <span class="tamanio-label">Registros por página:</span>
                 <div>
-                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="5"
+                    <a asp-action="Roles" asp-route-pagina="1" asp-route-tamanioPagina="5"
                        class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
-                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="10"
+                    <a asp-action="Roles" asp-route-pagina="1" asp-route-tamanioPagina="10"
                        class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
-                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="25"
+                    <a asp-action="Roles" asp-route-pagina="1" asp-route-tamanioPagina="25"
                        class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
-                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="50"
+                    <a asp-action="Roles" asp-route-pagina="1" asp-route-tamanioPagina="50"
                        class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
                 </div>
             </div>
         </div>
-
+        <br />
         <table class="table table-striped">
             <thead>
                 <tr>

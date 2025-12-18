@@ -1,61 +1,30 @@
-﻿/* ===== LISTAR USUARIOS ===== */
-
-.clientes-container {
-    padding: 2rem;
-    background-color: #f8f9fa;
-}
+﻿/* ===== ROLES USUARIO ===== */
 
 .page-title {
     font-weight: 700;
     color: #5d005d;
 }
 
+.table th {
+    background-color: #800080;
+    color: #fff;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
 .btn-agregar {
-    display: inline-block;
-    margin-bottom: 1rem;
     background-color: #FFD700;
     color: #333;
+    font-weight: 600;
     padding: 0.6rem 1.2rem;
     border-radius: 8px;
-    font-weight: 600;
     text-decoration: none;
 }
 
     .btn-agregar:hover {
         background-color: #e6c200;
-    }
-
-/* ===== CARDS ===== */
-
-.cliente-card {
-    border-radius: 12px;
-}
-
-.card-title {
-    color: #800080;
-}
-
-.badge {
-    font-size: 0.85rem;
-}
-
-.btn-outline-primary {
-    border-color: #800080;
-    color: #800080;
-}
-
-    .btn-outline-primary:hover {
-        background-color: #800080;
-        color: #fff;
-    }
-
-.btn-danger {
-    background-color: #800080;
-    border: none;
-}
-
-    .btn-danger:hover {
-        background-color: #5d005d;
     }
 
 .pagination-controls {
@@ -118,15 +87,3 @@
     opacity: 0.4;
     pointer-events: none;
 }
-
-/* ===== ESTADO VACÍO ===== */
-
-.estado-vacio {
-    text-align: center;
-    padding: 3rem;
-}
-
-    .estado-vacio i {
-        font-size: 3rem;
-        color: #800080;
-    }

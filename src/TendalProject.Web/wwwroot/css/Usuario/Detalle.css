@@ -1,0 +1,42 @@
+﻿/* ===== DETALLE USUARIO ===== */
+
+h1 {
+    color: #800080;
+    font-weight: 700;
+}
+
+dl {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+dt {
+    font-weight: 600;
+    color: #333;
+}
+
+dd {
+    margin-bottom: 1rem;
+}
+
+.btn-danger {
+    background-color: #800080;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-success {
+    background-color: #3CB371;
+    border: none;
+    font-weight: 600;
+}
+
+a {
+    display: inline-block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #800080;
+    text-decoration: none;
+}
