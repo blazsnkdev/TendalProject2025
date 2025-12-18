@@ -1,4 +1,4 @@
-﻿/* Archivo: wwwroot/css/Categoria/Listar.css */
+﻿/* Archivo: wwwroot/css/Usuario/Listar.css */
 
 /* Paleta de Colores Tendal Market:
    Amarillo: #FFD700
@@ -8,6 +8,7 @@
    Morado Oscuro: #5d005d
    Verde Oscuro: #2E8B57
    Gris Claro: #f8f9fa
+   Rojo para Roles: #DC3545
 */
 
 /* --- Estilos Generales --- */
@@ -152,6 +153,10 @@
     gap: 1.5rem !important;
 }
 
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
 .col-12 {
     flex: 0 0 auto;
     width: 100%;
@@ -178,7 +183,7 @@
     }
 }
 
-/* --- Cards de Categorías --- */
+/* --- Cards de Usuarios --- */
 .cliente-card {
     border: none;
     border-radius: 12px;
@@ -204,20 +209,38 @@
     flex-direction: column;
 }
 
-.card-title {
-    color: #800080;
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #FFD700;
+.d-flex {
+    display: flex !important;
 }
 
+.flex-column {
+    flex-direction: column !important;
+}
+
+/* --- Título y Email --- */
+.card-title {
+    color: #800080;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+.fw-bold {
+    font-weight: bold !important;
+}
+
+/* --- Última Conexión --- */
 .card-text.text-muted {
     color: #6c757d !important;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    flex-grow: 1;
+    font-size: 0.85rem;
     margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
 }
 
 /* --- Badge de Estado --- */
@@ -240,23 +263,13 @@
     margin-bottom: 1rem;
 }
 
-/* --- Fecha de Registro --- */
-.card-text small {
-    color: #800080 !important;
-    font-weight: 500;
-    background-color: rgba(255, 215, 0, 0.1);
-    padding: 4px 8px;
-    border-radius: 4px;
-    display: inline-block;
+.mb-2 {
+    margin-bottom: 0.5rem !important;
 }
 
 /* --- Botones en Cards --- */
 .mt-auto {
     margin-top: auto !important;
-}
-
-.d-flex {
-    display: flex !important;
 }
 
 .gap-2 {
@@ -287,6 +300,7 @@
     border-radius: 0.375rem;
 }
 
+/* Botón Detalle */
 .btn-outline-primary {
     background-color: transparent;
     border-color: #800080;
@@ -301,19 +315,20 @@
         box-shadow: 0 4px 8px rgba(128, 0, 128, 0.2);
     }
 
-.btn-primary {
-    background-color: #800080;
-    border-color: #800080;
+/* Botón Roles - Rojo para destacar */
+.btn-danger {
+    background-color: #DC3545;
+    border-color: #DC3545;
     color: white;
 }
 
-    .btn-primary:hover {
-        background-color: #5d005d;
-        border-color: #5d005d;
+    .btn-danger:hover {
+        background-color: #C82333;
+        border-color: #BD2130;
         color: white;
         text-decoration: none;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(128, 0, 128, 0.2);
+        box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
     }
 
 .btn i {
@@ -469,6 +484,67 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     }
 
+/* --- Animaciones --- */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cliente-card {
+    animation: fadeIn 0.4s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Animación escalonada para las cards */
+.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(1) .cliente-card {
+    animation-delay: 0.1s;
+}
+
+.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(2) .cliente-card {
+    animation-delay: 0.2s;
+}
+
+.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(3) .cliente-card {
+    animation-delay: 0.3s;
+}
+
+.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(4) .cliente-card {
+    animation-delay: 0.4s;
+}
+
+.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(5) .cliente-card {
+    animation-delay: 0.5s;
+}
+
+.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(6) .cliente-card {
+    animation-delay: 0.6s;
+}
+
+/* --- Efectos de hover adicionales --- */
+.cliente-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #800080, #FFD700);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.cliente-card:hover::before {
+    transform: scaleX(1);
+}
+
 /* --- Responsive Design --- */
 @media (max-width: 1200px) {
     .clientes-container {
@@ -562,73 +638,16 @@
         .estado-vacio h4 {
             font-size: 1.2rem;
         }
-}
 
-/* --- Animaciones --- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    .card-title {
+        font-size: 1rem;
     }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.cliente-card {
-    animation: fadeIn 0.4s ease-out;
-    animation-fill-mode: both;
-}
-
-/* Animación escalonada para las cards */
-.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(1) .cliente-card {
-    animation-delay: 0.1s;
-}
-
-.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(2) .cliente-card {
-    animation-delay: 0.2s;
-}
-
-.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(3) .cliente-card {
-    animation-delay: 0.3s;
-}
-
-.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(4) .cliente-card {
-    animation-delay: 0.4s;
-}
-
-.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(5) .cliente-card {
-    animation-delay: 0.5s;
-}
-
-.col-12.col-sm-6.col-md-4.col-lg-3:nth-child(6) .cliente-card {
-    animation-delay: 0.6s;
 }
 
 /* --- Estilos para íconos --- */
 .fas {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
-}
-
-/* --- Efectos de hover adicionales --- */
-.cliente-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #800080, #FFD700);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.cliente-card:hover::before {
-    transform: scaleX(1);
 }
 
 /* --- Mejoras de accesibilidad --- */
@@ -638,3 +657,41 @@
     outline: 2px solid #FFD700;
     outline-offset: 2px;
 }
+
+/* --- Corrección de texto en estado vacío --- */
+.estado-vacio h4 {
+    content: "No hay usuarios activos";
+}
+
+.estado-vacio p {
+    content: "No se encontraron usuarios activos en el sistema.";
+}
+
+.estado-vacio .btn-agregar {
+    content: "Agregar Primer Usuario";
+}
+
+/* --- Tooltip para email largo --- */
+.card-title {
+    position: relative;
+}
+
+    .card-title:hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        z-index: 1000;
+        margin-bottom: 5px;
+    }
+
+    .card-title[title]:hover::after {
+        display: block;
+    }
