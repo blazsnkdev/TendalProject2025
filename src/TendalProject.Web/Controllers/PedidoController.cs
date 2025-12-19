@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol;
 using TendalProject.Business.DTOs.Requests.Pedido;
 using TendalProject.Business.Interfaces;
@@ -82,7 +83,7 @@ namespace TendalProject.Web.Controllers
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
             return View(paginacion);
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize(Roles = "Administrador, Cliente")]
         public async Task<IActionResult> Detalles(Guid pedidoId, int pagina = 1,int tamanioPagina = 10)
         {
             var result = await _pedidoService.ObtenerDetallesPedidoAsync(pedidoId);
@@ -149,15 +150,37 @@ namespace TendalProject.Web.Controllers
         public async Task<IActionResult> CambiarEstado(CambiarEstadoViewModel viewModel)
         {
             var result = await _pedidoService.ModificarEstadoAsync(
-                new ModificarEstadoPedidoRequest(viewModel.PedidoId, viewModel.EstadoSeleccionado)
-            );
-
+                new ModificarEstadoPedidoRequest(
+                    viewModel.PedidoId, 
+                    viewModel.EstadoSeleccionado));
             if (!result.IsSuccess)
+            {
                 return HandleError(result.Error!);
-
+            }
             return RedirectToAction(nameof(Listar));
         }
 
+        [HttpGet]//NOTE: endpoint para setear los estados en el selectList
+        public IActionResult ObtenerEstadosDisponibles(string estadoActual)
+        {
+            var todosEstados = Enum.GetValues(typeof(EstadoPedido))
+                .Cast<EstadoPedido>()
+                .Select(e => new SelectListItem
+                {
+                    Value = e.ToString(),
+                    Text = e.ToString()
+                })
+                .ToList();
+            var estadosDisponibles = todosEstados
+                .Where(e => e.Value != estadoActual)
+                .ToList();
+
+            return Json(new
+            {
+                estadosDisponibles,
+                todosEstados
+            });
+        }
         private IActionResult HandleError(Error error)
         {
             return error.Code switch

@@ -1,29 +1,32 @@
 ﻿
-.clientes-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-}
-
-
-.page-header {
-    margin-bottom: 20px;
-}
-
-.page-title {
+h1 {
     color: #5d005d;
     font-weight: 700;
 }
 
-.filtros-container label {
-    font-weight: 500;
-    font-size: 0.85rem;
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-.filtros-container .form-control,
-.filtros-container .form-select {
-    font-size: 0.85rem;
+.table th {
+    background-color: #343a40;
+    color: white;
 }
+
+.table td {
+    vertical-align: middle;
+}
+
+
+tfoot td {
+    font-size: 1rem;
+    background-color: #800080;
+    color : white;
+}
+
+
 .pagination-controls {
     display: flex;
     justify-content: space-between;
@@ -86,54 +89,6 @@
 }
 
 
-.table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
+.btn {
+    font-size: 0.85rem;
 }
-
-.table td {
-    vertical-align: middle;
-}
-
-
-.table .btn {
-    font-size: 0.75rem;
-}
-
-.table select {
-    font-size: 0.75rem;
-}
-
-
-.estado-vacio {
-    text-align: center;
-    padding: 40px;
-    color: #6c757d;
-}
-
-    .estado-vacio i {
-        font-size: 40px;
-        margin-bottom: 10px;
-    }
-
-
-
-.btn-outline-info {
-    color: #800080;
-    border-color: #800080;
-}
-
-    .btn-outline-info:hover {
-        color: #fff;
-        background-color: #5d005d;
-    }
-
-.btn-primary {
-    background-color: #800080;
-    border: none;
-}
-
-    .btn-primary:hover {
-        background-color: #5d005d;
-    }
-

@@ -3,38 +3,59 @@
     ViewData["Title"] = "Detalles del Pedido";
     var pedidoId = Context.Request.Query["pedidoId"];
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pedido/Detalles.css" />
+}
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Detalles del Pedido</h1>
+        @* NOTE: OJITO ESTO CUANDO SE REDIRECCION DEL HISTORIAL DEBE ENVIAR UN DETALLE ESPECFICO DEL PEDIDO NO AQUI *@
         <a asp-action="Listar" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Volver a Pedidos
+            <i class="bi bi-arrow-left"></i> Regresar
         </a>
     </div>
 
-    <!-- Información de Paginación -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-0">
-                        <strong>Total de Artículos:</strong> @Model.TotalRegistros
-                    </p>
-                    <p class="mb-0">
-                        <strong>Mostrando:</strong> @(Model.Items.Count > 0 ?
-                                                $"{((Model.PaginaIndice - 1) * Model.TamanioPagina) + 1} - {Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros)}" :
-                                                "0") de @Model.TotalRegistros
-                    </p>
-                </div>
-                <div class="col-md-6 text-end">
-                    <p class="mb-0">
-                        <strong>Página:</strong> @Model.PaginaIndice de @Model.TotalPagias
-                    </p>
-                </div>
+    <div class="pagination-controls">
+
+        <div class="registros-info">
+            Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+            @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+            @Model.TotalRegistros registros
+        </div>
+
+        <div class="tamanio-pagina">
+            <span class="tamanio-label">Registros por página:</span>
+            <div>
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="5"
+                   class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="10"
+                   class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="25"
+                   class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="50"
+                   class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+
             </div>
         </div>
-    </div>
 
+    </div>
+    <br />
     @if (Model.Items.Any())
     {
         <div class="table-responsive">
@@ -65,10 +86,10 @@
                             </td>
                             <td>@detalle.CodigoArticulo</td>
                             <td>
-                                <span class="badge bg-info">@detalle.NombreCategoria</span>
+                                @detalle.NombreCategoria
                             </td>
                             <td>
-                                <span class="badge bg-primary rounded-pill">@detalle.Cantidad</span>
+                                @detalle.Cantidad
                             </td>
                             <td>
                                 @detalle.PrecioFinal.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-AR"))
@@ -95,86 +116,73 @@
         <!-- Paginación -->
         @if (Model.TotalPagias > 1)
         {
-            <nav aria-label="Paginación de detalles del pedido">
-                <ul class="pagination justify-content-center">
-                    <!-- Botón Anterior -->
-                    <li class="page-item @(!Model.TienePaginaAnterior ? "disabled" : "")">
-                        @if (Model.TienePaginaAnterior)
-                        {
-                            <a class="page-link"
-                               asp-action="Detalles"
-                               asp-route-pedidoId="@pedidoId"
-                               asp-route-pagina="@(Model.PaginaIndice - 1)">
-                                <i class="bi bi-chevron-left"></i> Anterior
-                            </a>
-                        }
-                        else
-                        {
-                            <span class="page-link"><i class="bi bi-chevron-left"></i> Anterior</span>
-                        }
+            <!-- PAGINACIÓN INFERIOR -->
+            <nav aria-label="Paginación de clientes">
+                <ul class="pagination-custom">
+
+                    <!-- Primera página -->
+                    <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="1"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
                     </li>
 
-                    <!-- Números de página -->
+                    <!-- Página anterior -->
+                    <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="@(Model.PaginaIndice - 1)"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+
                     @{
+
                         int inicio = Math.Max(1, Model.PaginaIndice - 2);
                         int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
                     }
 
-                    @if (inicio > 1)
-                    {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Detalles" asp-route-pedidoId="@pedidoId" asp-route-pagina="1">1</a>
-                        </li>
-                        @if (inicio > 2)
-                        {
-                            <li class="page-item disabled">
-                                <span class="page-link">...</span>
-                            </li>
-                        }
-                    }
-
                     @for (int i = inicio; i <= fin; i++)
                     {
-                        <li class="page-item @(i == Model.PaginaIndice ? "active" : "")">
-                            <a class="page-link"
+                        <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                            <a class="page-link-custom"
                                asp-action="Detalles"
                                asp-route-pedidoId="@pedidoId"
-                               asp-route-pagina="@i">@i</a>
-                        </li>
-                    }
-
-                    @if (fin < Model.TotalPagias)
-                    {
-                        @if (fin < Model.TotalPagias - 1)
-                        {
-                            <li class="page-item disabled">
-                                <span class="page-link">...</span>
-                            </li>
-                        }
-                        <li class="page-item">
-                            <a class="page-link"
-                               asp-action="Detalles"
-                               asp-route-pedidoId="@pedidoId"
-                               asp-route-pagina="@Model.TotalPagias">@Model.TotalPagias</a>
-                        </li>
-                    }
-
-                    <!-- Botón Siguiente -->
-                    <li class="page-item @(!Model.TienePaginaSiguiente ? "disabled" : "")">
-                        @if (Model.TienePaginaSiguiente)
-                        {
-                            <a class="page-link"
-                               asp-action="Detalles"
-                               asp-route-pedidoId="@pedidoId"
-                               asp-route-pagina="@(Model.PaginaIndice + 1)">
-                                Siguiente <i class="bi bi-chevron-right"></i>
+                               asp-route-pagina="@i"
+                               asp-route-tamanioPagina="@Model.TamanioPagina">
+                                @i
                             </a>
-                        }
-                        else
-                        {
-                            <span class="page-link">Siguiente <i class="bi bi-chevron-right"></i></span>
-                        }
+                        </li>
+                    }
+
+                    <!-- Página siguiente -->
+                    <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="@(Model.PaginaIndice + 1)"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
                     </li>
+
+                    <!-- Última página -->
+                    <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="@Model.TotalPagias"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+
                 </ul>
             </nav>
         }
@@ -186,60 +194,4 @@
             No se encontraron detalles para este pedido.
         </div>
     }
-
-    <!-- Información adicional si es necesario -->
-    <div class="mt-4">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Resumen</h5>
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Total de artículos:</strong> @Model.TotalRegistros</p>
-                        <p><strong>Total de páginas:</strong> @Model.TotalPagias</p>
-                        <p><strong>Tamaño de página:</strong> @Model.TamanioPagina</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Acciones</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-outline-primary">
-                                <i class="bi bi-printer"></i> Imprimir Detalles
-                            </a>
-                            <a href="#" class="btn btn-outline-success">
-                                <i class="bi bi-file-excel"></i> Exportar a Excel
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Estilos adicionales -->
-<style>
-    .table th {
-        background-color: #343a40;
-        color: white;
-    }
-
-    .badge {
-        font-size: 0.9em;
-    }
-
-    .page-item.active .page-link {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-
-    .card {
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    }
-</style>
+   </div>

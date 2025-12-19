@@ -136,29 +136,16 @@
                         <td>
                             <a asp-action="Detalles" asp-route-pedidoId="@item.PedidoId"
                                class="btn btn-sm btn-outline-info">
-                                <i class="fas fa-info-circle"></i> Detalle
+                                <i class="fas fa-info-circle"></i> Detalles
                             </a> |
-                            <form asp-action="CambiarEstado" method="post" class="d-inline">
-                                @Html.AntiForgeryToken()
-
-                                <input type="hidden" name="PedidoId" value="@item.PedidoId" />
-
-                                <select name="EstadoSeleccionado" class="form-select form-select-sm d-inline w-auto">
-                                    @if (item.Estado == "Pagado")
-                                    {
-                                        <option value="@EstadoPedido.Enviado">Enviar</option>
-                                        <option value="@EstadoPedido.Cancelado">Cancelar</option>
-                                    }
-                                    else if (item.Estado == "Enviado")
-                                    {
-                                        <option value="@EstadoPedido.Entregado">Entregar</option>
-                                    }
-                                </select>
-
-                                <button type="submit" class="btn btn-primary btn-sm ms-1">
-                                    Actualizar
-                                </button>
-                            </form>
+                            <button type="button" class="btn btn-primary btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#cambiarEstadoModal"
+                                    data-pedidoid="@item.PedidoId"
+                                    data-estadoactual="@item.Estado"
+                                    onclick="cargarEstados(this)">
+                                Cambiar Estado
+                            </button>
 
                         </td>
                     </tr>
@@ -238,6 +225,42 @@
         </div>
     }
 </div>
+
+<div class="modal fade" id="cambiarEstadoModal" tabindex="-1" aria-labelledby="cambiarEstadoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="CambiarEstado" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="modalPedidoId" name="PedidoId" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cambiarEstadoModalLabel">Cambiar Estado del Pedido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Estado Actual:</label>
+                        <input type="text" id="estadoActualDisplay" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="EstadoSeleccionado" class="form-label">Nuevo Estado:</label>
+                        <select id="EstadoSeleccionado" name="EstadoSeleccionado" class="form-select" required>
+                            <option value="">-- Seleccione un estado --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambio</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script src="~/js/Pedido/Listar.js"></script>
 }
