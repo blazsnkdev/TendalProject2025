@@ -1,28 +1,28 @@
 ﻿@model TendalProject.Web.ViewModels.Ecommerce.CarritoViewModel
 @{
-    ViewData["Title"] = "Mi Carrito de Compras";
-
+    ViewData["Title"] = "Mi Carrito";
 }
 @section Styles {
+    <link rel="stylesheet" href="~/css/Ecommerce/_BaseEcommerce.css" />
     <link rel="stylesheet" href="~/css/Ecommerce/Carrito.css" />
 }
+
 <div class="container mt-4">
-    <h2 class="mb-4 page-title">Tu Carrito <small class="cantidad-title">(@Model.Items.Count() items)</small></h2>
-    
+    <h2 class="page-title">Tu Carrito</h2>
+
     @if (!Model.Items.Any())
     {
-        <div class="empty-cart">
-            <div class="empty-cart-icon">🛒</div>
+        <div class="empty-state">
+            <div style="font-size:4rem">🛒</div>
             <h4>Tu carrito está vacío</h4>
             <p>Explora nuestros productos y agrega lo que más te guste.</p>
 
             <a asp-controller="Ecommerce"
                asp-action="Catalogo"
-               class="empty-cart-link">
+               class="empty-state-link">
                 Seguir comprando →
             </a>
         </div>
-
     }
     else
     {
@@ -43,28 +43,35 @@
                         @foreach (var item in Model.Items)
                         {
                             <tr>
-                                <td style="width:120px;">
-                                    <img src="@Url.Content("~/" + item.Imagen + "?v=" + DateTime.Now.Ticks)"
-                                         class="img-fluid" />
+                                <td style="width:100px">
+                                    <img src="@Url.Content("~/" + item.Imagen)" class="img-fluid" />
                                 </td>
                                 <td>@item.NombreArticulo</td>
                                 <td>S/ @item.Precio</td>
                                 <td>
-                                    <form asp-action="ActualizarCantidad" asp-route-itemId="@item.ItemId" method="post" class="d-flex gap-2">
+                                    <form asp-action="ActualizarCantidad"
+                                          asp-route-itemId="@item.ItemId"
+                                          method="post"
+                                          class="d-flex gap-2">
                                         @Html.AntiForgeryToken()
-                                        <input type="number" name="cantidad" value="@item.Cantidad" min="1"
-                                               class="form-control form-control-sm" style="width: 80px;" />
-                                        <button type="submit" class="btn btn-success btn-sm">
-                                            <i class="bi bi-check-lg"></i>
+                                        <input type="number" name="cantidad"
+                                               value="@item.Cantidad"
+                                               min="1"
+                                               class="form-control form-control-sm"
+                                               style="width:80px" />
+                                        <button class="btn btn-success btn-sm">
+                                            ✓
                                         </button>
                                     </form>
                                 </td>
                                 <td><strong>S/ @item.SubTotal</strong></td>
                                 <td>
-                                    <form asp-action="EliminarItem" asp-route-itemId="@item.ItemId" method="post">
+                                    <form asp-action="EliminarItem"
+                                          asp-route-itemId="@item.ItemId"
+                                          method="post">
                                         @Html.AntiForgeryToken()
                                         <button class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i> Quitar
+                                            Quitar
                                         </button>
                                     </form>
                                 </td>
@@ -81,36 +88,34 @@
                         <hr />
 
                         <p class="d-flex justify-content-between">
-                            <span>Cantidad total de articulos:</span>
+                            <span>Productos:</span>
                             <strong>@Model.CantidadTotal</strong>
                         </p>
 
                         <p class="d-flex justify-content-between fs-5">
-                            <span>Total a pagar:</span>
-                            <strong class="total-pagar">S/ @Model.PrecioTotal</strong>
+                            <span>Total:</span>
+                            <strong>S/ @Model.PrecioTotal</strong>
                         </p>
 
-                        <hr />
+                        <div class="d-grid gap-2 mt-3">
+                            <a asp-action="Checkout" class="btn btn-primary-tendal d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-credit-card"></i> Continuar
+                            </a>
 
-                        <a asp-action="Checkout" class="btn btn-continuar w-100">
-                            <i class="bi bi-credit-card"></i> Continuar
-                        </a>
-                        <a asp-controller="Ecommerce" asp-action="Catalogo" class="btn btn-seguir w-100 mt-2">
-                            Seguir comprando
-                        </a>
-                        <form id="formVaciarCarrito" asp-action="Vaciar" method="post">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger" onclick="VaciarCarritoConfirmacion()">
-                                Vaciar carrito
-                            </button>
-                        </form>
+                            <a asp-controller="Ecommerce" asp-action="Catalogo" class="btn btn-seguir d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-cart-plus"></i> Seguir comprando
+                            </a>
 
+                            <form id="formVaciarCarrito" asp-action="Vaciar" method="post" class="w-100">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-vaciar w-100 d-flex align-items-center justify-content-center gap-2" onclick="VaciarCarritoConfirmacion()">
+                                    <i class="bi bi-trash"></i> Vaciar carrito
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     }
 </div>
-@section Scripts {
-    <script src="~/js/Ecommerce/Carrito.js"></script>
-}
