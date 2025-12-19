@@ -158,7 +158,7 @@ namespace TendalProject.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Cliente")]
-        public async Task<IActionResult> VaciarCarrito()
+        public async Task<IActionResult> Vaciar()
         {
             var clienteId = ObtenerClienteId();
             if(clienteId == Guid.Empty)
@@ -170,7 +170,7 @@ namespace TendalProject.Web.Controllers
             {
                 return HandleError(result.Error!);
             }
-            return RedirectToAction(nameof(Catalogo));
+            return RedirectToAction(nameof(Carrito));
         }
         private IActionResult HandleError(Error error)
         {

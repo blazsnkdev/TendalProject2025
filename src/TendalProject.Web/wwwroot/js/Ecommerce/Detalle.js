@@ -1,7 +1,5 @@
-﻿// Archivo: wwwroot/js/Ecommerce/Detalle.js
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Validar cantidad en el formulario
+﻿document.addEventListener('DOMContentLoaded', function() {
+    
     const cantidadInput = document.querySelector('input[name="cantidad"]');
     const maxStock = parseInt(cantidadInput.max) || 0;
     
@@ -16,10 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
             value = maxStock;
         }
         
-        // Actualizar indicador visual
         updateStockIndicator(value);
         
-        // Cambiar color del input según stock
         if (value > maxStock * 0.8) {
             this.classList.remove('border-warning', 'border-danger');
             this.classList.add('border-success');
@@ -32,13 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Función para actualizar indicador de stock
     function updateStockIndicator(quantity) {
         const stockElement = document.querySelector('dd:nth-child(10)');
         if (stockElement) {
             const remaining = maxStock - quantity;
             
-            // Actualizar texto
             stockElement.innerHTML = `
                 <span class="stock-counter">
                     <span class="stock-indicator ${remaining < 10 ? 'stock-low' : ''} ${remaining === 0 ? 'stock-out' : ''}"></span>
@@ -268,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Cerrar con tecla ESC
         document.addEventListener('keydown', function closeOnEsc(e) {
             if (e.key === 'Escape') {
                 modal.style.display = 'none';
@@ -282,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Actualizar precio total basado en cantidad
     cantidadInput.addEventListener('input', function() {
         const quantity = parseInt(this.value) || 1;
         const priceElement = document.querySelector('dd:nth-child(8)');
@@ -292,7 +284,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isNaN(unitPrice)) {
             const totalPrice = unitPrice * quantity;
             
-            // Mostrar precio total temporalmente
             const originalContent = priceElement.innerHTML;
             priceElement.dataset.originalContent = originalContent;
             priceElement.innerHTML = `
@@ -302,7 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </small>
             `;
             
-            // Restaurar después de 3 segundos
             clearTimeout(priceElement.restoreTimeout);
             priceElement.restoreTimeout = setTimeout(() => {
                 if (priceElement.dataset.originalContent) {
@@ -312,7 +302,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Efecto de entrada para elementos
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -326,12 +315,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
     
-    // Observar elementos para animación
     document.querySelectorAll('dt, dd, form, a').forEach(el => {
         observer.observe(el);
     });
     
-    // Agregar badge de producto destacado si tiene alta calificación
     const ratingValue = parseFloat(document.querySelector('dd:nth-child(14)').textContent.trim()) || 0;
     if (ratingValue >= 4.5) {
         const imageContainer = document.querySelector('.product-image-container');
