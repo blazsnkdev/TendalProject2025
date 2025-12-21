@@ -1,17 +1,16 @@
 ﻿@model TendalProject.Web.ViewModels.Categoria.DetalleCategoriaViewModel
 
 @{
-    ViewData["Title"] = "Detalle Proveedor";
+    ViewData["Title"] = "Detalle Categoria";
 }
 
-<h1>Detalle</h1>
-<h4>Datos de la Categoria</h4>
+<h1 class="text-center">Detalle</h1>
+<h4 class="text-center">Datos de la Categoria</h4>
 @section Styles {
     <link rel="stylesheet" href="~/css/Categoria/Detalle.css" />
 }
-<div>
     <hr />
-    <dl class="row">
+    <dl class="row text-center">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nombre)
         </dt>
@@ -37,8 +36,7 @@
             @Html.DisplayFor(model => model.FechaRegistro)
         </dd>
     </dl>
-</div>
-<div>
+<div class="text-center">
     <form id="formEstado" asp-action="ModificarEstado" asp-route-categoriaId="@Model.CategoriaId" method="post">
         <button type="button"
                 class="btn @(Model.Estado == "Activo" ? "btn-danger" : "btn-success") px-4"
@@ -46,12 +44,10 @@
             <i class="bi @(Model.Estado == "Activo" ? "bi-x-circle" : "bi-check-circle")"></i>
             @(Model.Estado == "Activo" ? "Desactivar" : "Activar")
         </button>
+        <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
     </form>
 </div>
 <br />
-<div>
-    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
-</div>
 
 
 @section Scripts {

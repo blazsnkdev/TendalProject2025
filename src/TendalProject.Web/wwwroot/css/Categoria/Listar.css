@@ -1,6 +1,6 @@
 ﻿.clientes-container {
     padding: 2rem;
-    background-color: #f8f9fa;
+    background-color: white;
 }
 
 .page-header {
@@ -102,17 +102,7 @@
     pointer-events: none;
 }
 
-.estado-vacio {
-    text-align: center;
-    padding: 3rem;
-    color: #333333;
-}
 
-    .estado-vacio i {
-        font-size: 3rem;
-        color: #800080;
-        margin-bottom: 1rem;
-    }
 
 .custom-buttons .btn-outline-primary {
     color: #800080;
@@ -131,4 +121,25 @@
 
     .custom-buttons .btn-primary:hover {
         background-color: #5d005d;
+    }
+
+
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+    .empty-state h4 {
+        font-weight: 700;
+    }
+
+.empty-state-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .empty-state-link:hover {
+        text-decoration: underline;
     }

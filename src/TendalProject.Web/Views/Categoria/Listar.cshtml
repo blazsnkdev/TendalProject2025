@@ -115,13 +115,15 @@
     }
     else
     {
-        
-        <div class="estado-vacio">
-            <i class="fas fa-users"></i>
-            <h4>No hay categorias activas</h4>
-            <p>No se encontraron categorias activas en el sistema.</p>
-            <a asp-action="Registrar" class="btn-agregar">
-                <i class="fas fa-plus-circle"></i> Agregar Primera Categoria
+
+        <div class="empty-state">
+            <div style="font-size:4rem">📦</div>
+            <h4>No tienes categorias registradas</h4>
+            <p>Agrega una nueva categoria.</p>
+            <a asp-controller="Categoria"
+               asp-action="Registrar"
+               class="empty-state-link">
+                Agregar →
             </a>
         </div>
     }
@@ -129,7 +131,7 @@
 
 @if ((bool)ViewBag.MostrarInactivos)
 {
-    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-primary">
+    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-warning">
         Ver Activos
     </a>
 }

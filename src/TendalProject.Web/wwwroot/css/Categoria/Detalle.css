@@ -7,7 +7,7 @@ dl.row {
     background-color: #ffffff;
     padding: 1.5rem;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    align-items: center;
 }
 
 dt {
@@ -37,12 +37,3 @@ dd {
         background-color: #2E8B57;
     }
 
-a {
-    color: #FFD700;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-    a:hover {
-        color: #e6c200;
-    }
