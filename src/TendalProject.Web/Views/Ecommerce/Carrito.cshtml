@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="~/css/Ecommerce/Carrito.css" />
 }
 
-<div class="container mt-4">
-    <h2 class="page-title">Tu Carrito</h2>
+
 
     @if (!Model.Items.Any())
     {
@@ -26,6 +25,8 @@
     }
     else
     {
+    <div class="container mt-4">
+        <h2 class="page-title">Tu Carrito</h2>
         <div class="row">
             <div class="col-lg-8">
                 <table class="table align-middle">
@@ -117,5 +118,6 @@
                 </div>
             </div>
         </div>
+    </div>
     }
-</div>
+

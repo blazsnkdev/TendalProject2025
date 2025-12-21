@@ -1,0 +1,18 @@
+﻿.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+    .empty-state h4 {
+        font-weight: 700;
+    }
+
+.empty-state-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .empty-state-link:hover {
+        text-decoration: underline;
+    }
