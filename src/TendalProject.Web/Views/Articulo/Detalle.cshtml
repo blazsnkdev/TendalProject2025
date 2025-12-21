@@ -11,21 +11,17 @@
 <div class="container mt-4">
 
     <h2 class="text-center mb-4 fw-bold">Detalle del Artículo</h2>
-
     <div class="row justify-content-center">
-
-        <!-- Tarjeta -->
         <div class="col-md-10 col-lg-8">
-
-            <div class="card shadow-lg border-0 rounded-4">
-
-                <!-- Imagen -->
-                <img src="@Url.Content("~/" + Model.Imagen + "?v=" + DateTime.Now.Ticks)"
-                     class="img-fluid" />
+            <div class="card-tarjeta">
+                <div class="imagen text-center">
+                    <img src="@Url.Content("~/" + Model.Imagen + "?v=" + DateTime.Now.Ticks)"
+                         class="img-fluid imagen-articulo" />
+                </div>
                 <div class="card-body p-4">
 
 
-                    <h3 class="card-title fw-bold text-primary">@Model.Nombre</h3>
+                    <h3 class="card-title fw-bold nombre-ariticulo">@Model.Nombre</h3>
 
                     <p class="text-muted mb-4">@Model.Descripcion</p>
 

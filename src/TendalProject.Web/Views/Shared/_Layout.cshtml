@@ -14,39 +14,52 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light navbar-tendal mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TendalProject.Web</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Ecommerce" asp-action="Catalogo">Minimarket Tendal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categoria" asp-action="Listar">Módulo Categorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Proveedor" asp-action="Listar">Módulo Proveedores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Articulo" asp-action="Listar">Módulo Articulos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Listar">Módulo Usuarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Listar">Módulo Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pedido" asp-action="Listar">Módulo Pedidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ecommerce" asp-action="Catalogo">Catalogo</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ecommerce" asp-action="Carrito">Mi Carrito</a>
-                        </li>
+
+                        @* ADMIN *@
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark"
+                                   href="#"
+                                   id="modulosDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Módulos
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-controller="Articulo" asp-action="Listar">Artículos</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Categoria" asp-action="Listar">Categorías</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Proveedor" asp-action="Listar">Proveedores</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Usuario" asp-action="Listar">Usuarios</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Cliente" asp-action="Listar">Clientes</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Pedido" asp-action="Listar">Pedidos</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @* CLIENTE *@
+                        @if (User.IsInRole("Cliente"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Ecommerce"
+                                   asp-action="Catalogo">
+                                    Catálogo
+                                </a>
+                            </li>
+                        }
+
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item dropdown">
@@ -79,20 +92,23 @@
         </main>
     </div>
 
-    <footer style="margin-top:40px; padding:20px; background:#f5f5f5">
-        <h4>Tendal</h4>
-        <p>Tienda virtual dedicada a la venta de ropa y accesorios.</p>
+    <footer class="footer-tendal">
+        <div class="container">
+            <h5 class="mb-2">Tendal</h5>
+            <p class="mb-1">Tienda virtual dedicada a la venta de ropa y accesorios.</p>
 
-        <p>
-            📧 contacto@tendal.pe <br />
-            📞 WhatsApp: 999 999 999
-        </p>
+            <p class="mb-1">
+                📧 contacto@tendal.pe <br />
+                📞 WhatsApp: 999 999 999
+            </p>
 
-        <p>
-            <a asp-action="Privacy">Términos y condiciones</a> |
-            <a asp-action="Politica">Polictica de Privacidad</a> |
-        </p>
+            <small>
+                <a asp-action="Privacy">Términos</a> |
+                <a asp-action="Politica">Política de Privacidad</a>
+            </small>
+        </div>
     </footer>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

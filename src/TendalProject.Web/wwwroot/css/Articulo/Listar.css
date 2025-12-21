@@ -1,8 +1,8 @@
 ﻿/* ===== LISTAR ARTÍCULOS ===== */
 
-.clientes-container {
+.articulos-container {
     padding: 2rem;
-    background-color: #f8f9fa;
+    background-color: white;
 }
 
 .page-title {
