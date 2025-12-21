@@ -1,6 +1,4 @@
-﻿/* ===== REGISTRAR ARTÍCULO ===== */
-
-h2 {
+﻿h2 {
     color: #5d005d;
     font-weight: 700;
     text-align: center;
@@ -14,7 +12,6 @@ form {
     background-color: #ffffff;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.08);
 }
 
 label {
@@ -27,13 +24,13 @@ label {
     border-radius: 8px;
 }
 
-button.btn-primary {
+input.btn-primary {
     background-color: #800080;
     border: none;
     font-weight: 600;
 }
 
-    button.btn-primary:hover {
+    input.btn-primary:hover {
         background-color: #5d005d;
     }
 
