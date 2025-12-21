@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="~/css/Proveedor/Detalle.css" />
 }
 <h1>Detalle</h1>
-
-<div>
-    <h4>Datos del Proveedor</h4>
-    <hr />
+<h4>Datos del Proveedor</h4>
+<hr />
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Nombre)
@@ -67,9 +65,7 @@
             @Html.DisplayFor(model => model.FechaRegistro)
         </dd>
     </dl>
-</div>
-<div>
-
+<div class="text-center">
     <form id="formEstado" asp-action="ModificarEstado" asp-route-proveedorId="@Model.ProveedorId" method="post">
         <button type="button"
                 class="btn @(Model.Estado == "Activo" ? "btn-danger" : "btn-success") px-4"
@@ -77,13 +73,9 @@
             <i class="bi @(Model.Estado == "Activo" ? "bi-x-circle" : "bi-check-circle")"></i>
             @(Model.Estado == "Activo" ? "Desactivar" : "Activar")
         </button>
+        <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
     </form>
-    <br />
 </div>
-<div>
-    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
-</div>
-
 
 @section Scripts {
     <script src="~/js/Proveedor/Detalle.js"></script>

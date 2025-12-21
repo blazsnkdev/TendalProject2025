@@ -1,80 +1,140 @@
 ﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Proveedor.ListarProveedoresViewModel>
 
 @{
-    ViewData["Title"] = "Módulo Proveedor";
-    int paginaActual = ViewBag.PaginaActual ?? 1;
-    int totalPaginas = ViewBag.TotalPaginas ?? 1;
+    ViewData["Title"] = "Módulo Categoria";
 }
+
 @section Styles {
-    <link rel="stylesheet" href="~/css/Proveedor/Listar.css" />
+    <link rel="stylesheet" href="~/css/Categoria/Listar.css" />
 }
-
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">Módulo Proveedores</h2>
-        <a asp-action="Registrar" class="btn btn-agregar">
-            <i class="bi bi-plus-circle"></i> Nuevo Proveedor
-        </a>
+<div class="proveedor-container">
+    <div class="page-header">
+        <h1 class="page-title">Módulo Proveedor</h1>
     </div>
+    <a asp-action="Registrar" class="btn-agregar">
+        <i class="bi bi-plus-circle"></i>  Agregar
+    </a>
 
-    <div class="row g-4">
-        @foreach (var item in Model.Items)
-        {
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">@item.Nombre</h5>
-                        <p class="card-text mb-1"><strong>RUC:</strong> @item.Ruc</p>
-                        <p class="card-text mb-1"><strong>Razón Social:</strong> @item.RazonSocial</p>
-                        <p class="card-text mb-1"><strong>Contacto:</strong> @item.Contacto</p>
-                        <p class="card-text mb-1"><strong>Teléfono:</strong> @item.Telefono</p>
-                        <p class="card-text mb-1"><strong>Email:</strong> @item.Email</p>
-                        <p class="card-text mb-2"><strong>Dirección:</strong> @item.Direccion</p>
+    @if (Model.Items.Any())
+    {
+        <div class="pagination-controls">
+            <div class="registros-info">
+                Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+                @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+                @Model.TotalRegistros registros
+            </div>
 
-                        <span class="badge @(item.Estado == "Activo" ? "bg-success" : "bg-danger")">
-                            @item.Estado
-                        </span>
+            <div class="tamanio-pagina">
+                <span class="tamanio-label">Registros por página:</span>
+                <div>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="5"
+                       class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="10"
+                       class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="25"
+                       class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+                    <a asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="50"
+                       class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+                </div>
+            </div>
+        </div>
 
-                        <div class="mt-3 custom-buttons">
-                            <a class="btn btn-sm btn-outline-primary" asp-action="Detalle" asp-route-proveedorId="@item.ProveedorId">
-                                <i class="fas fa-eye"></i> Detalle
-                            </a>
-                            <a class="btn btn-sm btn-primary" asp-action="Actualizar" asp-route-proveedorId="@item.ProveedorId">
-                                <i class="bi bi-pencil-square"></i> Editar
-                            </a>
+        <div class="row g-4 mt-3">
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card shadow-sm cliente-card h-100">
+                        <div class="card-body d-flex flex-column">
+
+                            <h5 class="card-title fw-bold">@item.Nombre</h5>
+                            <p class="card-text text-muted mb-1">@item.RazonSocial</p>
+                            <p class="card-text text-muted mb-1">@item.Ruc</p>
+                            <p class="card-text text-muted mb-1">@item.Contacto</p>
+                            <p class="card-text text-muted mb-1">@item.Telefono</p>
+                            <p class="card-text text-muted mb-1">@item.Email</p>
+                            <p class="card-text text-muted mb-1">@item.Direccion</p>
+                            <span class="badge bg-success mb-2">@item.Estado</span>
+                            <p class="card-text">
+                                <small class="text-secondary">
+                                    Registro: @item.FechaRegistro.ToString("dd/MM/yyyy:HH:mm")
+                                </small>
+                            </p>
+
+                            <div class="mt-auto d-flex gap-2 custom-buttons">
+                                <a asp-controller="Proveedor" asp-action="Detalle" asp-route-proveedorId="@item.ProveedorId"
+                                   class="btn btn-sm btn-outline-primary w-50">
+                                    <i class="fas fa-eye"></i> Detalle
+                                </a>
+                                <a asp-controller="Proveedor" asp-action="Actualizar" asp-route-proveedorId="@item.ProveedorId"
+                                   class="btn btn-sm btn-primary w-50">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-
-    <nav class="mt-4">
-        <ul class="pagination justify-content-center">
-
-            <li class="page-item @(paginaActual == 1 ? "disabled" : "")">
-                <a class="page-link" asp-action="Listar" asp-route-pagina="@(paginaActual - 1)">Anterior</a>
-            </li>
-
-            @for (int i = 1; i <= totalPaginas; i++)
-            {
-                <li class="page-item @(i == paginaActual ? "active" : "")">
-                    <a class="page-link" asp-action="Listar" asp-route-pagina="@i">@i</a>
-                </li>
             }
+        </div>
 
-            <li class="page-item @(paginaActual == totalPaginas ? "disabled" : "")">
-                <a class="page-link" asp-action="Listar" asp-route-pagina="@(paginaActual + 1)">Siguiente</a>
-            </li>
-        </ul>
-    </nav>
 
+        <nav aria-label="Paginación de proveedores">
+            <ul class="pagination-custom">
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="1" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Primera">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@(Model.PaginaIndice - 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Anterior">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+
+                @{
+                    int inicio = Math.Max(1, Model.PaginaIndice - 2);
+                    int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
+                }
+
+                @for (int i = inicio; i <= fin; i++)
+                {
+                    <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                        <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@i" asp-route-tamanioPagina="@Model.TamanioPagina">@i</a>
+                    </li>
+                }
+
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@(Model.PaginaIndice + 1)" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Siguiente">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                    <a class="page-link-custom" asp-action="Listar" asp-route-pagina="@Model.TotalPagias" asp-route-tamanioPagina="@Model.TamanioPagina" aria-label="Última">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+
+        <div class="empty-state">
+            <div style="font-size:4rem">🚚</div>
+            <h4>No tienes proveedores registrados</h4>
+            <p>Agrega una nuevo proveedor.</p>
+            <a asp-controller="Proveedor"
+               asp-action="Registrar"
+               class="empty-state-link">
+                Agregar →
+            </a>
+        </div>
+    }
 </div>
-
 
 @if ((bool)ViewBag.MostrarInactivos)
 {
-    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-primary">
+    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-warning">
         Ver Activos
     </a>
 }

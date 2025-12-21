@@ -1,8 +1,10 @@
-﻿/* ===== LISTAR PROVEEDORES ===== */
-
-.clientes-container {
+﻿.clientes-container {
     padding: 2rem;
-    background-color: #f8f9fa;
+    background-color: white;
+}
+
+.page-header {
+    margin-bottom: 1.5rem;
 }
 
 .page-title {
@@ -23,56 +25,68 @@
 
     .btn-agregar:hover {
         background-color: #e6c200;
-        color: #333333
+        color: #333333;
     }
 
-.card {
+.cliente-card {
     border: none;
     border-radius: 10px;
 }
 
-.card-title {
-    color: #800080;
-    font-weight: 700;
-}
-
-.badge {
-    background-color: #3CB371;
-}
-
-.custom-buttons .btn-outline-primary {
-    border-color: #800080;
-    color: #800080;
-}
-
-    .custom-buttons .btn-outline-primary:hover {
-        background-color: #800080;
-        color: #ffffff;
+    .cliente-card .card-title {
+        color: #800080;
     }
 
-.custom-buttons .btn-primary {
-    background-color: #800080;
-    color: white;
-    border: none;
+.badge.bg-success {
+    background-color: #3CB371 !important;
 }
 
-    .custom-buttons .btn-primary:hover {
-        background-color: #5d005d;
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.registros-info {
+    color: #333333;
+    font-size: 0.9rem;
+}
+
+.tamanio-pagina {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-tamanio {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .btn-tamanio.active,
+    .btn-tamanio:hover {
+        background-color: #800080;
+        color: #ffffff;
     }
 
 .pagination-custom {
     display: flex;
     justify-content: center;
-    gap: 0.4rem;
     list-style: none;
-    padding: 0;
     margin-top: 2rem;
+    padding: 0;
+    gap: 0.3rem;
 }
 
 .page-link-custom {
     padding: 0.4rem 0.7rem;
+    border-radius: 5px;
     border: 1px solid #800080;
-    border-radius: 6px;
     color: #800080;
     text-decoration: none;
 }
@@ -83,27 +97,49 @@
         color: #ffffff;
     }
 
-.page-item-custom.disabled {
+.page-item-custom.disabled .page-link-custom {
     opacity: 0.4;
     pointer-events: none;
 }
 
-.estado-vacio {
-    text-align: center;
-    padding: 3rem;
-    color: #333333;
+
+
+.custom-buttons .btn-outline-primary {
+    color: #800080;
+    border-color: #800080;
 }
 
-    .estado-vacio i {
-        font-size: 3rem;
-        color: #800080;
+    .custom-buttons .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #5d005d;
     }
 
-.btn-primary {
-    background-color: #3CB371;
+.custom-buttons .btn-primary {
+    background-color: #800080;
     border: none;
 }
 
-    .btn-primary:hover {
-        background-color: #2E8B57;
+    .custom-buttons .btn-primary:hover {
+        background-color: #5d005d;
+    }
+
+
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+    .empty-state h4 {
+        font-weight: 700;
+    }
+
+.empty-state-link {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .empty-state-link:hover {
+        text-decoration: underline;
     }
