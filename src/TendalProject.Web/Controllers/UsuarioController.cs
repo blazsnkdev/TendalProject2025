@@ -78,7 +78,6 @@ namespace TendalProject.Web.Controllers
                 Nombre = r.Nombre,
                 Descripcion = r.Descripcion
             }).ToList();
-            ViewBag.UsuarioId = usuarioId;
             var paginacion = PaginacionHelper.Paginacion(viewModel, pagina, tamanioPagina);
             return View(paginacion);
         }

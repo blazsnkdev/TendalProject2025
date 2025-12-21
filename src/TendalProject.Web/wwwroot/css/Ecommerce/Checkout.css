@@ -1,0 +1,7 @@
+﻿.table tbody tr:hover {
+    background-color: #f7f2f7;
+}
+.card-title {
+    color: #800080;
+    font-weight: 600;
+}

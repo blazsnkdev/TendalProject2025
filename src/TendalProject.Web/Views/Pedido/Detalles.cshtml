@@ -1,0 +1,197 @@
+﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Pedido.DetallePedidoViewModel>
+@{
+    ViewData["Title"] = "Detalles del Pedido";
+    var pedidoId = Context.Request.Query["pedidoId"];
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pedido/Detalles.css" />
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Detalles del Pedido</h1>
+        @* NOTE: OJITO ESTO CUANDO SE REDIRECCION DEL HISTORIAL DEBE ENVIAR UN DETALLE ESPECFICO DEL PEDIDO NO AQUI *@
+        <a asp-action="Listar" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Regresar
+        </a>
+    </div>
+
+    <div class="pagination-controls">
+
+        <div class="registros-info">
+            Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
+            @Math.Min(Model.PaginaIndice * Model.TamanioPagina, Model.TotalRegistros) de
+            @Model.TotalRegistros registros
+        </div>
+
+        <div class="tamanio-pagina">
+            <span class="tamanio-label">Registros por página:</span>
+            <div>
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="5"
+                   class="btn-tamanio @(Model.TamanioPagina == 5 ? "active" : "")">5</a>
+
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="10"
+                   class="btn-tamanio @(Model.TamanioPagina == 10 ? "active" : "")">10</a>
+
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="25"
+                   class="btn-tamanio @(Model.TamanioPagina == 25 ? "active" : "")">25</a>
+
+                <a asp-action="Detalles"
+                   asp-route-pedidoId="@pedidoId"
+                   asp-route-pagina="1"
+                   asp-route-tamanioPagina="50"
+                   class="btn-tamanio @(Model.TamanioPagina == 50 ? "active" : "")">50</a>
+
+            </div>
+        </div>
+
+    </div>
+    <br />
+    @if (Model.Items.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Artículo</th>
+                        <th>Código</th>
+                        <th>Categoría</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detalle in Model.Items)
+                    {
+                        <tr>
+                            <td>
+                                <div>
+                                    <strong>@detalle.NombreArticulo</strong>
+                                    @if (!string.IsNullOrEmpty(detalle.DescripcionArticulo))
+                                    {
+                                        <br />
+                                        <small class="text-muted">@detalle.DescripcionArticulo</small>
+                                    }
+                                </div>
+                            </td>
+                            <td>@detalle.CodigoArticulo</td>
+                            <td>
+                                @detalle.NombreCategoria
+                            </td>
+                            <td>
+                                @detalle.Cantidad
+                            </td>
+                            <td>
+                                @detalle.PrecioFinal.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-AR"))
+                            </td>
+                            <td>
+                                <strong>@detalle.SubTotal.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-AR"))</strong>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="table-active">
+                        <td colspan="5" class="text-end"><strong>Total del Pedido:</strong></td>
+                        <td>
+                            <strong>
+                                @Model.Items.Sum(x => x.SubTotal).ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("es-AR"))
+                            </strong>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        @if (Model.TotalPagias > 1)
+        {
+            <!-- PAGINACIÓN INFERIOR -->
+            <nav aria-label="Paginación de clientes">
+                <ul class="pagination-custom">
+
+                    <!-- Primera página -->
+                    <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="1"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+
+                    <!-- Página anterior -->
+                    <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="@(Model.PaginaIndice - 1)"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+
+                    @{
+
+                        int inicio = Math.Max(1, Model.PaginaIndice - 2);
+                        int fin = Math.Min(Model.TotalPagias, Model.PaginaIndice + 2);
+                    }
+
+                    @for (int i = inicio; i <= fin; i++)
+                    {
+                        <li class="page-item-custom @(i == Model.PaginaIndice ? "active" : "")">
+                            <a class="page-link-custom"
+                               asp-action="Detalles"
+                               asp-route-pedidoId="@pedidoId"
+                               asp-route-pagina="@i"
+                               asp-route-tamanioPagina="@Model.TamanioPagina">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Página siguiente -->
+                    <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="@(Model.PaginaIndice + 1)"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+
+                    <!-- Última página -->
+                    <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
+                        <a class="page-link-custom"
+                           asp-action="Detalles"
+                           asp-route-pedidoId="@pedidoId"
+                           asp-route-pagina="@Model.TotalPagias"
+                           asp-route-tamanioPagina="@Model.TamanioPagina">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle me-2"></i>
+            No se encontraron detalles para este pedido.
+        </div>
+    }
+   </div>

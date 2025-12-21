@@ -12,12 +12,11 @@
 
 <div class="container-fluid py-4">
     <div class="row">
-        <!-- Sidebar de Filtros -->
+        
         <div class="col-lg-3 mb-4">
             <div class="filter-sidebar">
                 <h5 class="mb-4">Filtros</h5>
                 
-                <!-- Buscador -->
                 <div class="filter-section">
                     <h6 class="filter-title">Buscar</h6>
                     <form method="get" id="searchForm">
@@ -34,7 +33,7 @@
                     </form>
                 </div>
 
-                <!-- Categorías -->
+                
                 <div class="filter-section">
                     <h6 class="filter-title">Categorías</h6>
                     <select class="form-select" name="categoriaId" onchange="this.form.submit()" form="filterForm">
@@ -52,7 +51,7 @@
                     </select>
                 </div>
 
-                <!-- Precio -->
+                
                 <div class="filter-section">
                     <h6 class="filter-title">Rango de Precio</h6>
                     <div class="row g-2">
@@ -74,8 +73,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Estado -->
+                
                 <div class="filter-section">
                     <h6 class="filter-title">Estado</h6>
                     <div class="form-check mb-2">
@@ -116,7 +114,7 @@
                     </div>
                 </div>
 
-                <!-- Calificación -->
+                
                 <div class="filter-section">
                     <h6 class="filter-title">Calificación Mínima</h6>
                     <select class="form-select" name="minRating" onchange="this.form.submit()" form="filterForm">
@@ -126,10 +124,10 @@
                         <option value="2" selected="@(Context.Request.Query["minRating"] == "2")">2+ Estrellas</option>
                     </select>
                 </div>
-
-                <!-- Botones de Filtro -->
+                <br />
+                
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary" form="filterForm">
+                    <button type="submit" class="btn btn-filtrar" form="filterForm">
                         <i class="fas fa-filter me-2"></i>Aplicar Filtros
                     </button>
                     <a href="@Url.Action("Catalogo")" class="btn btn-outline-secondary">
@@ -139,9 +137,9 @@
             </div>
         </div>
 
-        <!-- Contenido Principal -->
+        
         <div class="col-lg-9">
-            <!-- Header del Catálogo -->
+            
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h3 mb-2">Catálogo de Productos</h1>
@@ -162,7 +160,7 @@
                 </div>
             </div>
 
-            <!-- Formulario de Filtros (oculto) -->
+            
             <form id="filterForm" method="get" class="d-none">
                 @foreach (var key in Context.Request.Query.Keys)
                 {
@@ -173,23 +171,23 @@
                 }
             </form>
 
-            <!-- Grid de Productos -->
+            
             @if (Model.Items.Any())
             {
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="row g-4">
                     @foreach (var producto in Model.Items)
                     {
-                        
-                        <div class="col">
+                        <div class="col-12 col-md-6 col-lg-4">
+
                             <div class="card product-card h-100">
-                                <!-- Imagen del Producto -->
+                                
                                 <div class="product-image-container">
                                     <img src="@Url.Content("~/" + producto.Imagen + "?v=" + DateTime.Now.Ticks)
                                          alt="@producto.NombreArticulo" 
                                          class="product-image"
                                          onerror="this.src='/images/default-product.png'">
                                     
-                                    <!-- Badges -->
+                                    
                                     <div class="badge-container">
                                         @if (producto.EsNuevo)
                                         {
@@ -202,18 +200,18 @@
                                     </div>
                                 </div>
 
-                                <!-- Contenido de la Tarjeta -->
+                                
                                 <div class="card-body d-flex flex-column">
-                                    <!-- Categoría -->
+                                    
                                     <span class="category-badge">@producto.NombreCategoria</span>
                                     
-                                    <!-- Título -->
+                                    
                                     <h5 class="product-title">@producto.NombreArticulo</h5>
                                     
-                                    <!-- Descripción -->
+                                    
                                     <p class="product-description">@producto.Descripcion</p>
                                     
-                                    <!-- Calificación -->
+                                    
                                     @if (producto.Calificacion.HasValue)
                                     {
                                         <div class="rating-container mb-3">
@@ -241,7 +239,7 @@
                                         </div>
                                     }
 
-                                    <!-- Precio -->
+                                    
                                     <div class="price-container mb-3">
                                         @if (producto.PrecioOferta.HasValue
                                                                         && producto.PrecioOferta > 0
@@ -262,7 +260,7 @@
                                     </div>
 
                                     
-                                    <!-- Stock -->
+                                    
                                     <div class="mb-3">
                                         @if (producto.Stock > 0)
                                         {
@@ -280,7 +278,7 @@
                                         }
                                     </div>
                                     
-                                    <!-- Botón de Seleccionar -->
+                                    
                                     @if (producto.Disponible && producto.Stock > 0)
                                     {
                                         <div class="mt-auto">
@@ -290,7 +288,7 @@
                                                 <i class="fas fa-shopping-cart me-2"></i>Seleccionar
                                             </a>
                                         </div>
-                                        <div class="btn-calificar">
+                                        <div class="mt-auto">
                                             <a class="btn-calificar"
                                                asp-action="Calificar"
                                                asp-route-articuloId="@producto.ArticuloId">
@@ -312,7 +310,7 @@
                     }
                 </div>
 
-                <!-- Paginación -->
+                
                 @if (Model.TotalPagias > 1)
                 {
                     <div class="pagination-container">
@@ -352,7 +350,7 @@
             }
             else
             {
-                <!-- Estado Vacío -->
+                
                 <div class="text-center py-5">
                     <div class="mb-4">
                         <i class="fas fa-search fa-4x text-muted"></i>
@@ -371,7 +369,7 @@
 @section Scripts {
     <script src="~/js/Ecommerce/Catalogo.js"></script>
 }
-<!-- Modal de Carga -->
+
 <div class="modal fade" id="loadingModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0">

@@ -1,26 +1,22 @@
 ﻿@model TendalProject.Common.Utils.PaginaResult<TendalProject.Web.ViewModels.Categoria.ListarCategoriasViewModel>
 
 @{
-    ViewData["Title"] = "Activos";
+    ViewData["Title"] = "Módulo Categoria";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/Categoria/Listar.css" />
 }
 <div class="clientes-container">
-    <!-- Header de la página -->
     <div class="page-header">
         <h1 class="page-title">Módulo Categorias</h1>
     </div>
-
-    <!-- Botón agregar -->
     <a asp-action="Registrar" class="btn-agregar">
-        <i class="fas fa-plus-circle"></i> Agregar
+        <i class="bi bi-plus-circle"></i>  Agregar
     </a>
 
     @if (Model.Items.Any())
     {
-        <!-- Controles de paginación superior -->
         <div class="pagination-controls">
             <div class="registros-info">
                 Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
@@ -43,7 +39,6 @@
             </div>
         </div>
 
-        <!-- Grid de Cards -->
         <div class="row g-4 mt-3">
             @foreach (var item in Model.Items)
             {
@@ -62,7 +57,7 @@
                                 </small>
                             </p>
 
-                            <div class="mt-auto d-flex gap-2">
+                            <div class="mt-auto d-flex gap-2 custom-buttons">
                                 <a asp-controller="Categoria" asp-action="Detalle" asp-route-categoriaId="@item.CategoriaId"
                                    class="btn btn-sm btn-outline-primary w-50">
                                     <i class="fas fa-eye"></i> Detalle
@@ -80,7 +75,6 @@
         </div>
 
 
-        <!-- Paginación inferior -->
         <nav aria-label="Paginación de categorias">
             <ul class="pagination-custom">
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
@@ -121,7 +115,7 @@
     }
     else
     {
-        <!-- Estado vacío -->
+        
         <div class="estado-vacio">
             <i class="fas fa-users"></i>
             <h4>No hay categorias activas</h4>

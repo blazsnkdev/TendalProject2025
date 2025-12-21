@@ -1,0 +1,44 @@
+﻿h1{
+    color: #5d005d;
+    font-weight: 700;
+}
+h4 {
+    color: black;
+    font-weight: 700;
+}
+
+dl.row {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.06);
+}
+
+dt {
+    font-weight: 600;
+    color: #333333;
+}
+
+dd {
+    color: #555555;
+}
+
+.btn-danger {
+    background-color: #800080;
+    border: none;
+}
+
+    .btn-danger:hover {
+        background-color: #5d005d;
+    }
+
+.btn-success {
+    background-color: #3CB371;
+    border: none;
+}
+
+    .btn-success:hover {
+        background-color: #2E8B57;
+    }
+
+

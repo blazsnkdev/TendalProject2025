@@ -1,0 +1,159 @@
+﻿.clientes-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Header */
+.page-header {
+    margin-bottom: 20px;
+}
+
+.page-title {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+/* Buscador */
+form input[type="text"] {
+    max-width: 300px;
+}
+
+
+/* Tamaño página */
+.tamanio-pagina {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-tamanio {
+    padding: 4px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #212529;
+    font-size: 0.85rem;
+}
+
+    .btn-tamanio.active {
+        background: #800080;
+        color: white;
+        border-color: #800080;
+    }
+
+/* Tabla */
+.table th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+/* Estado vacío */
+.estado-vacio {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+    .estado-vacio i {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.registros-info {
+    color: #333333;
+    font-size: 0.9rem;
+}
+
+.tamanio-pagina {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-tamanio {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .btn-tamanio.active,
+    .btn-tamanio:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.pagination-custom {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 2rem;
+    padding: 0;
+    gap: 0.3rem;
+}
+
+.page-link-custom {
+    padding: 0.4rem 0.7rem;
+    border-radius: 5px;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .page-item-custom.active .page-link-custom,
+    .page-link-custom:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.page-item-custom.disabled .page-link-custom {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+
+.btn-buscar {
+    display: inline-block;
+    background-color: #800080;
+    color: white;
+    text-decoration: none;
+}
+
+    .btn-buscar:hover {
+        background-color: #5d005d;
+        color: white;
+    }
+
+.custom-buttons .btn-outline-primary {
+    color: #800080;
+    border-color: #800080;
+}
+
+    .custom-buttons .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #5d005d;
+    }
+
+.custom-buttons .btn-primary {
+    background-color: #800080;
+    border: none;
+}
+
+    .custom-buttons .btn-primary:hover {
+        background-color: #5d005d;
+    }

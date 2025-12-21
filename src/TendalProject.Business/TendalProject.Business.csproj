@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTOs\Requests\Pago\**" />
+    <EmbeddedResource Remove="DTOs\Requests\Pago\**" />
+    <None Remove="DTOs\Requests\Pago\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="mercadopago-sdk" Version="2.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
@@ -15,10 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TendalProject.Common\TendalProject.Common.csproj" />
     <ProjectReference Include="..\TendalProject.Data\TendalProject.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\Requests\Pago\" />
   </ItemGroup>
 
 </Project>

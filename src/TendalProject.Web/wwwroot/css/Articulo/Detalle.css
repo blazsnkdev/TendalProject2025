@@ -1,0 +1,49 @@
+﻿/* ===== DETALLE ARTÍCULO ===== */
+
+h2 {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+.card {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+    .card img {
+        max-height: 350px;
+        object-fit: cover;
+    }
+
+.card-title {
+    color: #800080;
+}
+
+strong {
+    color: #333333;
+}
+
+
+
+.btn-primary {
+    background-color: #800080;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #5d005d;
+    }
+
+.btn-danger {
+    background-color: #800080;
+    border: none;
+}
+
+.btn-success {
+    background-color: #800080;
+    border: none;
+}
+
+.btn-warning {
+    font-weight: 600;
+}

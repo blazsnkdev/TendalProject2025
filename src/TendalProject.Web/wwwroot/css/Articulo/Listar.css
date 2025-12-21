@@ -1,2 +1,160 @@
-﻿body {
+﻿/* ===== LISTAR ARTÍCULOS ===== */
+
+.clientes-container {
+    padding: 2rem;
+    background-color: #f8f9fa;
 }
+
+.page-title {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+.btn-agregar {
+    display: inline-block;
+    margin-bottom: 1rem;
+    background-color: #FFD700;
+    color: #333333;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .btn-agregar:hover {
+        background-color: #e6c200;
+    }
+
+.table th {
+    background-color: #800080;
+    color: #ffffff;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-outline-primary {
+    border-color: #800080;
+    color: #800080;
+}
+
+    .btn-outline-primary:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.btn-outline-info {
+    border-color: #3CB371;
+    color: #3CB371;
+}
+
+    .btn-outline-info:hover {
+        background-color: #3CB371;
+        color: #ffffff;
+    }
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.registros-info {
+    color: #333333;
+    font-size: 0.9rem;
+}
+
+.tamanio-pagina {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-tamanio {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .btn-tamanio.active,
+    .btn-tamanio:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.pagination-custom {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 2rem;
+    padding: 0;
+    gap: 0.3rem;
+}
+
+.page-link-custom {
+    padding: 0.4rem 0.7rem;
+    border-radius: 5px;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .page-item-custom.active .page-link-custom,
+    .page-link-custom:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.page-item-custom.disabled .page-link-custom {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.estado-vacio {
+    text-align: center;
+    padding: 3rem;
+    color: #333333;
+}
+
+    .estado-vacio i {
+        font-size: 3rem;
+        color: #800080;
+        margin-bottom: 1rem;
+    }
+
+.custom-buttons .btn-info {
+    color: #800080;
+    background-color :white;
+    border-color: #800080;
+}
+
+    .custom-buttons .btn-info:hover {
+        color: #fff;
+        background-color: #5d005d;
+    }
+
+.custom-buttons .btn-primary {
+    background-color: #800080;
+    border: none;
+}
+
+    .custom-buttons .btn-primary:hover {
+        background-color: #5d005d;
+    }
+
+/* ===== ESTADO VACÍO ===== */
+
+.estado-vacio {
+    text-align: center;
+    padding: 3rem;
+}
+
+    .estado-vacio i {
+        font-size: 3rem;
+        color: #800080;
+    }

@@ -1,11 +1,14 @@
 ﻿@model TendalProject.Web.ViewModels.Categoria.DetalleCategoriaViewModel
 
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Detalle Proveedor";
 }
 
 <h1>Detalle</h1>
-
+<h4>Datos de la Categoria</h4>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Categoria/Detalle.css" />
+}
 <div>
     <hr />
     <dl class="row">
@@ -44,8 +47,10 @@
             @(Model.Estado == "Activo" ? "Desactivar" : "Activar")
         </button>
     </form>
-    <br />
-    <a asp-action="Listar">Lista</a>
+</div>
+<br />
+<div>
+    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>
 
 

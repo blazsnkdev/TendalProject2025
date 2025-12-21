@@ -21,5 +21,6 @@
         public int PedidosEnviados { get; set; }
         public int PedidosEntregados { get; set; }
         public int PedidosCancelados { get; set; }
+        public int PedidosPagados { get; set; }
     }
 }

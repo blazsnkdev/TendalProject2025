@@ -1,0 +1,89 @@
+﻿/* ===== ROLES USUARIO ===== */
+
+.page-title {
+    font-weight: 700;
+    color: #5d005d;
+}
+
+.table th {
+    background-color: #800080;
+    color: #fff;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-agregar {
+    background-color: #FFD700;
+    color: #333;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+    .btn-agregar:hover {
+        background-color: #e6c200;
+    }
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.registros-info {
+    color: #333333;
+    font-size: 0.9rem;
+}
+
+.tamanio-pagina {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-tamanio {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .btn-tamanio.active,
+    .btn-tamanio:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.pagination-custom {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 2rem;
+    padding: 0;
+    gap: 0.3rem;
+}
+
+.page-link-custom {
+    padding: 0.4rem 0.7rem;
+    border-radius: 5px;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .page-item-custom.active .page-link-custom,
+    .page-link-custom:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.page-item-custom.disabled .page-link-custom {
+    opacity: 0.4;
+    pointer-events: none;
+}

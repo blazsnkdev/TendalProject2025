@@ -8,7 +8,7 @@
         public DateTime FechaCreacion { get; set; }
         public bool Activo { get; set; }
         public DateTime? UltimaConexion { get; set; }
-        public int IntentosFallidos { get; set; }//TODO: che esto es para el futuro para hacer un conteo de intentos fallidos de login
+        public int IntentosFallidos { get; set; }
         public DateTime? FechaDesbloqueo { get; set; }
         public int CantidadLogins { get; set; }
         public ICollection<UsuarioRol> UsuariosRoles { get; set; } = new List<UsuarioRol>();

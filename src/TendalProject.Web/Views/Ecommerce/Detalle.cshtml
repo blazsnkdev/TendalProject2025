@@ -1,13 +1,15 @@
 ﻿@model TendalProject.Web.ViewModels.Ecommerce.DetalleArticuloSeleccionadoViewModel
 
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Detalle Articulo";
 }
-
-<h1>Detalle</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Ecommerce/Detalle.css" />
+}
+<h1 class="page-title">Detalle</h1>
 
 <div>
-    <h4>DetalleArticuloSeleccionadoViewModel</h4>
+    <h4>Datos del Articulo seleccionado</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -44,7 +46,8 @@
             @Html.DisplayNameFor(model => model.Imagen)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Imagen)
+            <img src="@Url.Content("~/" + Model.Imagen + "?v=" + DateTime.Now.Ticks)"
+                 class="img-fluid" />
         </dd>
         <dt class = "col-sm-2">
             Calificación del Articulo
@@ -54,28 +57,38 @@
         </dd>
     </dl>
 </div>
-<div>
+
+<div class="form-container">
     <form asp-controller="Ecommerce"
           asp-action="Agregar"
           asp-route-articuloId="@Model.ArticuloId"
           asp-route-precioFinal="@Model.Precio"
-          method="post">
+          method="post"
+          class="form-inline">
         @Html.AntiForgeryToken()
+
         <label for="cantidad" class="form-label">Cantidad:</label>
+
         @Html.TextBox("cantidad", "1", new {
         type = "number",
                 min = 1,
                 max = Model.Stock,
-                @class = "form-control",
+                @class = "form-control quantity-input",
                 style = "max-width:120px"
                 })
 
-        <button type="submit" class="btn btn-primary-tendal mt-2">
-            Agregar al Carrito
+        <button type="submit" class="btn btn-primary-tendal btn-add-cart">
+            <i class="fas fa-cart-plus me-2"></i>Agregar al Carrito
         </button>
     </form>
 
-    <br />
-    <a asp-action="Catalogo">Regresar al Catálogo</a>
+    <div class="form-actions">
+        <a asp-action="Catalogo" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Regresar
+        </a>
+    </div>
 </div>
 
+@section Scripts {
+    <script src="~/js/Ecommerce/Detalle.js"></script>
+}

@@ -21,6 +21,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IEcommerceService, EcommerceService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 //SecretsKey
 builder.Services.AddScoped<IPagoService>(sp =>
 {

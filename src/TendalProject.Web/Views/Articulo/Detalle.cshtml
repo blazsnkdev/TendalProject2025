@@ -4,6 +4,9 @@
 @{
     ViewData["Title"] = "Detalle del Artículo";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Articulo/Detalle.css" />
+}
 
 <div class="container mt-4">
 
@@ -60,26 +63,20 @@
 
                     </div>
 
-                    <div class="d-flex justify-content-between mt-4">
-                        <a asp-action="Listar" class="btn btn-secondary px-4">
+                    <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+                        <a asp-action="Listar" class="btn btn-secondary flex-grow-1 text-center px-4">
                             <i class="bi bi-arrow-left"></i> Volver
                         </a>
-                        <form id="formEstado" asp-action="ModificarEstado" asp-route-articuloId="@Model.ArticuloId" method="post">
+
+                        <form id="formEstado" asp-action="ModificarEstado" asp-route-articuloId="@Model.ArticuloId" method="post" class="flex-grow-1">
                             <button type="button"
-                                    class="btn @(Model.Estado == "Activo" ? "btn-danger" : "btn-success") px-4"
+                                    class="btn @(Model.Estado == "Activo" ? "btn-danger" : "btn-success") w-100 px-4"
                                     onclick="confirmarCambioEstado('@Model.Estado')">
                                 <i class="bi @(Model.Estado == "Activo" ? "bi-x-circle" : "bi-check-circle")"></i>
                                 @(Model.Estado == "Activo" ? "Desactivar" : "Activar")
                             </button>
                         </form>
-
-
-
-                        <a asp-action="Actualizar" asp-route-articuloId="@Model.ArticuloId"
-                           class="btn btn-primary px-4">
-                            <i class="bi bi-pencil-square"></i> Editar
-                        </a>
-                        <button type="button" class="btn btn-warning mt-3" data-bs-toggle="modal" data-bs-target="#modalActualizarImagen">
+                        <button type="button" class="btn btn-warning flex-grow-1 px-4" data-bs-toggle="modal" data-bs-target="#modalActualizarImagen">
                             Cambiar Imagen
                         </button>
                     </div>

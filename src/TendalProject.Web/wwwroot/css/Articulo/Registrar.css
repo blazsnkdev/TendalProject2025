@@ -1,0 +1,44 @@
+﻿/* ===== REGISTRAR ARTÍCULO ===== */
+
+h2 {
+    color: #5d005d;
+    font-weight: 700;
+    text-align: center;
+}
+h4 {
+    color: black;
+    font-weight: 700;
+    text-align: center;
+}
+form {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.08);
+}
+
+label {
+    font-weight: 600;
+    color: #333333;
+}
+
+.form-control,
+.form-select {
+    border-radius: 8px;
+}
+
+button.btn-primary {
+    background-color: #800080;
+    border: none;
+    font-weight: 600;
+}
+
+    button.btn-primary:hover {
+        background-color: #5d005d;
+    }
+
+
+#preview {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}

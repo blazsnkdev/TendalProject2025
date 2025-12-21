@@ -33,7 +33,7 @@ namespace TendalProject.Business.Services
                 {
                     return Result<Guid>.Failure(Error.Validation("El Id de la categoría es inválido."));
                 }
-                if (StringUtils.IsNullOrWhiteSpace(request.Nombre, request.Descripcion))//NOTE: ojito aqui creo que falta el !
+                if (!StringUtils.IsNullOrWhiteSpace(request.Nombre, request.Descripcion))
                 {
                     return Result<Guid>.Failure(Error.Validation("Nombre y Descripción son nulos."));
                 }

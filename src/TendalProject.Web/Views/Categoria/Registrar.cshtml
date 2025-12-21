@@ -1,12 +1,15 @@
 ﻿@model TendalProject.Web.ViewModels.Categoria.RegistrarCategoriaViewModel
 
 @{
-    ViewData["Title"] = "Registrar";
+    ViewData["Title"] = "Registrar Proveedor";
 }
 
 <h1>Registrar</h1>
 
-<h4>RegistrarCategoriaViewModel</h4>
+<h4>Nueva Categoria</h4>
+@section Styles {
+    <link rel="stylesheet" href="~/css/Categoria/Registrar.css" />
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -25,13 +28,13 @@
             </div>
             <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Registrar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Listar">Regresar</a>
+    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>
 

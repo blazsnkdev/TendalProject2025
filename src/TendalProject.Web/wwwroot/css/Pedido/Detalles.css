@@ -1,0 +1,94 @@
+﻿
+h1 {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.table th {
+    background-color: #343a40;
+    color: white;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+
+tfoot td {
+    font-size: 1rem;
+    background-color: #800080;
+    color : white;
+}
+
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.registros-info {
+    color: #333333;
+    font-size: 0.9rem;
+}
+
+.tamanio-pagina {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-tamanio {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .btn-tamanio.active,
+    .btn-tamanio:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.pagination-custom {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin-top: 2rem;
+    padding: 0;
+    gap: 0.3rem;
+}
+
+.page-link-custom {
+    padding: 0.4rem 0.7rem;
+    border-radius: 5px;
+    border: 1px solid #800080;
+    color: #800080;
+    text-decoration: none;
+}
+
+    .page-item-custom.active .page-link-custom,
+    .page-link-custom:hover {
+        background-color: #800080;
+        color: #ffffff;
+    }
+
+.page-item-custom.disabled .page-link-custom {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+
+.btn {
+    font-size: 0.85rem;
+}

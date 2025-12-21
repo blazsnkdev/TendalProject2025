@@ -1,50 +1,70 @@
-﻿@{
-    ViewData["Title"] = "Inicio";
+﻿@using TendalProject.Web.ViewModels.Dashboard
+@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="container mt-5">
+<div class="container mt-4">
 
-    <!-- HERO -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">Tendal</h1>
-        <p class="lead">
-            Tienda virtual para la compra de productos de forma rápida y segura.
-        </p>
+    <h2 class="mb-4">📊 Dashboard</h2>
+
+    <!-- CARDS -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Ventas Hoy</h6>
+                    <h4 class="fw-bold text-success">S/. @Model.VentasHoy.ToString("N2")</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Ventas del Mes</h6>
+                    <h4 class="fw-bold text-primary">S/. @Model.VentasMes.ToString("N2")</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Pedidos Hoy</h6>
+                    <h4 class="fw-bold">@Model.PedidosHoy</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Pedidos Pendientes</h6>
+                    <h4 class="fw-bold text-danger">@Model.PedidosPendientes</h4>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- INFO DEL NEGOCIO -->
-    <div class="row text-center mb-5">
-        <div class="col-md-4">
-            <h4>🛒 Compra Online</h4>
-            <p>Explora nuestros productos y agrégalos al carrito de compras.</p>
+    <!-- GRÁFICO -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="mb-3">Resumen de pedidos</h5>
+            <canvas id="chartPedidos"></canvas>
         </div>
-        <div class="col-md-4">
-            <h4>🔒 Pagos Seguros</h4>
-            <p>Pagos protegidos mediante pasarela de pago con certificado SSL.</p>
-        </div>
-        <div class="col-md-4">
-            <h4>🚚 Entrega</h4>
-            <p>Entregas coordinadas según disponibilidad y ubicación.</p>
-        </div>
-    </div>
-
-    <!-- BOTONES -->
-    <div class="text-center mb-5">
-        <a asp-controller="Catalogo" asp-action="Index" class="btn btn-primary btn-lg me-3">
-            Ver productos
-        </a>
-        <a asp-controller="Home" asp-action="Contacto" class="btn btn-outline-secondary btn-lg">
-            Contáctanos
-        </a>
-    </div>
-
-    <!-- INFO LEGAL VISIBLE -->
-    <div class="text-center text-muted mt-4">
-        <p>
-            © 2025 Tendal — Comercio electrónico<br />
-            <a asp-controller="Legal" asp-action="Terminos">Términos y Condiciones</a> |
-            <a asp-controller="Legal" asp-action="Privacidad">Política de Privacidad</a>
-        </p>
     </div>
 
 </div>
+
+@section Scripts {
+    <script>
+        window.dashboardData = {
+            pedidosHoy: @Model.PedidosHoy,
+            pedidosPendientes: @Model.PedidosPendientes
+        };
+    </script>
+
+    <script src="~/js/Home/Index.js"></script>
+}
