@@ -2,6 +2,22 @@
 @{
     ViewData["Title"] = "UnauthorizedPage";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Auth/_ErrorCodes.css" />
+}
 
-<h1>UnauthorizedPage</h1>
+
+<div class="empty-state">
+    <div style="font-size:4rem">🚫</div>
+    <h4>No tienes autorización 401</h4>
+    <p>No has iniciado sesión.</p>
+
+    <a asp-controller="Auth"
+       asp-action="Login"
+       class="empty-state-link">
+        Ir al login →
+    </a>
+</div>
+
+
 

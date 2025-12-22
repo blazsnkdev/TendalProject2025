@@ -44,9 +44,8 @@ button.accept-policy {
   line-height: 60px;
 }
 
-/* Navbar Tendal */
 .navbar-tendal {
-    background-color: #ffc107; /* amarillo bootstrap */
+    background-color: #ffc107;
     border-bottom: 2px solid #e0a800;
 }
 
@@ -60,12 +59,10 @@ button.accept-policy {
             color: #000;
         }
 
-/* Dropdown */
 .dropdown-menu {
     border-radius: 8px;
     font-size: 0.9rem;
 }
-/* Layout para footer abajo */
 .layout-flex {
     display: flex;
     flex-direction: column;
@@ -76,7 +73,6 @@ button.accept-policy {
     flex: 1;
 }
 
-/* Footer */
 .footer-tendal {
     background-color: #f5f5f5;
     padding: 20px 0;

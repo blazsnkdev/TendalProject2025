@@ -1,7 +1,20 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "NotFoundPage";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Auth/_ErrorCodes.css" />
+}
 
-<h1>NotFoundPage</h1>
+<div class="empty-state">
+    <div style="font-size:4rem">🔎</div>
+    <h4>Pagína no Encontrada 404</h4>
+    <p>No se ha encontrado este recurso.</p>
+
+    <a asp-controller="Ecommerce"
+       asp-action="Catalogo"
+       class="empty-state-link">
+        Ir al catalogo →
+    </a>
+</div>
+
 

@@ -22,6 +22,7 @@ builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IEcommerceService, EcommerceService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 //SecretsKey
 builder.Services.AddScoped<IPagoService>(sp =>
 {
@@ -42,9 +43,9 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Auth/Login";     // Página de login
-        options.LogoutPath = "/Auth/Logout";   // Página de logout
-        options.AccessDeniedPath = "/Auth/Denegado";
+        options.LoginPath = "/Auth/Login";     
+        options.LogoutPath = "/Auth/Logout";   
+        options.AccessDeniedPath = "/Auth/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromHours(12);
         options.SlidingExpiration = true;
     });
@@ -68,17 +69,12 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
-//Authenticación y authorizacion
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Ecommerce}/{action=Catalogo}/{id?}")
     .WithStaticAssets();
-
-
 app.Run();

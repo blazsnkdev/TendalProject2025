@@ -1,7 +1,19 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "AccessDenied";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Auth/_ErrorCodes.css" />
+}
 
-<h1>AccessDenied</h1>
+<div class="empty-state">
+    <div style="font-size:4rem">⛔</div>
+    <h4>Acceso Denegado 403</h4>
+    <p>No cuentas por permisos para acceder a esta pagina.</p>
+
+    <a asp-controller="Ecommerce"
+       asp-action="Catalogo"
+       class="empty-state-link">
+        Ir al catalogo →
+    </a>
+</div>
 

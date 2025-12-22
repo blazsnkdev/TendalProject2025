@@ -23,7 +23,7 @@ namespace TendalProject.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var result = await _dashboardService.GetDatosCabeceraDashboardAsync();
-            var value = result.Value;
+            var value = result.Value!;
             var viewModel = new DashboardViewModel()
             {
                 VentasHoy = value.VentasHoy,

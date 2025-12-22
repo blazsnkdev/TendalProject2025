@@ -4,18 +4,20 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Home/Index.css" />
+}
 
 <div class="container mt-4">
 
-    <h2 class="mb-4">📊 Dashboard</h2>
+    <h2 class="mb-4 page-title">Dashboard</h2>
 
-    <!-- CARDS -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
             <div class="card shadow-sm border-0 text-center">
                 <div class="card-body">
                     <h6 class="text-muted">Ventas Hoy</h6>
-                    <h4 class="fw-bold text-success">S/. @Model.VentasHoy.ToString("N2")</h4>
+                    <h4 class="fw-bold text-ventashoy">S/. @Model.VentasHoy.ToString("N2")</h4>
                 </div>
             </div>
         </div>
@@ -24,7 +26,7 @@
             <div class="card shadow-sm border-0 text-center">
                 <div class="card-body">
                     <h6 class="text-muted">Ventas del Mes</h6>
-                    <h4 class="fw-bold text-primary">S/. @Model.VentasMes.ToString("N2")</h4>
+                    <h4 class="fw-bold text-ventasmes">S/. @Model.VentasMes.ToString("N2")</h4>
                 </div>
             </div>
         </div>
@@ -48,7 +50,6 @@
         </div>
     </div>
 
-    <!-- GRÁFICO -->
     <div class="card shadow-sm border-0">
         <div class="card-body">
             <h5 class="mb-3">Resumen de pedidos</h5>

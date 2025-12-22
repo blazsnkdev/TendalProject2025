@@ -23,7 +23,6 @@ namespace TendalProject.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Usuario-Rol (many-to-many)
             modelBuilder.Entity<UsuarioRol>()
                 .HasKey(ur => new { ur.UsuarioId, ur.RolId });
 
@@ -39,14 +38,12 @@ namespace TendalProject.Data.Context
                 .HasForeignKey(ur => ur.RolId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Cliente - Usuario (1:1)
             modelBuilder.Entity<Cliente>()
                 .HasOne(c => c.Usuario)
                 .WithOne(u => u.Cliente)
                 .HasForeignKey<Cliente>(c => c.UsuarioId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Articulo - Categoria y Proveedor
             modelBuilder.Entity<Articulo>()
                 .HasOne(a => a.Categoria)
                 .WithMany(c => c.Articulos)
@@ -59,67 +56,57 @@ namespace TendalProject.Data.Context
                 .HasForeignKey(a => a.ProveedorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            // Índices
             modelBuilder.Entity<Articulo>().HasIndex(a => a.Nombre);
             modelBuilder.Entity<Articulo>().HasIndex(a => a.Codigo).IsUnique();
             modelBuilder.Entity<Categoria>().HasIndex(c => c.Nombre).IsUnique();
             modelBuilder.Entity<Proveedor>().HasIndex(p => p.Nombre).IsUnique();
 
-            // Default
             modelBuilder.Entity<Articulo>()
                 .Property(a => a.Destacado)
                 .HasDefaultValue(false);
 
-            // Cliente - Carrito (1:1)
             modelBuilder.Entity<Cliente>()
                 .HasOne(c => c.Carrito)
                 .WithOne(ca => ca.Cliente)
                 .HasForeignKey<Carrito>(ca => ca.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Cliente - Pedidos (1:N)
             modelBuilder.Entity<Cliente>()
                 .HasMany(c => c.Pedidos)
                 .WithOne(p => p.Cliente)
                 .HasForeignKey(p => p.ClienteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Carrito - Items (1:N)
             modelBuilder.Entity<Carrito>()
                 .HasMany(c => c.Items)
                 .WithOne(i => i.Carrito)
                 .HasForeignKey(i => i.CarritoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Item - Articulo (N:1)
             modelBuilder.Entity<Item>()
                 .HasOne(i => i.Articulo)
                 .WithMany()
                 .HasForeignKey(i => i.ArticuloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Pedido - Detalles (1:N)
             modelBuilder.Entity<Pedido>()
                 .HasMany(p => p.Detalles)
                 .WithOne(d => d.Pedido)
                 .HasForeignKey(d => d.PedidoId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // DetallePedido - Articulo (N:1)
             modelBuilder.Entity<DetallePedido>()
                 .HasOne(d => d.Articulo)
                 .WithMany()
                 .HasForeignKey(d => d.ArticuloId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Venta - Pedido (N:1)
             modelBuilder.Entity<Venta>()
                 .HasOne(v => v.Pedido)
                 .WithMany()
                 .HasForeignKey(v => v.PedidoId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Precisión
             modelBuilder.Entity<Item>()
                 .Property(i => i.PrecioFinal)
                 .HasPrecision(10, 2);
@@ -140,21 +127,18 @@ namespace TendalProject.Data.Context
                 .Property(p => p.Total)
                 .HasPrecision(10, 2);
 
-            //Articulo - Reseñas (1:N)
             modelBuilder.Entity<Reseña>()
                 .HasOne(r => r.Articulo)
                 .WithMany(a => a.Reseñas)
                 .HasForeignKey(r => r.ArticuloId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Cliente - Reseñas (1:N)
             modelBuilder.Entity<Reseña>()
                 .HasOne(r => r.Cliente)
                 .WithMany(c => c.Reseñas)
                 .HasForeignKey(r => r.ClienteId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Carrito
             modelBuilder.Entity<Carrito>()
                 .HasKey(c => c.CarritoId);
 
