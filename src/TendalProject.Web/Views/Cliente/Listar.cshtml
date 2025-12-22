@@ -67,7 +67,7 @@
 
         <br />
         <table class="table table-striped">
-            <thead>
+            <thead class="table table-dark">
                 <tr>
                     <th>Nombre</th>
                     <th>Apellidos</th>
@@ -99,11 +99,9 @@
             </tbody>
         </table>
 
-        <!-- PAGINACIÓN INFERIOR -->
         <nav aria-label="Paginación de clientes">
             <ul class="pagination-custom">
 
-                <!-- Primera página -->
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
                     <a class="page-link-custom"
                        asp-action="Listar"
@@ -115,7 +113,6 @@
                     </a>
                 </li>
 
-                <!-- Página anterior -->
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
                     <a class="page-link-custom"
                        asp-action="Listar"
@@ -147,7 +144,6 @@
                     </li>
                 }
 
-                <!-- Página siguiente -->
                 <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
                     <a class="page-link-custom"
                        asp-action="Listar"
@@ -159,7 +155,6 @@
                     </a>
                 </li>
 
-                <!-- Última página -->
                 <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
                     <a class="page-link-custom"
                        asp-action="Listar"
@@ -184,13 +179,12 @@
     }
 </div>
 
-<!-- BOTÓN DE ACTIVOS / INACTIVOS -->
 @if ((bool)ViewBag.MostrarInactivos)
 {
     <a asp-action="Listar"
        asp-route-mostrarInactivos="false"
        asp-route-nombre="@ViewBag.Nombre"
-       class="btn btn-primary mt-3">
+       class="btn btn-warning mt-3">
         Ver Activos
     </a>
 }

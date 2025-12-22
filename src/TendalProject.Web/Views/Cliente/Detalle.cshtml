@@ -9,8 +9,8 @@
 }
 
 <div class="container mt-4">
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
+    <div class="card mb-4">
+        <div class="card-body p-4">
             <h4 class="card-title mb-3">Información del Cliente</h4>
 
             <div class="row">
@@ -39,105 +39,47 @@
                     <strong>Última Conexión:</strong>
                     <p>@Model.UltimaConexion</p>
                 </div>
+                <div class="col-md-4">
+                    <strong>Monto total gastado:</strong>
+                    <p>@Model.MontoTotalGastado</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Nivel:</strong>
+                    <p>@Model.Nivel</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Compras totales:</strong>
+                    <p>@Model.ComprasTotales</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Pedidos Pendientes:</strong>
+                    <p>@Model.PedidosPendientes</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Pedidos en Proceso:</strong>
+                    <p>@Model.PedidosProcesando</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Pedidos Enviados:</strong>
+                    <p>@Model.PedidosEnviados</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Pedidos Entregados:</strong>
+                    <p>@Model.PedidosEntregados</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Pedidos Cancelados:</strong>
+                    <p>@Model.PedidosCancelados</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Pedidos Pagados:</strong>
+                    <p>@Model.PedidosPagados</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="cliente-cards">
-    <!-- Cards de datos del cliente -->
-    <div class="row text-center mb-4">
-
-        <!-- Monto total gastado -->
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm border-success">
-                <div class="card-body">
-                    <h6 class="text-muted">Monto Total Gastado</h6>
-                    <h3>S/. @Model.MontoTotalGastado</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nivel del cliente -->
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm border-primary">
-                <div class="card-body">
-                    <h6 class="text-muted">Nivel</h6>
-                    <h3>@Model.Nivel</h3>
-                </div>
-            </div>
-        </div>
-
-        <!-- Compras Totales -->
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm border-info">
-                <div class="card-body">
-                    <h6 class="text-muted">Compras Totales</h6>
-                    <h3>@Model.ComprasTotales</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cards de pedidos por estado -->
-    <h4 class="mb-3">Estado de Pedidos</h4>
-    <div class="row text-center">
-
-        <div class="col-md-2 mb-3">
-            <div class="card shadow-sm border-secondary">
-                <div class="card-body">
-                    <h6>Pendientes</h6>
-                    <h4>@Model.PedidosPendientes</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 mb-3">
-            <div class="card shadow-sm border-warning">
-                <div class="card-body">
-                    <h6>Procesando</h6>
-                    <h4>@Model.PedidosProcesando</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 mb-3">
-            <div class="card shadow-sm border-primary">
-                <div class="card-body">
-                    <h6>Enviados</h6>
-                    <h4>@Model.PedidosEnviados</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 mb-3">
-            <div class="card shadow-sm border-success">
-                <div class="card-body">
-                    <h6>Entregados</h6>
-                    <h4>@Model.PedidosEntregados</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 mb-3">
-            <div class="card shadow-sm border-danger">
-                <div class="card-body">
-                    <h6>Cancelados</h6>
-                    <h4>@Model.PedidosCancelados</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2 mb-3">
-            <div class="card shadow-sm border-danger">
-                <div class="card-body">
-                    <h6>Pagados</h6>
-                    <h4>@Model.PedidosPagados</h4>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    </div>
-    <div>
+    
+    <div class="text-center">
         <form id="formEstado" asp-action="ModificarEstado" asp-route-clienteId="@Model.ClienteId" method="post">
             <button type="button"
                     class="btn @(Model.Estado == "Activo" ? "btn-danger" : "btn-success") px-4"
@@ -145,6 +87,7 @@
                 <i class="bi @(Model.Estado == "Activo" ? "bi-x-circle" : "bi-check-circle")"></i>
                 @(Model.Estado == "Activo" ? "Desactivar" : "Activar")
             </button>
+            <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
         </form>
     </div>
 </div>

@@ -16,28 +16,24 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control" placeholder="correro electronico...."/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" class="form-control" placeholder="password..."/>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ConfirmarPassword" class="control-label"></label>
-                <input asp-for="ConfirmarPassword" class="form-control" />
+                <input asp-for="ConfirmarPassword" class="form-control" placeholder="confirmar password..."/>
                 <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
                 <input type="submit" value="Registrar" class="btn btn-primary" />
+                <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
-</div>
-

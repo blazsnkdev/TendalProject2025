@@ -113,14 +113,11 @@
             </table>
         </div>
 
-        <!-- Paginación -->
         @if (Model.TotalPagias > 1)
         {
-            <!-- PAGINACIÓN INFERIOR -->
             <nav aria-label="Paginación de clientes">
                 <ul class="pagination-custom">
 
-                    <!-- Primera página -->
                     <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
                         <a class="page-link-custom"
                            asp-action="Detalles"
@@ -131,7 +128,6 @@
                         </a>
                     </li>
 
-                    <!-- Página anterior -->
                     <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
                         <a class="page-link-custom"
                            asp-action="Detalles"
@@ -161,7 +157,6 @@
                         </li>
                     }
 
-                    <!-- Página siguiente -->
                     <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
                         <a class="page-link-custom"
                            asp-action="Detalles"
@@ -172,7 +167,6 @@
                         </a>
                     </li>
 
-                    <!-- Última página -->
                     <li class="page-item-custom @(!Model.TienePaginaSiguiente ? "disabled" : "")">
                         <a class="page-link-custom"
                            asp-action="Detalles"
@@ -194,4 +188,5 @@
             No se encontraron detalles para este pedido.
         </div>
     }
-   </div>
+</div>
+

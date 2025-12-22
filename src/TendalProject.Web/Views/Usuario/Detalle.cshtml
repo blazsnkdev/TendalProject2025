@@ -1,7 +1,7 @@
 ﻿@model TendalProject.Web.ViewModels.Usuario.DetalleUsuarioViewModel
 
 @{
-    ViewData["Title"] = "Detalle";
+    ViewData["Title"] = "Detalle del Usuario";
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/Usuario/Detalle.css" />
@@ -57,13 +57,14 @@
     <form asp-action="ModificarEstado" asp-route-usuarioId="@Model.UsuarioId" method="post">
         @if (Model.Activo)
         {
-            <input type="submit" value="Desactivar Usuario" class="btn btn-danger" />
+
+            <button type="submit"class="btn btn-danger">Desactivar</button>
+            <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
         }
         else
         {
-            <input type="submit" value="Activar Usuario" class="btn btn-success" />
+            <button type="submit" class="btn btn-success">Activar</button>
+            <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
         }
     </form>
-    <br />
-    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>

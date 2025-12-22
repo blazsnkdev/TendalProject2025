@@ -11,7 +11,7 @@
 <div class="clientes-container">
 
     <div class="page-header">
-        <h1 class="page-title">Pedidos</h1>
+        <h1 class="page-title">Pedidos del cliente</h1>
     </div>
 
     <form asp-action="Pedidos" method="get" class="mb-3 d-flex gap-2">
@@ -29,7 +29,6 @@
     </form>
     @if (Model.Items.Any())
     {
-        <!-- CONTROLES SUPERIORES -->
         <div class="pagination-controls">
 
             <div class="registros-info">
@@ -73,9 +72,8 @@
 
         </div>
         <br />
-        <!-- TABLA -->
         <table class="table table-striped">
-            <thead>
+            <thead class="table table-dark">
                 <tr>
                     <th>Codigo</th>
                     <th>Total</th>
@@ -102,7 +100,6 @@
             </tbody>
         </table>
 
-        <!-- PAGINACIÓN INFERIOR -->
         <nav aria-label="Paginación de pedidos">
             <ul class="pagination-custom">
 

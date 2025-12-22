@@ -12,9 +12,7 @@
     <div class="page-header">
         <h1 class="page-title">Roles Asignados</h1>
     </div>
-    <a asp-action="Registrar" class="btn-agregar">
-        <i class="fas fa-plus-circle"></i> Agregar
-    </a>
+
 
     @if (Model.Items.Any())
     {
@@ -42,7 +40,7 @@
         </div>
         <br />
         <table class="table table-striped">
-            <thead>
+            <thead class="table table-dark">
                 <tr>
                     <th>Nombre</th>
                     <th>Descripción</th>
@@ -59,7 +57,6 @@
             </tbody>
         </table>
 
-        <!-- Paginación inferior -->
         <nav aria-label="Paginación de articulos">
             <ul class="pagination-custom">
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
@@ -100,15 +97,19 @@
     }
     else
     {
-        <!-- Estado vacío -->
-        <div class="estado-vacio">
-            <i class="fas fa-users"></i>
-            <h4>No hay roles asignados </h4>
-            <p>No se le asignaron roles.</p>
-            <a asp-action="Registrar" class="btn-agregar">
-                <i class="fas fa-plus-circle"></i> Agregar Rol
+        <div class="empty-state">
+            <div style="font-size:4rem">📦</div>
+            <h4>No tiene roles asiganados</h4>
+            <p>Agregar rol a usuario proximamente.</p>
+            <a asp-controller="Usuario"
+               asp-action="Listar"
+               class="empty-state-link">
+                Regresar →
             </a>
         </div>
     }
+</div>
+<div>
+    <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
 </div>
 

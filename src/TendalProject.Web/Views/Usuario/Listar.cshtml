@@ -7,20 +7,16 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/Usuario/Listar.css" />
 }
-<div class="clientes-container">
-    <!-- Header de la página -->
+<div class="usuarios-container">
     <div class="page-header">
         <h1 class="page-title">Módulo Usuarios</h1>
     </div>
-
-    <!-- Botón agregar -->
     <a asp-action="Registrar" class="btn-agregar">
-        <i class="fas fa-plus-circle"></i> Agregar
+        <i class="bi bi-plus-circle"></i>  Agregar
     </a>
 
     @if (Model.Items.Any())
     {
-        <!-- Controles de paginación superior -->
         <div class="pagination-controls">
             <div class="registros-info">
                 Mostrando @((Model.PaginaIndice - 1) * Model.TamanioPagina + 1) -
@@ -79,7 +75,6 @@
         </div>
 
 
-        <!-- Paginación inferior -->
         <nav aria-label="Paginación de categorias">
             <ul class="pagination-custom">
                 <li class="page-item-custom @(!Model.TienePaginaAnterior ? "disabled" : "")">
@@ -121,13 +116,15 @@
     }
     else
     {
-        <!-- Estado vacío -->
-        <div class="estado-vacio">
-            <i class="fas fa-users"></i>
-            <h4>No hay categorias activas</h4>
-            <p>No se encontraron categorias activas en el sistema.</p>
-            <a asp-action="Registrar" class="btn-agregar">
-                <i class="fas fa-plus-circle"></i> Agregar Primera Categoria
+
+        <div class="empty-state">
+            <div style="font-size:4rem">🧑🏻‍💻</div>
+            <h4>No tienes usuarios registradas</h4>
+            <p>Agrega una nuevo usuario.</p>
+            <a asp-controller="Usuario"
+               asp-action="Registrar"
+               class="empty-state-link">
+                Agregar →
             </a>
         </div>
     }
@@ -135,7 +132,7 @@
 
 @if ((bool)ViewBag.MostrarInactivos)
 {
-    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-primary">
+    <a asp-action="Listar" asp-route-mostrarInactivos="false" class="btn btn-warning">
         Ver Activos
     </a>
 }

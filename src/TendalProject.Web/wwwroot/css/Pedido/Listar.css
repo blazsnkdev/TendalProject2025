@@ -49,6 +49,7 @@
     border: 1px solid #800080;
     color: #800080;
     text-decoration: none;
+    margin-left: 0.5rem;
 }
 
     .btn-tamanio.active,
@@ -85,11 +86,6 @@
     pointer-events: none;
 }
 
-
-.table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-}
 
 .table td {
     vertical-align: middle;
