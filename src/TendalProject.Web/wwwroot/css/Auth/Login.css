@@ -1,13 +1,5 @@
-﻿/* Paleta de Colores Tendal Market:
-   Amarillo: #FFD700
-   Morado: #800080
-   Verde: #3CB371
-   Blanco: #FFFFFF
-*/
-
-/* --- Base y Contenedor de Login --- */
-body {
-    background-color: #FFD700; /* Fondo amarillo vibrante */
+﻿body {
+    background-color: #FFD700; 
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
@@ -24,14 +16,14 @@ body {
 }
 
 .login-box {
-    background-color: #FFFFFF; /* Caja blanca para el formulario */
+    background-color: #FFFFFF; 
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
-/* --- Elementos de Marca --- */
+
 .logo-area {
     margin-bottom: 25px;
 }
@@ -39,14 +31,14 @@ body {
 .brand-logo {
     width: 80px;
     height: 80px;
-    background-color: #3CB371; /* Círculo verde */
+    background-color: #3CB371; 
     border-radius: 50%;
     padding: 10px;
     margin-bottom: 10px;
 }
 
 .brand-name {
-    color: #800080; /* Morado */
+    color: #800080; 
     font-size: 1.8rem;
     font-weight: bold;
     margin: 0;
@@ -56,11 +48,10 @@ body {
     color: #800080;
     margin-bottom: 20px;
     font-size: 1.5rem;
-    border-bottom: 2px solid #FFD700; /* Detalle amarillo */
+    border-bottom: 2px solid #FFD700; 
     padding-bottom: 5px;
 }
 
-/* --- Formulario General --- */
 .form-group {
     margin-bottom: 15px;
     text-align: left;
@@ -82,11 +73,11 @@ body {
     font-size: 1rem;
 }
 
-/* Botón Principal */
+
 .btn-primary-tendal {
     width: 100%;
     padding: 12px;
-    background-color: #800080; /* Botón Morado */
+    background-color: #800080; 
     color: #FFFFFF;
     border: none;
     border-radius: 6px;
@@ -101,14 +92,14 @@ body {
         background-color: #5d005d;
     }
 
-/* --- Links y Checkbox --- */
+
 .register-link {
     margin-top: 20px;
     font-size: 0.9rem;
 }
 
     .register-link a {
-        color: #3CB371; /* Link verde */
+        color: #3CB371; 
         text-decoration: none;
         font-weight: bold;
     }
@@ -130,7 +121,7 @@ body {
     height: 18px;
 }
 
-/* Validación de Errores */
+
 .text-danger {
     color: #D32F2F;
     font-size: 0.85rem;
@@ -138,7 +129,6 @@ body {
     display: block;
 }
 
-/* Media Query (Móviles) */
 @media (max-width: 768px) {
     .login-box {
         padding: 25px 20px;

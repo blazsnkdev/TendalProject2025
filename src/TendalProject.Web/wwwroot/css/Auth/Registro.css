@@ -1,13 +1,6 @@
-﻿/* Paleta de Colores Tendal Market:
-   Amarillo: #FFD700
-   Morado: #800080
-   Verde: #3CB371
-   Blanco: #FFFFFF
-*/
-
-/* --- Base y Contenedor de Registro --- */
+﻿
 body {
-    background-color: #FFD700; /* Fondo amarillo vibrante */
+    background-color: #FFD700; 
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
@@ -20,7 +13,7 @@ body {
 
 .register-container {
     width: 100%;
-    max-width: 750px; /* Más ancho para el registro */
+    max-width: 750px;
 }
 
 .register-box {
@@ -31,13 +24,12 @@ body {
     text-align: center;
 }
 
-/* --- Elementos de Marca --- */
 .logo-area {
     margin-bottom: 25px;
 }
 
 .brand-name {
-    color: #800080; /* Morado */
+    color: #800080; 
     font-size: 1.8rem;
     font-weight: bold;
     margin: 0;
@@ -47,11 +39,11 @@ body {
     color: #800080;
     margin-bottom: 20px;
     font-size: 1.5rem;
-    border-bottom: 2px solid #FFD700; /* Detalle amarillo */
+    border-bottom: 2px solid #FFD700; 
     padding-bottom: 5px;
 }
 
-/* --- Formulario General --- */
+
 .form-group {
     margin-bottom: 15px;
     text-align: left;
@@ -73,7 +65,7 @@ body {
     font-size: 1rem;
 }
 
-/* Columna y Fila para el Registro (Permite campos lado a lado) */
+
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -89,11 +81,11 @@ body {
     box-sizing: border-box;
 }
 
-/* Botón Principal */
+
 .btn-primary-tendal {
     width: 100%;
     padding: 12px;
-    background-color: #800080; /* Botón Morado */
+    background-color: #800080; 
     color: #FFFFFF;
     border: none;
     border-radius: 6px;
@@ -101,21 +93,21 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 25px; /* Más espacio en el botón de registro */
+    margin-top: 25px;
 }
 
     .btn-primary-tendal:hover {
         background-color: #5d005d;
     }
 
-/* --- Links y Validación --- */
+
 .login-link {
     margin-top: 20px;
     font-size: 0.9rem;
 }
 
     .login-link a {
-        color: #3CB371; /* Link verde */
+        color: #3CB371; 
         text-decoration: none;
         font-weight: bold;
     }
@@ -124,7 +116,6 @@ body {
             text-decoration: underline;
         }
 
-/* Validación de Errores */
 .text-danger {
     color: #D32F2F;
     font-size: 0.85rem;
@@ -132,7 +123,7 @@ body {
     display: block;
 }
 
-/* Media Query para Responsividad (Móviles) */
+
 @media (max-width: 768px) {
     .register-container {
         max-width: 95%;
@@ -142,7 +133,7 @@ body {
         padding: 25px 20px;
     }
 
-    /* Columnas a una sola columna en móvil */
+
     .col-md-6 {
         flex: 0 0 100%;
         max-width: 100%;

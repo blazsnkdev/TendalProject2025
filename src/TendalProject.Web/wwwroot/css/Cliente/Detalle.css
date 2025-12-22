@@ -8,19 +8,6 @@
     font-weight: 700;
 }
 
-/*.cliente-cards .card {
-    border-color: #800080 !important;
-}
-
-.cliente-cards .shadow-sm {
-    box-shadow: 0 0.125rem 0.25rem rgba(128, 0, 128, 0.1) !important;
-}
-
-    .cliente-cards .shadow-sm:hover {
-        box-shadow: 0 0.5rem 1rem rgba(128, 0, 128, 0.15) !important;
-    }*/
-
-
 .btn-danger {
     display: inline-block;
     background-color: #800080;

@@ -16,7 +16,6 @@
         background-color: #800080;
     }
 
-/* SOLO para el botón Vaciar carrito */
 #formVaciarCarrito .btn-vaciar {
     width: 100%;
     padding: 12px 24px;
@@ -43,7 +42,6 @@
         box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
     }
 
-/* Si quieres que sea igual al btn-seguir pero en rojo */
 #formVaciarCarrito .btn-vaciar {
     width: 100%;
     padding: 12px 24px;

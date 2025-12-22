@@ -79,7 +79,20 @@ namespace TendalProject.Business.Services
             {
                 pedido.Estado = EstadoPedido.Pagado;
                 pedido.FechaPago = _dateTimeProvider.GetDateTimeNow();
-
+                foreach (var detalle in pedido.Detalles)
+                {
+                    var articulo = await _UoW.ArticuloRepository.GetByIdAsync(detalle.ArticuloId);
+                    if (articulo is null)
+                    {
+                        return Result.Failure(Error.NotFound("Artículo no encontrado"));
+                    }
+                    if (articulo.Stock < detalle.Cantidad)
+                    {
+                        return Result.Failure(Error.Validation("Stock insuficiente"));
+                    }
+                    articulo.Stock -= detalle.Cantidad;
+                    articulo.CantidadVentas += detalle.Cantidad;
+                }
                 var venta = new Venta
                 {
                     VentaId = Guid.NewGuid(),
@@ -87,14 +100,12 @@ namespace TendalProject.Business.Services
                     FechaVenta = _dateTimeProvider.GetDateTimeNow(),
                     MetodoPago = MetodoPago.MercadoPago,
                     TipoComprobante = TipoComprobante.Boleta,
-                    NumeroComprobante = $"B-{_dateTimeProvider.GetDateTimeNow().Ticks}" // TODO: generar número válido
+                    NumeroComprobante = $"B-{_dateTimeProvider.GetDateTimeNow().Ticks}" 
                 };
 
                 await _UoW.VentaRepository.AddAsync(venta);
-
                 var carrito = await _UoW.CarritoRepository.GetCarritoByClienteIdAsync(clienteId);
                 carrito.Items.Clear();
-
                 await _UoW.CommitTransactionAsync();
                 return Result.Success();
             }

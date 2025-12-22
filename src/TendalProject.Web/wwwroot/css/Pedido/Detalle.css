@@ -7,31 +7,27 @@
     font-weight: 700;
 }
 
-/* Contenedor */
 .acciones-pedido {
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-/* Tamaño uniforme para ambos botones */
 .btn-accion {
-    min-width: 170px; /* 👈 mismo ancho */
-    height: 42px; /* 👈 misma altura */
+    min-width: 170px;
+    height: 42px; 
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-weight: 500;
 }
 
-/* Botón Marcar Entregado */
 .btn-entregar {
     background-color: #5d005d;
     color: #ffffff;
     border: none;
 }
 
-    /* Hover del botón entregar */
     .btn-entregar:hover {
         background-color: #800080;
         color: #ffffff;

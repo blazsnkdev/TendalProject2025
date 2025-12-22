@@ -1,15 +1,9 @@
-﻿/* ===== ROLES USUARIO ===== */
-
+﻿
 .page-title {
     font-weight: 700;
     color: #5d005d;
 }
 
-/*.table th {
-    background-color: #800080;
-    color: #fff;
-}
-*/
 .table td {
     vertical-align: middle;
 }

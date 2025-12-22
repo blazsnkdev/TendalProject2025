@@ -1,6 +1,4 @@
-﻿/* ===== LISTAR ARTÍCULOS ===== */
-
-.articulos-container {
+﻿.articulos-container {
     padding: 2rem;
     background-color: white;
 }
@@ -25,11 +23,6 @@
         background-color: #e6c200;
     }
 
-/*.table th {
-    background-color: #800080;
-    color: #ffffff;
-}
-*/
 .table td {
     vertical-align: middle;
 }
@@ -146,8 +139,6 @@
     .custom-buttons .btn-primary:hover {
         background-color: #5d005d;
     }
-
-/* ===== ESTADO VACÍO ===== */
 
 .estado-vacio {
     text-align: center;

@@ -40,7 +40,7 @@
                 </span>
             `;
             
-            // Mostrar alerta si stock es bajo
+            
             if (remaining < 10 && remaining > 0) {
                 showStockAlert(remaining);
             } else if (remaining === 0) {
@@ -51,10 +51,9 @@
         }
     }
     
-    // Inicializar indicador de stock
     updateStockIndicator(1);
     
-    // Mostrar alertas de stock
+    
     function showStockAlert(remaining) {
         let alertElement = document.getElementById('stock-alert');
         if (!alertElement) {
@@ -88,7 +87,6 @@
         `;
         alertElement.style.display = 'block';
         
-        // Deshabilitar botón de agregar
         const addButton = document.querySelector('.btn-primary-tendal');
         if (addButton) {
             addButton.disabled = true;
@@ -105,7 +103,6 @@
         }
     }
     
-    // Manejar envío del formulario
     const addToCartForm = document.querySelector('form[action*="Agregar"]');
     if (addToCartForm) {
         addToCartForm.addEventListener('submit', function(e) {
@@ -126,32 +123,29 @@
                 return false;
             }
             
-            // Mostrar loading en el botón
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Agregando...';
             submitBtn.disabled = true;
             submitBtn.classList.add('btn-loading');
             
-            // Enviar formulario después de breve delay para feedback visual
             setTimeout(() => {
-                // Mostrar mensaje de éxito
+                
                 showAddToCartMessage(quantity);
                 
-                // Restaurar botón
+                
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 submitBtn.classList.remove('btn-loading');
                 
-                // Enviar formulario
+                
                 this.submit();
             }, 1500);
         });
     }
     
-    // Mostrar mensaje de éxito al agregar al carrito
     function showAddToCartMessage(quantity) {
-        // Crear elemento de mensaje
+        
         const message = document.createElement('div');
         message.className = 'added-to-cart-message';
         message.innerHTML = `
@@ -167,7 +161,6 @@
         
         document.body.appendChild(message);
         
-        // Eliminar mensaje después de 3 segundos
         setTimeout(() => {
             if (message.parentNode) {
                 message.parentNode.removeChild(message);
@@ -175,7 +168,6 @@
         }, 3000);
     }
     
-    // Sistema de calificación con estrellas
     const ratingElement = document.querySelector('dd:nth-child(14)');
     if (ratingElement) {
         const ratingValue = parseFloat(ratingElement.textContent.trim()) || 0;
@@ -204,7 +196,6 @@
         `;
     }
     
-    // Vista ampliada de imagen
     const imageElement = document.querySelector('dd:nth-child(12)');
     if (imageElement) {
         const imageSrc = imageElement.textContent.trim();
@@ -219,7 +210,6 @@
                 </div>
             `;
             
-            // Agregar funcionalidad de modal
             const img = imageElement.querySelector('img');
             img.style.cursor = 'pointer';
             img.addEventListener('click', function() {
@@ -228,7 +218,6 @@
         }
     }
     
-    // Modal para imagen ampliada
     function openImageModal(src, alt) {
         const modal = document.createElement('div');
         modal.className = 'image-modal';
@@ -240,7 +229,6 @@
         document.body.appendChild(modal);
         modal.style.display = 'flex';
         
-        // Cerrar modal al hacer clic en X
         modal.querySelector('.close-modal').addEventListener('click', function() {
             modal.style.display = 'none';
             setTimeout(() => {
@@ -250,7 +238,6 @@
             }, 300);
         });
         
-        // Cerrar modal al hacer clic fuera
         modal.addEventListener('click', function(e) {
             if (e.target === modal) {
                 modal.style.display = 'none';
