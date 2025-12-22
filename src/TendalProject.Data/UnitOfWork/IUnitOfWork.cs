@@ -15,6 +15,7 @@ namespace TendalProject.Data.UnitOfWork
         public ICarritoRepository CarritoRepository { get; }
         public IItemRepository ItemRepository { get; }
         public IDetallPedidoRepository DetallePedidoRepository { get; }
+        public IReseñaRepository ReseñaRepository { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

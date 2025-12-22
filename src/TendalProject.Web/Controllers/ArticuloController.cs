@@ -233,10 +233,43 @@ namespace TendalProject.Web.Controllers
             }
             return RedirectToAction(nameof(Detalle), new { articuloId = result.Value});
         }
-
-
-
-
+        [Authorize(Roles = "Cliente")]
+        public IActionResult Calificar(Guid articuloId)
+        {
+            var clienteId = ObtenerClienteId();
+            var viewModel = new CalificarArticuloViewModel() { 
+                ArticuloId = articuloId,
+                ClienteId = clienteId
+            };
+            return View(viewModel);
+        }
+        [HttpPost]
+        [Authorize(Roles = "Cliente")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Calificar(CalificarArticuloViewModel viewModel)
+        {
+            var request = new ReseñaArticuloRequest(
+                viewModel.ArticuloId,
+                viewModel.ClienteId,
+                viewModel.Puntuacion,
+                viewModel.Comentario);
+            var result = await _articuloService.CalificarArticuloAsync(request);
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError(string.Empty, result.Error!.Message);
+                return View(viewModel);
+            }
+            return RedirectToAction("Catalogo", "Ecommerce");
+        }
+        private Guid ObtenerClienteId()
+        {
+            var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId")?.Value;
+            if (string.IsNullOrEmpty(clienteIdClaim) || !Guid.TryParse(clienteIdClaim, out var clienteId))
+            {
+                return Guid.Empty;
+            }
+            return clienteId;
+        }
         private async Task CargarSelectLists()
         {
             var categorias = await _categoriaService.ObtenerCategoriasActivasSelectListAsync();

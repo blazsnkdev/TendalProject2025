@@ -17,8 +17,9 @@ namespace TendalProject.Data.Repositories
         public async Task<List<Articulo>> GetArticulosDisponiblesWithCategoriaAsync()
         {
             return await _appDbContext.TblArticulo
+                .Where(a => a.Estado == EstadoArticulo.Activo)
                 .Include(c=>c.Categoria)
-                .Where(a=>a.Estado == EstadoArticulo.Activo)
+                .Include(r=>r.Reseñas)
                 .ToListAsync();
         }
 

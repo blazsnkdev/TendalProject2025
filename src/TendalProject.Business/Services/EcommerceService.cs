@@ -44,7 +44,6 @@ namespace TendalProject.Business.Services
             return Result<Guid>.Success(request.ClienteId);
         }
 
-
         public async Task<Result<Guid>> AgregarItemAlCarritoAsync(SeleccionarArticuloRequest request)
         {
             await _UoW.BeginTransactionAsync();
@@ -183,7 +182,6 @@ namespace TendalProject.Business.Services
 
             return Result<CarritoResponse>.Success(response);
         }
-
 
         public async Task<Result<List<CatalogoArticulosResponse>>>ObtenerCatalogoFiltradoAsync(
             Guid? categoriaId,

@@ -15,5 +15,6 @@ namespace TendalProject.Business.Interfaces
         Task<Result<List<ListarArticulosResponse>>> ObtenerListaArticulosAsync();
         Task<Result<DatosActualizarArticuloResponse>> ObtenerArticuloActualizarAsync(Guid articuloId);
         Task<Result<Guid>> ModificarEstadoArticuloAsync(Guid articuloId);
+        Task<Result> CalificarArticuloAsync(ReseñaArticuloRequest request);
     }
 }

@@ -1,0 +1,40 @@
+﻿.page-title {
+    color: #5d005d;
+    font-weight: 700;
+}
+
+.second-page-title {
+    color: black;
+    font-weight: 700;
+}
+.rating {
+    display: flex;
+    gap: 8px;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+    .rating span {
+        color: #ccc;
+        transition: color 0.2s ease;
+    }
+
+        .rating span.active,
+        .rating span:hover,
+        .rating span:hover ~ span {
+            color: #ccc;
+        }
+
+        .rating span:hover,
+        .rating span.active {
+            color: #ffc107; 
+        }
+.btn-enviar {
+    background-color: #800080;
+    color : white;
+}
+
+    .btn-enviar:hover {
+        background-color: #5d005d;
+        color: white;
+    }

@@ -89,6 +89,41 @@ namespace TendalProject.Business.Services
             return Result.Success();
         }
 
+        public async Task<Result> CalificarArticuloAsync(ReseñaArticuloRequest request)
+        {
+            var articulo = await _UoW.ArticuloRepository.GetByIdAsync(request.ArticuloId);
+            if(articulo is null)
+            {
+                return Result.Failure(Error.NotFound("El articulo no existe"));
+            }
+            if (request.Puntuacion < 1 || request.Puntuacion > 5)
+            {
+                return Result.Failure(Error.Validation("La puntuación debe estar entre 1 y 5"));
+            }
+            await _UoW.BeginTransactionAsync();
+            try
+            {
+                var reseña = new Reseña()
+                {
+                    ReseñaId = Guid.NewGuid(),
+                    ArticuloId = articulo.ArticuloId,
+                    ClienteId = request.ClienteId,
+                    Puntuacion = request.Puntuacion,
+                    Comentario = request.Comentario,
+                    FechaRegistro = _dateTimeProvider.GetDateTimeNow()
+                };
+                await _UoW.ReseñaRepository.AddAsync(reseña);
+                await _UoW.SaveChangesAsync();
+                await _UoW.CommitTransactionAsync();
+                return Result.Success();
+            }
+            catch (DbUpdateException)
+            {
+                await _UoW.RollBackAsync();
+                return Result.Failure(Error.Database("Ocurrió un error al registrar la reseña"));
+            }
+        }
+
         public async Task<Result<DetalleArticuloResponse>> DetalleArticuloAsync(Guid articuloId)
         {
             var articulo = await _UoW.ArticuloRepository.GetArticuloWithIncludesByIdAsync(articuloId);

@@ -1,0 +1,57 @@
+﻿@model TendalProject.Web.ViewModels.Articulo.CalificarArticuloViewModel
+
+@{
+    ViewData["Title"] = "Calificar";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Articulo/Calificar.css" />
+}
+<h1 class="page-title">Calificar Articulo</h1>
+
+<h4 class="second-page-title">Formulario de Articulo</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Articulo" asp-action="Calificar" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <input asp-for="ArticuloId" type="hidden" class="form-control" />
+                <span asp-validation-for="ArticuloId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="ClienteId" type="hidden" class="form-control" />
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Puntuación</label>
+                <input asp-for="Puntuacion" type="hidden" id="Puntuacion" />
+
+                <div class="rating" id="rating">
+                    <span data-value="1">★</span>
+                    <span data-value="2">★</span>
+                    <span data-value="3">★</span>
+                    <span data-value="4">★</span>
+                    <span data-value="5">★</span>
+                </div>
+
+                <span asp-validation-for="Puntuacion" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Comentario" class="control-label"></label>
+                <textarea asp-for="Comentario" class="form-control" placeholder="Dejar comentarios.."></textarea>
+                <span asp-validation-for="Comentario" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Enviar" class="btn btn-enviar" />
+                <a asp-controller="Ecommerce" asp-action="Catalogo" class="btn btn-secondary">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/Articulo/Calificar.js"></script>
+}
+
