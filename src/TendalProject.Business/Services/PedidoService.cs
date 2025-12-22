@@ -220,5 +220,40 @@ namespace TendalProject.Business.Services
             await _UoW.SaveChangesAsync();
             return Result<Guid>.Success(pedido.PedidoId);
         }
+
+        public async Task<Result<DetallePedidoClienteResponse>> ObtenerDetallePedidoPorClienteAsync(Guid pedidoId)
+        {
+            if (pedidoId == Guid.Empty)
+            {
+                return Result<DetallePedidoClienteResponse>.Failure(Error.Validation("pedidoId vacío"));
+            }
+            var pedido = await _UoW.PedidoRepository.GetPedidoIncludClienteDetalleArticuloAsync(pedidoId);
+            if (pedido is null)
+            {
+                return Result<DetallePedidoClienteResponse>.Failure(Error.NotFound("Pedido no encontrado"));
+            }
+            if(pedido.Detalles.Count() == 0)
+            {
+                return Result<DetallePedidoClienteResponse>.Failure(Error.NotFound("No se encontraron items"));
+            }
+            var itemsResponse = pedido.Detalles.Select(x => new ItemsPedidoClienteResponse(
+                x.PedidoId,x.ArticuloId,x.Articulo.Codigo,x.Articulo.Nombre,x.Articulo.Descripcion,x.Cantidad,x.PrecioUnitario)).ToList();
+            var response = new DetallePedidoClienteResponse(
+                pedido.PedidoId,
+                pedido.ClienteId,
+                pedido.Codigo,
+                pedido.FechaRegistro,
+                pedido.Estado.ToString(),
+                pedido.FechaEntrega,
+                pedido.FechaEnvio,
+                pedido.FechaPago,
+                pedido.Igv,
+                pedido.SubTotal,
+                pedido.Total,
+                pedido.Detalles.Count(),
+                itemsResponse
+                );
+            return Result<DetallePedidoClienteResponse>.Success(response);
+        }
     }
 }

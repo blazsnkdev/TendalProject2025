@@ -159,7 +159,40 @@ namespace TendalProject.Web.Controllers
             }
             return RedirectToAction(nameof(Listar));
         }
-
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> Detalle(Guid pedidoId)
+        {
+            var result = await _pedidoService.ObtenerDetallePedidoPorClienteAsync(pedidoId);
+            if (!result.IsSuccess)
+            {
+                return HandleError(result.Error!);
+            }
+            var value = result.Value!;
+            var viewModel = new DetallePedidoClienteViewModel()
+            {
+                PedidoId = value.PedidoId,
+                CodigoPedido = value.CodigoPedido,
+                FechaRegistro = value.FechaRegistro,
+                FechaEntrega = value.FechaEntrega ?? DateTime.MinValue,
+                FechaEnvio = value.FechaEnvio,
+                FechaPago = value.FechaPago ?? DateTime.MinValue,
+                Igv = value.Igv,
+                SubTotal = value.SubTotal,
+                Total = value.Total,
+                Items = value.CantidadItems,
+                ItemsPedido = value.Items.Select(x=> new ItemsPedidoClienteViewModel()
+                {
+                    PedidoId = x.PedidoId,
+                    ArticuloId =x.ArticuloId,
+                    CodigoArticulo = x.CodigoArticulo,
+                    Nombre = x.Nombre,
+                    Descripcion = x.Descripcion,
+                    Cantidad = x.Cantidad,
+                    Precio = x.Precio,
+                }).ToList()
+            };
+            return View(viewModel);
+        }
         [HttpGet]//NOTE: endpoint para setear los estados en el selectList
         public IActionResult ObtenerEstadosDisponibles(string estadoActual)
         {

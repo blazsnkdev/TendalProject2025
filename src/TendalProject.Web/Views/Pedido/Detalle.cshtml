@@ -1,0 +1,104 @@
+﻿@model TendalProject.Web.ViewModels.Pedido.DetallePedidoClienteViewModel
+
+@{
+    ViewData["Title"] = "Detalle Pedido";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/Pedido/Detalle.css" />
+}
+<h1 class="page-title">Detalle Pedido</h1>
+<div>
+    <h4 class="second-page-title">Datos del Pedido</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CodigoPedido)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CodigoPedido)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaRegistro)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaRegistro)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaEntrega)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaEntrega)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaEnvio)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaEnvio)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaPago)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaPago)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Igv)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Igv)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SubTotal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SubTotal)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Total)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Total)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Items)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Items)
+        </dd>
+    </dl>
+    <table class="table table-striped">
+        <thead class="table table-dark">
+            <tr>
+                <th>Código Articulo</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>SubTotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model.ItemsPedido)
+            {
+                <tr>
+                    <td>@i.CodigoArticulo</td>
+                    <td>@i.Nombre</td>
+                    <td>@i.Descripcion</td>
+                    <td>@i.Cantidad</td>
+                    <td>S./@i.Precio</td>
+                    <td>S./@(i.Cantidad * i.Precio)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+</div>
+<div>
+    <a asp-controller="Pedido" asp-action="Historial" class="btn btn-secondary">Regresar</a>
+</div>
