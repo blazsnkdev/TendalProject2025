@@ -52,7 +52,6 @@ namespace TendalProject.Business.Services
                     p.FechaEntrega.Value.Date <= manana
                 );
             }
-            // Filtro por estado (nuevo)
             if (estado.HasValue)
             {
                 query = query.Where(p => p.Estado == estado.Value);
@@ -214,7 +213,7 @@ namespace TendalProject.Business.Services
             }
             if (pedido.Estado == request.EstadoPedido)
             {
-                return Result<Guid>.Failure(Error.Validation("pedido no disponible para enviar"));
+                return Result<Guid>.Failure(Error.Validation("No se puede cambiar el estado a este pedido"));
             }
             pedido.Estado = request.EstadoPedido;
             await _UoW.SaveChangesAsync();
@@ -254,6 +253,22 @@ namespace TendalProject.Business.Services
                 itemsResponse
                 );
             return Result<DetallePedidoClienteResponse>.Success(response);
+        }
+
+        public async Task<Result<Guid>> MarcarEntregadoPedidoAsync(Guid pedidoId)
+        {
+            var pedido = await _UoW.PedidoRepository.GetByIdAsync(pedidoId);
+            if(pedido is null)
+            {
+                return Result<Guid>.Failure(Error.Validation("Pedido no encontrado"));
+            }
+            if(pedido.Estado == EstadoPedido.Pagado)
+            {
+                pedido.Estado = EstadoPedido.Entregado;
+                await _UoW.SaveChangesAsync();
+                return Result<Guid>.Success(pedido.PedidoId);
+            }
+            return Result<Guid>.Failure(Error.Validation("No se puede cambiar el estado a este pedido"));
         }
     }
 }

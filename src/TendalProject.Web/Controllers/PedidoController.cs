@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Protocol;
 using TendalProject.Business.DTOs.Requests.Pedido;
 using TendalProject.Business.Interfaces;
 using TendalProject.Common.Helpers;
@@ -173,6 +173,7 @@ namespace TendalProject.Web.Controllers
                 PedidoId = value.PedidoId,
                 CodigoPedido = value.CodigoPedido,
                 FechaRegistro = value.FechaRegistro,
+                Estado =value.Estado,
                 FechaEntrega = value.FechaEntrega ?? DateTime.MinValue,
                 FechaEnvio = value.FechaEnvio,
                 FechaPago = value.FechaPago ?? DateTime.MinValue,
@@ -192,6 +193,17 @@ namespace TendalProject.Web.Controllers
                 }).ToList()
             };
             return View(viewModel);
+        }
+        [Authorize(Roles = "Cliente")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Entregar(Guid pedidoId)
+        {
+            var result = await _pedidoService.MarcarEntregadoPedidoAsync(pedidoId);
+            if (!result.IsSuccess)
+            {
+            }
+            return RedirectToAction(nameof(Detalle), new { pedidoId = result.Value });
         }
         [HttpGet]//NOTE: endpoint para setear los estados en el selectList
         public IActionResult ObtenerEstadosDisponibles(string estadoActual)

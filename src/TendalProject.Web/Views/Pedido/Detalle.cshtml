@@ -38,8 +38,15 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FechaEnvio)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaEnvio)
+        <dd class="col-sm-10">
+            @if (Model.FechaEnvio.HasValue)
+            {
+                @Model.FechaEnvio.Value.ToString("dd/MM/yyyy HH:mm")
+            }
+            else
+            {
+                <span class="text-muted fst-italic">Aún no recepcionado</span>
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FechaPago)
@@ -99,6 +106,30 @@
     </table>
     
 </div>
-<div>
-    <a asp-controller="Pedido" asp-action="Historial" class="btn btn-secondary">Regresar</a>
+<div class="acciones-pedido">
+    <a asp-controller="Pedido"
+       asp-action="Historial"
+       class="btn btn-secondary btn-accion">
+        Regresar
+    </a>
+
+    @if (Model.Estado == "Pagado")
+    {
+        <form id="formEstado"
+              asp-controller="Pedido"
+              asp-action="Entregar"
+              asp-route-pedidoId="@Model.PedidoId"
+              method="post">
+            @Html.AntiForgeryToken()
+            <button type="button"
+                    onclick="confirmarEntrega()"
+                    class="btn btn-entregar btn-accion">
+                Marcar Entregado
+            </button>
+        </form>
+    }
 </div>
+
+@section Scripts {
+    <script src="~/js/Pedido/Detalle.js"></script>
+}
