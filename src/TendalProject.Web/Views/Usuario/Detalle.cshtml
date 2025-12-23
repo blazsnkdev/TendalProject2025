@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="~/css/Usuario/Detalle.css" />
 }
 <h1>Detalle</h1>
-
-<div>
     <h4>Datos del Usuario</h4>
     <hr />
     <dl class="row">
@@ -52,19 +50,23 @@
             }
         </dd>
     </dl>
-</div>
-<div>
-    <form asp-action="ModificarEstado" asp-route-usuarioId="@Model.UsuarioId" method="post">
-        @if (Model.Activo)
-        {
+    <div>
+        <form id="formEstado"
+              asp-action="ModificarEstado"
+              asp-route-usuarioId="@Model.UsuarioId"
+              method="post"
+              class="flex-grow-1">
 
-            <button type="submit"class="btn btn-danger">Desactivar</button>
-            <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
-        }
-        else
-        {
-            <button type="submit" class="btn btn-success">Activar</button>
-            <a asp-action="Listar" class="btn btn-secondary">Regresar</a>
-        }
-    </form>
-</div>
+            <button type="button"
+                    class="btn @(Model.Activo ? "btn-danger" : "btn-success")"
+                    onclick="confirmarCambioEstado(@Model.Activo.ToString().ToLower())">
+
+                <i class="bi @(Model.Activo ? "bi-x-circle" : "bi-check-circle")"></i>
+                @(Model.Activo ? "Desactivar" : "Activar")
+            </button>
+        </form>
+    </div>
+
+@section Scripts {
+    <script src="~/js/Usuario/Detalle.js"></script>
+}
