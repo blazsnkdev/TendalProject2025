@@ -29,9 +29,7 @@ builder.Services.AddScoped<IPagoService>(sp =>
     var config = sp.GetRequiredService<IConfiguration>(); 
     var uow = sp.GetRequiredService<IUnitOfWork>();
     var dateTimeProvider = sp.GetRequiredService<IDateTimeProvider>();
-    var pedidoService = sp.GetRequiredService<IPedidoService>();
-
-    return new PagoService(config, uow, dateTimeProvider, pedidoService);
+    return new PagoService(config, uow, dateTimeProvider);
 });
 
 //AppDbContext para EntityFramework

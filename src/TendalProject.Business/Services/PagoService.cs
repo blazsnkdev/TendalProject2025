@@ -12,55 +12,54 @@ using TendalProject.Entities.Enum;
 
 namespace TendalProject.Business.Services
 {
-    public class PagoService : IPagoService
-    {
-        private readonly IUnitOfWork _UoW;
-        private readonly IDateTimeProvider _dateTimeProvider;
-        private readonly IPedidoService _pedidoService;
-        public PagoService(
-            IConfiguration config,
-            IUnitOfWork UoW,
-            IDateTimeProvider dateTimeProvider,
-            IPedidoService pedidoService
-            )
+        public class PagoService : IPagoService
         {
-            var token = config["MercadoPago:AccessToken"];
-            if (string.IsNullOrEmpty(token))
-                throw new Exception("¡No se encontró el AccessToken de MercadoPago!");
-            MercadoPagoConfig.AccessToken = token;
-            _UoW = UoW;
-            _dateTimeProvider = dateTimeProvider;
-            _pedidoService = pedidoService;
-        }
-
-        public async Task<Result<string>> CrearPrefernciaPagoAsync(Guid pedidoId)
-        {
-            var pedido = await _UoW.PedidoRepository.GetByIdAsync(pedidoId);//ojito
-            if (pedido == null || !pedido.Detalles.Any())
-                return Result<string>.Failure(Error.NotFound("Pedido no encontrado"));
-
-            var items = pedido.Detalles.Select(d => new PreferenceItemRequest
+            private readonly IUnitOfWork _UoW;
+            private readonly IDateTimeProvider _dateTimeProvider;
+            private readonly IConfiguration _configuration;
+            public PagoService(
+                IConfiguration config,
+                IUnitOfWork UoW,
+                IDateTimeProvider dateTimeProvider
+                )
             {
-                Title = d.Articulo.Nombre,
-                Quantity = d.Cantidad,
-                UnitPrice = d.PrecioUnitario
-            }).ToList();
+                var token = config["MercadoPago:AccessToken"];
+                if (string.IsNullOrEmpty(token))
+                    throw new Exception("¡No se encontró el AccessToken de MercadoPago!");
+                MercadoPagoConfig.AccessToken = token;
+                _UoW = UoW;
+                _dateTimeProvider = dateTimeProvider;
+                _configuration = config;
+            }
 
-            var preferenceRequest = new PreferenceRequest
+            public async Task<Result<string>> CrearPrefernciaPagoAsync(Guid pedidoId)
             {
-                Items = items,
-                Payer = new PreferencePayerRequest
+                var pedido = await _UoW.PedidoRepository.GetByIdAsync(pedidoId);//ojito
+                if (pedido == null || !pedido.Detalles.Any())
+                    return Result<string>.Failure(Error.NotFound("Pedido no encontrado"));
+
+                var items = pedido.Detalles.Select(d => new PreferenceItemRequest
                 {
-                    Email = pedido.Cliente.CorreoElectronico
-                },
-                BackUrls = new PreferenceBackUrlsRequest
+                    Title = d.Articulo.Nombre,
+                    Quantity = d.Cantidad,
+                    UnitPrice = d.PrecioUnitario
+                }).ToList();
+
+                var preferenceRequest = new PreferenceRequest
                 {
-                    Success = "https://nonstimulating-semestral-frankie.ngrok-free.dev/Pago/PagoExitoso",
-                    Failure = "https://nonstimulating-semestral-frankie.ngrok-free.dev/Ecommerce/Carrito",
-                    Pending = "https://nonstimulating-semestral-frankie.ngrok-free.dev/Ecommerce/Carrito"
-                },
-                AutoReturn = "approved"
-            };
+                    Items = items,
+                    Payer = new PreferencePayerRequest
+                    {
+                        Email = pedido.Cliente.CorreoElectronico
+                    },
+                    BackUrls = new PreferenceBackUrlsRequest
+                    {
+                        Success = _configuration["MercadoPago:SuccessUrl"],
+                        Failure = _configuration["MercadoPago:FailureUrl"],
+                        Pending = _configuration["MercadoPago:PendingUrl"]
+                    },
+                    AutoReturn = "approved"
+                };
 
             var client = new PreferenceClient();
             var preference = await client.CreateAsync(preferenceRequest);
