@@ -78,10 +78,3 @@ El sistema está organizado bajo **Arquitectura N-Capas**, separando responsabil
 ### Integraciones
 - MercadoPago (pasarela de pagos)
 
----
-
-## ⚙️ Instalación y configuración
-
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/tu-usuario/TendalProject2025.git
